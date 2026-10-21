@@ -1,5 +1,5 @@
-import {BOW_ROTATION} from './bow-motion.js?v=59';
-import {SWORDS,BOWS} from '../game/weapons.js?v=59';
+import {BOW_ROTATION} from './bow-motion.js?v=60';
+import {SWORDS,BOWS} from '../game/weapons.js?v=60';
 import * as T from '../../vendor/three.module.js';
 // A thin pixel-built item, with a diagonal wooden shaft and a stepped silhouette.
 const PALETTES=[[0x566161,0xb9c3bc,0xe2e6da],[0x4c5657,0xc9d4cc,0xf1f3e8],[0x20594c,0x54c7a7,0xa0f1cf],[0x364e5f,0x92b8cc,0xd9edf2],[0x765a24,0xd4ac45,0xffdf83],[0x713e31,0xe18a59,0xffc388]];

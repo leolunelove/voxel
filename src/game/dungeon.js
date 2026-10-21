@@ -1,7 +1,7 @@
 import * as T from '../../vendor/three.module.js';
-import {generateDungeon} from './dungeon-rules.js?v=59';
-import {MONSTERS} from './hunt-rules.js?v=59';
-import {Hunt} from './hunt.js?v=59';
+import {generateDungeon} from './dungeon-rules.js?v=60';
+import {MONSTERS} from './hunt-rules.js?v=60';
+import {Hunt} from './hunt.js?v=60';
 export class Dungeon{
  constructor(scene,state,seed,difficulty=0){Object.assign(this,generateDungeon(seed,difficulty));this.scene=scene;this.root=new T.Group();scene.add(this.root);this.completed=false;this.cleared=false;this.atExit=false;
   const geometry=new T.BoxGeometry(1,1,1),walls=new Set();for(const key of this.floor){const [x,z]=key.split(',').map(Number);for(const [dx,dz]of [[1,0],[-1,0],[0,1],[0,-1]])if(!this.floor.has((x+dx)+','+(z+dz)))walls.add((x+dx)+','+(z+dz));}

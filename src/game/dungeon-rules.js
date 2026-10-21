@@ -1,5 +1,6 @@
 export const inRange=p=>p.x>20.5&&p.x<38.5&&p.z>3.5&&p.z<14.5;
-export const atDungeonGate=p=>p.x< -24&&p.x> -29&&Math.abs(p.z-8)<2;
+import {atUnderblockSeal} from './underblock-entry-rules.js?v=60';
+export const atDungeonGate=atUnderblockSeal;
 export const skillLevel=xp=>Math.min(20,1+Math.floor(Math.sqrt(Math.max(0,xp)/30)));
 export const shotXP=(charge,radius)=>charge<.18?0:radius<.22?6:radius<.5?4:2;
 export const DIFFICULTIES=[{name:"Scavenger",health:1,damage:1,reward:1,bonus:80},{name:"Lockdown",health:1.55,damage:1.3,reward:2,bonus:220},{name:"Blacksite",health:2.2,damage:1.65,reward:3.5,bonus:500}];

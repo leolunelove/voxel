@@ -1,9 +1,9 @@
 import * as T from '../../vendor/three.module.js';
-import {MONSTERS,swordDamage,reward,hurt,inHunt,MAX_HP} from './hunt-rules.js?v=59';
-import {dressWarden,animateWarden} from './warden.js?v=59';
-import {clearArrows,updateArrows} from './embedded-arrows.js?v=59';
-import {dressMonster,animateMonster} from './monster-look.js?v=59';
-import {CombatLoot} from './combat-loot.js?v=59';
+import {MONSTERS,swordDamage,reward,hurt,inHunt,MAX_HP} from './hunt-rules.js?v=60';
+import {dressWarden,animateWarden} from './warden.js?v=60';
+import {clearArrows,updateArrows} from './embedded-arrows.js?v=60';
+import {dressMonster,animateMonster} from './monster-look.js?v=60';
+import {CombatLoot} from './combat-loot.js?v=60';
 export class Hunt{
  constructor(scene,state,options={}){this.loot=new CombatLoot(scene);this.options=options;this.bounds=options.bounds??[-7.5,7.5,18,30];this.state=state;this.enemies=[];this.targets=[];this.inside=false;this.damageFlash=0;
   for(const [i,x,z,type]of (options.spawns??[[0,-4,23,0],[1,4,24,0],[2,0,28,1]])){
