@@ -1,0 +1,8 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import * as T from '../vendor/three.module.js';
+import {Dungeon} from '../src/game/dungeon.js';
+import {generateDungeon,finishDungeon} from '../src/game/dungeon-rules.js';
+import {freshHunt} from '../src/game/hunt-rules.js';
+test('difficulty increases real enemy strength and completion rewards; boss guards every exit',()=>{let priorHP=0,priorXP=0;for(let tier=0;tier<3;tier++){const state=freshHunt(),d=new Dungeon(new T.Scene(),state,812,tier),boss=d.combat.enemies.at(-1);assert.ok(boss.stats.boss);assert.ok(boss.hp>priorHP);assert.ok(d.xp>priorXP);priorHP=boss.hp;priorXP=d.xp;assert.equal(d.rooms.at(-1).style,'Warden vault');assert.ok(new Set(d.rooms.map(r=>r.style)).size>=4);d.atExit=true;assert.equal(finishDungeon(d,state),0);for(const e of d.combat.enemies)while(!e.dead)d.combat.strike(e,null,1000);d.update(new T.Vector3(d.exit.position.x,2.65,d.exit.position.z));const loot=state.loot;assert.equal(finishDungeon(d,state),d.xp);assert.equal(state.loot,loot+d.bonus);assert.equal(finishDungeon(d,state),0);assert.equal(state.loot,loot+d.bonus);d.dispose();}});
+test('warden windup resists stunlock, backstepping or jumping avoids the heavy hit',()=>{for(const dodge of [false,'backstep','jump']){const state=freshHunt(),d=new Dungeon(new T.Scene(),state,812),e=d.combat.enemies.at(-1),p=new T.Vector3(e.x,2.65,e.z+1);e.cooldown=0;d.combat.update(.01,p);assert.ok(e.windup>1);d.combat.strike(e,p,1);assert.ok(e.windup>1);if(dodge==='backstep')p.z+=3;if(dodge==='jump')p.y+=1;for(let n=0;n<120;n++)d.combat.update(.01,p);assert.equal(state.hp,dodge?100:70);d.dispose();}});

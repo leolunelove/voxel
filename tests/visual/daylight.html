@@ -1,0 +1,7 @@
+<!doctype html><html><head><meta charset=utf-8><title>Voxel lighting review</title><style>body{margin:0;background:#18291f;color:#e9d6a6;font:14px monospace}canvas{display:block}nav{position:fixed;top:15px;left:15px;padding:15px;background:#203526ed;border:2px solid #bba574}button{padding:9px;margin:4px;background:#c2aa70;border:0;color:#19291e;font:14px monospace}</style></head><body><nav>VOXEL / LIGHTING REVIEW <b id=hour></b><br><button data-hour=12>Day</button><button data-hour=18.5>Sunset</button><button data-hour=22>Night</button></nav><script type=module>
+import * as T from '../../vendor/three.module.js';
+import {CampWorld} from '../../src/game/camp.js?v=55';
+import {freshState} from '../../src/game/rules.js?v=55';
+import {Daylight} from '../../src/engine/daylight.js?v=55';
+const scene=new T.Scene(),world=new CampWorld(scene);world.configure(freshState(),true);const cycle=new Daylight(world,scene),renderer=new T.WebGLRenderer({antialias:true});renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.35;document.body.append(renderer.domElement);const camera=new T.PerspectiveCamera(68,innerWidth/innerHeight,.1,180);camera.position.set(.5,4.8,13);camera.lookAt(0,4,-12);function show(hour){cycle.update(hour,0);document.getElementById('hour').textContent=hour+':00';renderer.render(scene,camera);}document.querySelectorAll('button').forEach(b=>b.onclick=()=>show(Number(b.dataset.hour)));show(18.5);
+</script></body></html>

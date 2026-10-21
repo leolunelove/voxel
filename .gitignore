@@ -1,0 +1,10 @@
+dist/
+voxel-release.tar.gz
+.DS_Store
+Voxel-web-build-*.zip
+node_modules/
+*.log
+.env
+.env.*
+.sites-checkout*/
+releases/

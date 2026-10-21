@@ -1,0 +1,13 @@
+<!doctype html><meta charset="utf-8"><title>Voxel — plot expansion review</title>
+<style>body{margin:0;padding:25px;background:#152a21;color:#eadabc;font:14px monospace}h1{font-size:24px}article{margin:24px 0}h2{font-size:17px}p{color:#aebfa5}canvas{display:block;width:100%;max-width:1000px;aspect-ratio:1.6;border:1px solid #b9a57a55}</style>
+<h1>Voxel / plot expansion review</h1><p>Read-only geometry preview. This page does not access or change game saves.</p><main></main>
+<script type="module">
+import * as T from '../vendor/three.module.js?v=26';
+import {CampWorld} from '../src/game/camp.js?v=26';
+import {freshState} from '../src/game/rules.js?v=26';
+import {MINE_STAGES,FOREST_STAGES} from '../src/game/camp-rules.js?v=26';
+for(let stage=0;stage<3;stage++){
+ const article=document.createElement('article');article.innerHTML='<h2>Stage '+(stage+1)+' / '+MINE_STAGES[stage].name+' + '+FOREST_STAGES[stage].name+'</h2><p>'+MINE_STAGES[stage].detail+' / '+FOREST_STAGES[stage].detail+'</p><canvas></canvas>';document.querySelector('main').append(article);
+ const scene=new T.Scene(),world=new CampWorld(scene),s={...freshState(),mineLevel:stage,forestLevel:stage,mined:stage?20:0,rank:stage?3:0};world.configure(s,true);world.update(0);const camera=new T.PerspectiveCamera(53,1.6,.1,150);camera.position.set(0,35,35);camera.lookAt(0,0,-2);const renderer=new T.WebGLRenderer({canvas:article.querySelector('canvas'),antialias:true});renderer.setSize(1000,625,false);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.35;renderer.render(scene,camera);
+}
+</script>

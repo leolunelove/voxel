@@ -1,0 +1,9 @@
+import * as T from '../../vendor/three.module.js';
+// Reward rules credit risky loot once on death. These tokens are presentation only.
+export class CombatLoot{
+ constructor(scene){this.scene=scene;this.items=[];this.geometry=new T.BoxGeometry(.15,.10,.15);this.materials=[new T.MeshStandardMaterial({color:0xe4b963,metalness:.55,roughness:.35}),new T.MeshStandardMaterial({color:0x86c6a1,roughness:.6})];this.onCollect=()=>{};}
+ burst(position,boss=false){const count=boss?14:7;for(let i=0;i<count;i++){if(this.items.length>=100)this.items.shift().mesh.removeFromParent();const mesh=new T.Mesh(this.geometry,this.materials[i%3===0?1:0]),angle=i*2.399;mesh.position.copy(position);mesh.rotation.set(i*.6,i*.9,0);if(boss)mesh.scale.setScalar(1.3);this.scene.add(mesh);this.items.push({mesh,age:0,velocity:new T.Vector3(Math.cos(angle)*(1.3+i*.07),2.6+(i%3)*.65,Math.sin(angle)*(1.3+i*.07))});}}
+ update(dt,player,reduced=false){const target=player.clone().add(new T.Vector3(0,-.6,0));let collected=false;for(let i=this.items.length-1;i>=0;i--){const a=this.items[i];a.age+=dt;if(a.age<.32&&!reduced){a.velocity.y-=10*dt;a.mesh.position.addScaledVector(a.velocity,dt);a.mesh.position.y=Math.max(1.12,a.mesh.position.y);}else{const delta=target.clone().sub(a.mesh.position),distance=delta.length(),speed=5+Math.max(0,a.age-.32)*14;a.mesh.position.addScaledVector(delta,Math.min(1,speed*dt/Math.max(.01,distance)));if(distance<.32||a.age>5){a.mesh.removeFromParent();this.items.splice(i,1);collected=true;continue;}}if(!reduced){a.mesh.rotation.x+=dt*5;a.mesh.rotation.y+=dt*7;}a.mesh.scale.multiplyScalar(Math.exp(-dt*(a.age>.8?.6:0)));}if(collected)this.onCollect();}
+ clear(){for(const a of this.items)a.mesh.removeFromParent();this.items=[];}
+ dispose(){this.clear();this.geometry.dispose();this.materials.forEach(m=>m.dispose());}
+}

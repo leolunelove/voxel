@@ -1,0 +1,5 @@
+import * as T from '../../vendor/three.module.js';
+export const CELL_WAKE=[5.2,2.65,11.5];
+export const atBed=p=>p.x>3.4&&p.x<7.7&&p.z>11&&p.z<15;
+export function buildCell(world){const b=(...a)=>world.box(...a);b(3,2.8,12.5,.28,3.6,5,0x65716a,true);b(8,2.8,12.5,.28,3.6,5,0x65716a,true);b(5.5,2.8,15,5.2,3.6,.25,0x65716a,true);for(const x of [3.55,7.45])b(x,2.8,10,1.1,3.6,.25,0x65716a,true);b(5.5,4.7,12.5,5.4,.25,5.3,0x46554a,true);
+ b(6.8,1.35,13.4,1.3,.6,2.5,0x3b4b42,true);b(6.8,1.75,13.4,1.25,.20,2.4,0x9a9f7e);b(6.8,1.88,12.55,1.1,.15,.55,0xd0ccb3);b(6.8,1.89,13.8,1.28,.12,1.3,0x496b5c);for(let x=4.2;x<6;x+=.35)b(x,3.2,14.83,.05,1.5,.08,0x263c32);b(3.5,1.65,13.6,.65,1.3,1,0x725c3c,true);b(3.6,2.36,13.5,.35,.05,.45,0xd5bd8d);const light=new T.PointLight(0xffcd8a,13,9);light.userData.alwaysOn=true;light.position.set(5.3,4.1,12.4);world.scene.add(light);b(5.3,4.2,12.4,.5,.12,.5,0xe7c38a);world.sign(['YOUR CELL / 07','E BY THE BED / REST & END SHIFT'],5.5,3.9,9.8,3.5,.95);world.sign(['YOUR SHIFT. YOUR PACE.'],5.4,3.1,14.8,2.6,.55);}
