@@ -67,8 +67,8 @@ export function buildWorkyardCharacter(world){
   b(21.2+i*.55,3.15,13.8,.32,.08,.15,cream);
  }
  b(36.2,1.6,4,1.2,1.2,.6,0x806c49,true);
- sign(['04 / THE LONG ROOM','STAND AT THE LINE · FIND YOUR MARK'],29,5.15,14.2,8,1);
- sign(['RETURN EQUIPMENT','PRISON PROPERTY'],22.4,4.2,14.05,3.1,.75);
+ sign(['04 / THE LONG ROOM','STAND AT THE LINE · FIND YOUR MARK'],29,5.15,14.2,8,1,Math.PI);
+ sign(['RETURN EQUIPMENT','PRISON PROPERTY'],22.4,4.2,14.05,3.1,.75,Math.PI);
  lamp(27,5.7,9,0xffdcaa,19,13);lamp(35,5.7,9,0xffd39a,14,10);
  // MELEE: the condemned exercise yard. No new obstacles inside AI bounds.
  for(const x of [-8.35,8.35]){

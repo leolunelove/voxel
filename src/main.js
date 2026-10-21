@@ -2,7 +2,7 @@ import * as T from '../vendor/three.module.js';
 import {Input} from './engine/input.js?v=59';
 import {Audio} from './engine/audio.js?v=59';
 import {Feedback} from './engine/feedback.js?v=59';
-import {CampWorld} from './game/camp.js?v=59';
+import {CampWorld} from './game/camp.js?v=59.1';
 import {campLevel,LEVEL_TWO,AXES,treeYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=59';
 import {Player} from './game/player.js?v=59';
 import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=59';

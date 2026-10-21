@@ -3,7 +3,7 @@ import {World,keyOf} from './world.js?v=59';
 import {BLOCKS} from './rules.js?v=59';
 import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=59';
 export const TREE_SPOTS=[[7,-4],[10,-7],[7,-8],[13,-4],[13,-9],[5,-11],[16,-4],[16,-12],[10,-14],[4,-15]];
-import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=59';
+import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=59.1';
 import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=59';
 import {buildCell} from './cell.js?v=59';
 export class CampWorld{
