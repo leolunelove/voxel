@@ -1,5 +1,5 @@
 import * as T from '../../vendor/three.module.js';
-import {GATES} from './prison-layout.js?v=57';
+import {GATES} from './prison-layout.js?v=58';
 
 // Dressing stays beside the walking lanes; colliders are owned by PrisonWorld.
 export function dressPrison(world,{box,mat,group:g,cube}){

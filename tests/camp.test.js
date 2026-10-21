@@ -18,3 +18,21 @@ test('axe upgrades noticeably reduce complete-tree cutting time and capacity res
 test('all three mine stages have walkable stairs down and back to the yard',()=>{const s={...freshState(),money:9999,mined:20};for(let level=0;level<3;level++){s.mineLevel=level;world.configure(s);const p=player();p.position.set(-10,2.65,.5);for(let n=0;n<20;n++)p.step(1/120);p.input.keys.add('KeyW');for(let n=0;n<360;n++)p.step(1/120);assert.ok(p.position.y<2,'descend stage '+level);p.input.keys.clear();p.input.keys.add('KeyS');for(let n=0;n<440;n++)p.step(1/120);assert.ok(p.position.z>.4&&p.position.y>2.6,'walk out of stage '+level);}});
 test('old permits migrate into plot stages while money, inventory and gear survive reload',()=>{const old={version:3,money:777,inventory:[1,2,3,4,5,0,0,0,6],pick:3,bagLevel:2,mined:60,rank:1,mine:1};const s=validateSave(old);assert.equal(s.version,4);assert.equal(s.mineLevel,1);assert.equal(s.money,777);assert.equal(s.pick,3);assert.deepEqual(s.inventory,old.inventory);assert.equal(s.axe,0);s.money=9999;assert.equal(expandPlot(s,'forest'),true);assert.equal(upgradeAxe(s),true);assert.deepEqual(validateSave(s),s);});
 test('automatic seam refill warns, preserves progression, and actually restores ore',()=>{const s={...freshState(),mineLevel:0};world.configure(s);world.refill();const before=world.blocks.size;world.remove([...world.blocks.values()][0]);world.update(151);assert.ok(world.refillIn>=0);world.update(6);assert.equal(world.blocks.size,before);assert.equal(world.refillEvent,true);assert.equal(s.mineLevel,0);});
+
+test('cellblock dressing preserves access to bed, shops, combat and side rooms at every plot stage',()=>{
+ const s={...freshState(),mined:20};
+ for(let stage=0;stage<3;stage++){
+  s.mineLevel=stage;s.forestLevel=stage;world.configure(s);const p=player();
+  for(const [a,b]of [
+   [[.5,8],[.5,13]],[[.5,13],[.5,17]],
+   [[.5,8],[5.5,8]],[[5.5,8],[5.5,11.5]],
+   [[.5,8],[-10,8]],[[.5,8],[10,8]],
+   [[.5,8],[-25,8]],[[.5,8],[25,8]],
+   [[.5,3],[-10,3]],[[-10,3],[-10,.5]],
+   [[.5,3],[8,3]],[[8,3],[8,-1]]
+  ])line(p,a,b);
+ }
+ const p=player();assert.equal(p.fits(new T.Vector3(-4.7,2.65,12.15)),false,'noticeboard has real collision');
+ assert.equal(p.fits(new T.Vector3(-18.2,2.65,3.7)),false,'water point has real collision');
+ assert.ok(world.yardCharacter.children.some(o=>o.isInstancedMesh&&o.count>300),'masonry uses instancing');
+});
