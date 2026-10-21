@@ -36,3 +36,33 @@ test('cellblock dressing preserves access to bed, shops, combat and side rooms a
  assert.equal(p.fits(new T.Vector3(-18.2,2.65,3.7)),false,'water point has real collision');
  assert.ok(world.yardCharacter.children.some(o=>o.isInstancedMesh&&o.count>300),'masonry uses instancing');
 });
+
+test('timber dressing preserves tree approaches through every expansion and rebuilds without accumulating',()=>{
+ const s={...freshState(),mined:20};
+ for(let stage=0;stage<3;stage++){
+  s.forestLevel=stage;world.configure(s);const p=player();
+  for(const t of world.trees){
+   assert.ok(p.fits(new T.Vector3(t.x,2.65,t.z+1.2)),'approach tree '+t.id+' at stage '+stage);
+   const ray=new T.Ray(new T.Vector3(t.x,2.5,t.z+1.2),new T.Vector3(0,0,-1));
+   assert.equal(world.obstructed(ray,1.2),false,'clear chopping line '+t.id);
+  }
+  const count=world.forestDress.children.length;world.configure(s);assert.equal(world.forestDress.children.length,count);
+ }
+ const expandedCount=world.forestDress.children.length;s.forestLevel=0;world.configure(s);assert.ok(world.forestDress.children.length<expandedCount,'old expansion dressing is removed when loading a smaller plot');
+});
+
+test('all archery lanes retain clear shots and a solid backstop beyond the target',()=>{
+ const p=player();
+ for(const z of [5.8,9,12.2]){
+  line(p,[21,9],[23.7,z]);line(p,[23.7,z],[34,z]);
+  const ray=new T.Ray(new T.Vector3(23.7,2.5,z),new T.Vector3(1,0,0));
+  assert.equal(world.obstructed(ray,11.2),false,'clear target face at '+z);
+  assert.equal(world.obstructed(ray,15),true,'backstop catches missed arrows at '+z);
+ }
+});
+
+test('condemned yard dressing leaves monster pursuit space and retreat route clear',()=>{
+ const p=player();line(p,[.5,13],[.5,19]);
+ for(const z of [19,22,25,28])line(p,[-5,z],[5,z]);
+ assert.ok(world.workyardCharacter.children.some(o=>o.isInstancedMesh),'repeated fixtures are batched');
+});
