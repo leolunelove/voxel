@@ -1,35 +1,35 @@
 import * as T from '../vendor/three.module.js';
-import {entryDepth} from './game/underblock-entry-rules.js?v=60';
+import {entryDepth} from './game/underblock-entry-rules.js?v=61';
 const entryFogColor=new T.Color(0x263e38);
-import {Input} from './engine/input.js?v=60';
-import {Audio} from './engine/audio.js?v=60';
-import {Feedback} from './engine/feedback.js?v=60';
-import {CampWorld} from './game/camp.js?v=60';
-import {campLevel,LEVEL_TWO,AXES,treeYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=60';
-import {Player} from './game/player.js?v=60';
-import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=60';
-import {Pickups} from './game/pickups.js?v=60';
-import {HUD} from './ui/hud.js?v=60';
+import {Input} from './engine/input.js?v=61';
+import {Audio} from './engine/audio.js?v=61';
+import {Feedback} from './engine/feedback.js?v=61';
+import {CampWorld} from './game/camp.js?v=61';
+import {campLevel,LEVEL_TWO,AXES,treeYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=61';
+import {Player} from './game/player.js?v=61';
+import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=61';
+import {Pickups} from './game/pickups.js?v=61';
+import {HUD} from './ui/hud.js?v=61';
 
-import {Hunt} from './game/hunt.js?v=60';
-import {freshHunt,loadHunt,inHunt,bank,retreat,attackLevel,swordDamage,MONSTERS,MAX_HP,hurt} from './game/hunt-rules.js?v=60';
+import {Hunt} from './game/hunt.js?v=61';
+import {freshHunt,loadHunt,inHunt,bank,retreat,attackLevel,swordDamage,MONSTERS,MAX_HP,hurt} from './game/hunt-rules.js?v=61';
 
-import {Archery} from './game/archery.js?v=60';
-import {Dungeon} from './game/dungeon.js?v=60';
-import {inRange,atDungeonGate,skillLevel,finishDungeon,DIFFICULTIES} from './game/dungeon-rules.js?v=60';
+import {Archery} from './game/archery.js?v=61';
+import {Dungeon} from './game/dungeon.js?v=61';
+import {inRange,atDungeonGate,skillLevel,finishDungeon,DIFFICULTIES} from './game/dungeon-rules.js?v=61';
 
-import {SkillBook} from './ui/skills.js?v=60';
+import {SkillBook} from './ui/skills.js?v=61';
 
-import {SWORDS,BOWS,forgeWeapon,weaponReason} from './game/weapons.js?v=60';
+import {SWORDS,BOWS,forgeWeapon,weaponReason} from './game/weapons.js?v=61';
 
-import {SHIELDS,freshGuard,tickGuard,defend,forgeShield,shieldReason} from './game/shield-rules.js?v=60';
-import {skillLedger} from './game/skills.js?v=60';
-import {freshShift,loadShift,tickShift,fatigue,shiftClock,closeShift,loadSummary} from './game/shift-rules.js?v=60';
-import {atBed,CELL_WAKE} from './game/cell.js?v=60';
-import {ShiftUI} from './ui/shift.js?v=60';
-import {RestFlow} from './game/rest-flow.js?v=60';
-import {Daylight} from './engine/daylight.js?v=60';
-import {updateHTML} from './ui/dom.js?v=60';
+import {SHIELDS,freshGuard,tickGuard,defend,forgeShield,shieldReason} from './game/shield-rules.js?v=61';
+import {skillLedger} from './game/skills.js?v=61';
+import {freshShift,loadShift,tickShift,fatigue,shiftClock,closeShift,loadSummary} from './game/shift-rules.js?v=61';
+import {atBed,CELL_WAKE} from './game/cell.js?v=61';
+import {ShiftUI} from './ui/shift.js?v=61';
+import {RestFlow} from './game/rest-flow.js?v=61';
+import {Daylight} from './engine/daylight.js?v=61';
+import {updateHTML} from './ui/dom.js?v=61';
 const canvas=document.getElementById('game');
 const scene=new T.Scene();scene.background=new T.Color(0x1d302a);scene.fog=new T.FogExp2(0x1d302a,.024);
 let renderer;try{renderer=new T.WebGLRenderer({canvas,antialias:true});}catch(error){document.querySelector('#interface').textContent='This prototype needs WebGL. Please open it in a desktop browser with hardware acceleration enabled.';throw error;}
@@ -118,6 +118,7 @@ function frame(now){requestAnimationFrame(frame);const dt=Math.min((now-last)/10
  document.body.classList.toggle('in-dungeon',!!dungeon);dungeonPanel.hidden=!dungeon||mode!=='playing';if(dungeon&&dungeonGuard){const g=dungeonGuard,spec=SHIELDS[huntState.shield],room=dungeon.roomAt(player.position),boss=dungeon.combat.enemies.at(-1);huntPanel.hidden=true;updateHTML(dungeonPanel,'<small>THE UNDERBLOCK / '+dungeon.rules.name+'</small><h3>'+(room<0?'Passage':dungeon.rooms[room].style)+'</h3><div class=dungeon-vitals><label>HEALTH <b>'+Math.ceil(huntState.hp)+' / 100</b></label><meter aria-label="Dungeon health" min=0 max=100 value='+Math.ceil(huntState.hp)+'></meter><label>GUARD <b>'+Math.ceil(g.value)+' / '+spec.guard+'</b></label><meter aria-label="Shield guard" min=0 max='+spec.guard+' value='+Math.ceil(g.value)+'></meter></div><em>'+(g.lock>0?'GUARD BROKEN / RECOVERING':g.flash>0?(g.event==='perfect'?'PERFECT BLOCK':'BLOCKED'):g.held?'GUARDING / FRONT ONLY':combatWeapon==='bow'?'BOW EQUIPPED / SHIELD LOWERED':'RIGHT CLICK / BLOCK')+'</em><strong>'+huntState.loot+' CR / LOOT AT RISK</strong><p>Room '+(room<0?'—':room+1)+' / '+dungeon.rooms.length+' · '+dungeon.combat.enemies.filter(e=>!e.dead).length+' enemies remain</p><p>'+(dungeon.cleared?'SEAL OPEN / E at the gold exit':'Clear every chamber. Defeat loses your haul.')+'</p>'+(room===dungeon.rooms.length-1?'<p>UNDERWARDEN / '+boss.hp+' / '+boss.maxHp+' HP · DODGE THE SLAM</p>':'')+'<small>'+spec.name+' · Q / sword or bow · R / abandon<br>Completion / +'+dungeon.bonus+' CR · +'+dungeon.xp+' XP</small>');}
  const clock=shiftClock(shift);shiftPanel.hidden=mode!=='playing';updateHTML(shiftPanel,'<small>SHIFT '+shift.day+' / '+clock.label+(clock.night?' · NIGHT':'')+'</small><label>STAMINA <b>'+Math.ceil(shift.stamina)+' / 100</b></label><meter aria-label=Stamina min=0 max=100 value='+Math.ceil(shift.stamina)+'></meter><span>'+(shift.stamina<=0?'EXHAUSTED / Work at half pace. Walk home freely.':shift.stamina<20?'TIRED / Rest in your cell by the yard.':clock.night?'NIGHT SHIFT / Your bed is ready when you are.':atBed(player.position)?'E / Rest & end shift':'CELL 07 / Beside the yard · E at bed')+'</span>');
  daylight.update(clock.hour,dt,!!dungeon);
+ if(dungeon)dungeon.atmosphere(world,scene,player.position,dt);
  if(!dungeon){const depth=entryDepth(player.position);if(depth){scene.fog.color.lerp(entryFogColor,depth*.8);scene.fog.density+=depth*.045;scene.background.lerp(entryFogColor,depth*.5);world.skyLight.intensity*=1-depth*.7;world.sun.intensity*=1-depth*.95;}}
  audio.environment(currentArea===7?3:currentArea===6?1:currentArea===8?1:currentArea===5?3:currentArea===4?4:currentArea>=0?currentArea:0,mode==='playing');world.update(mode==='playing'?dt:0,feedback.reduced,player.position);if(world.refillEvent){world.refillEvent=false;if(world.area(player.position)===0)player.home();mining.reset();hud.toast('A fresh seam is ready. Your haul stays yours.');}if(mode!=='playing'){menuCamera.position.set(.5,5.2,13);menuCamera.lookAt(-2,2,-5);}renderer.render(scene,(mode==='playing'||mode==='skills'||mode==='sleep'||mode==='waking'||mode==='sleep-transition')?camera:menuCamera);feedback.render(renderer,mode==='playing');
 }
