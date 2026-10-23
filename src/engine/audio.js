@@ -9,13 +9,14 @@ export class Audio{
  if(kind==='rest'){[330,440,554,660].forEach((f,i)=>this.tone(t+i*.18,f,.8,.035,'sine',f));return;}
  if(kind==='shield-block'||kind==='perfect-block'||kind==='guard-break'){this.tone(t,kind==='guard-break'?95:420,.17,.075,'triangle',kind==='guard-break'?38:210);this.grit(t,.085,.08,1700);if(kind==='perfect-block')this.tone(t+.02,1100,.23,.035,'sine',1500);return;}
  if(kind==='monster-death'){this.tone(t,140,.19,.065,'triangle',35);this.grit(t,.16,.065,450);[660,880].forEach((f,i)=>this.tone(t+.06+i*.065,f,.16,.025,'sine',f));return;}
- if(kind==='bow-tension'){this.tone(t,105+type*75,.10,.012,'triangle',135+type*85);this.grit(t,.05,.012,650+type*300);return;}
+ if(kind==='bow-tension'){this.tone(t,90+type*95,.13,.014+type*.01,'triangle',120+type*115);this.grit(t,.065,.014+type*.012,500+type*450);return;}
  if(kind==='bow-ready'){this.tone(t,460,.09,.018,'triangle',620);return;}
  if(kind==='boss-victory'){[220,330,440,554,660].forEach((f,i)=>this.tone(t+i*.13,f,.65,.045,'triangle',f));this.grit(t,.4,.07,180);return;}
  if(kind==='armor-hit'){this.tone(t,105,.12,.07,'triangle',42);this.tone(t,1750,.14,.035,'sine',900);this.grit(t,.065,.09,1700);return;}
  if(kind==='monster-arrow-hit'){this.tone(t,92,.13,.085,'triangle',38);this.grit(t,.045,.11,1150);this.grit(t+.025,.09,.045,320);return;}
+ if(kind==='arrow-wall'){this.tone(t,145,.09,.025+type*.025,'triangle',58);this.grit(t,.055,.03+type*.03,850);return;}
  if(kind==='arrow-hit'||kind==='bullseye'){this.grit(t,.06,.09,650);this.tone(t,kind==='bullseye'?1046:740,.16,.045,'sine',kind==='bullseye'?1568:900);return;}
- if(kind==='bow-release'){this.tone(t,260,.065,.055,'triangle',62);this.grit(t,.045,.075,3000);this.tone(t+.016,390,.16,.016,'sine',150);return;}
+ if(kind==='bow-release'){this.tone(t,290,.045,.035+type*.035,'triangle',65);this.grit(t,.055,.045+type*.05,2600+type*700);this.tone(t+.012,440,.14,.012+type*.012,'sine',130);return;}
  if(kind==='swoosh'){this.grit(t,.075,.035,1800);return;}
  if(kind==='strike'){this.tone(t,145,.09,.065,'triangle',65);this.grit(t,.055,.09,750);this.tone(t+.004,1260,.09,.018,'sine',820);return;}
  if(kind==='hurt'){this.tone(t,88,.14,.06,'triangle',42);this.grit(t,.1,.055,340);return;}

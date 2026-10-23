@@ -1,8 +1,8 @@
 import * as T from '../../vendor/three.module.js';
-import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=61';
-import {PICKS} from '../game/rules.js?v=61';
-import {bowRig,applyBowRig} from './bow-motion.js?v=61';
-import {createShield} from './shield.js?v=61';
+import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=62';
+import {PICKS} from '../game/rules.js?v=62';
+import {bowRig,applyBowRig} from './bow-motion.js?v=62';
+import {createShield} from './shield.js?v=62';
 export class Feedback{
  constructor(scene){
  this.scene=scene;this.particles=[];this.geometry=new T.BoxGeometry(1,1,1);this.materials=new Map();this.reduced=false;this.phase=0;this.swinging=false;this.time=0;this.kick=0;this.equip=0;this.tier=-1;
@@ -37,10 +37,11 @@ export class Feedback{
  this.setTier(tier,kind);this.bowReleaseAge=(this.bowReleaseAge??Infinity)+dt;this.bowRecoil=Math.max(0,(this.bowRecoil??0)-dt*8);this.nockDelay=Math.max(0,(this.nockDelay??0)-dt);this.time+=dt;this.equip=Math.max(0,this.equip-dt*2.8);this.kick=Math.max(0,this.kick-dt*9);let impact=false;
  if(active&&!this.swinging){this.swinging=true;this.phase=0;}
  if(this.swinging){const before=this.phase;const step=this.contactStop>0?0:dt;this.contactStop=Math.max(0,(this.contactStop??0)-dt);this.phase+=step/(kind==='sword'?.50:Math.max(.30,.42/Math.pow(power,.18)));impact=(before<.30&&this.phase>=.30)||this.phase>=1.30;if(this.phase>=1){this.phase=active?this.phase%1:0;this.swinging=active;}}
- const renderPhase=impact?.30:this.phase,motion=this.reduced?.13:1,pose=heldPose(renderPhase,this.camera.aspect,motion,kind,this.bowDraw??0,this.reduced?0:this.bowRecoil),bob=moving&&!this.reduced?Math.sin(this.time*10)*.004:0;
- this.pivot.position.fromArray(pose.position);this.pivot.position.y+=(kind==='bow'?bob*(1-(this.bowDraw??0)):bob)-this.equip*.22;this.pivot.position.z+=this.kick*.012;
- if(kind==='bow'){const rig=bowRig(this.bowDraw??0,this.bowReleaseAge,this.releasedCharge,this.reduced);applyBowRig(this.tool,rig);this.pivot.position.z+=rig.follow;}
- this.pivot.rotation.fromArray([...pose.rotation,'XYZ']);this.pivot.rotation.z-=this.equip*.04;
+ const rig=kind==='bow'?bowRig(this.bowDraw??0,this.bowReleaseAge,this.releasedCharge,this.reduced):null;
+ const renderPhase=impact?.30:this.phase,motion=this.reduced?.13:1,pose=heldPose(renderPhase,this.camera.aspect,motion,kind,rig?.stance??this.bowDraw??0,this.reduced?0:this.bowRecoil),bob=moving&&!this.reduced?Math.sin(this.time*10)*.004:0;
+ this.pivot.position.fromArray(pose.position);this.pivot.position.y+=(kind==='bow'?bob*(1-(this.bowDraw??0)):bob)-(kind==='bow'?0:this.equip*.22);this.pivot.position.z+=this.kick*.012;
+ if(kind==='bow'){applyBowRig(this.tool,rig);this.pivot.position.z+=rig.follow;}
+ this.pivot.rotation.fromArray([...pose.rotation,'XYZ']);if(kind!=='bow')this.pivot.rotation.z-=this.equip*.04;
  if(aim?.point&&this.swinging){
  const smooth=(a,b,x)=>{let t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t);};
  const contact=smooth(.16,.30,renderPhase)*(1-smooth(.34,.48,renderPhase));

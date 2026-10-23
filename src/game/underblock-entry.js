@@ -1,5 +1,5 @@
 import * as T from '../../vendor/three.module.js';
-import {ENTRY_STEPS,ENTRY_STEP_RUN,ENTRY_STEP_RISE} from './underblock-entry-rules.js?v=61';
+import {ENTRY_STEPS,ENTRY_STEP_RUN,ENTRY_STEP_RISE} from './underblock-entry-rules.js?v=62';
 
 export function buildUnderblockEntry(world){
  const root=new T.Group();root.name='The Underblock / condemned service descent';world.scene.add(root);
