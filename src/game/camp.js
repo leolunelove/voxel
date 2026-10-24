@@ -54,7 +54,7 @@ export class CampWorld{
   for(const x of [-18,18]){const lamp=new T.PointLight(0xffd39a,85,30);lamp.position.set(x,11.7,-15);this.scene.add(lamp);const bulb=box(x,11.9,-14.7,1,.25,.55,0xffd39a);bulb.material=this.mat(0xffd39a,.7);bulb.userData.prisonBulb=true;}
   // Color-coded routes are only a few seconds long.
   box(-4.8,1.015,4,.13,.02,7,0xdd8d39);box(-7,1.015,3.5,4.5,.02,.13,0xdd8d39);box(4.8,1.015,4,.13,.02,7,0xb4ce94);box(6.6,1.015,3.5,3.5,.02,.13,0xb4ce94);
-  for(const [x,words]of [[-10,'01 / THE DEEPWELL'],[8,'02 / TIMBER FARM']]){for(const dx of [-3.3,3.3])box(x+dx,3,1,.25,4,.25,metal);box(x,5.2,1,7,.3,.5,0x8d957b);this.sign(['CENTRAL YARD','EXCHANGE / FORGE'],x,4.3,.7,6,1.2,Math.PI);}
+  for(const [x,words]of [[-10,'01 / THE DEEPWELL'],[8,'02 / TIMBER FARM']]){for(const dx of [-3.3,3.3])box(x+dx,3,1,.25,4,.25,metal);if(x!==-10)box(x,5.2,1,7,.3,.5,0x8d957b);this.sign(['CENTRAL YARD','EXCHANGE / FORGE'],x,4.3,.7,6,1.2,Math.PI);}
   
   this.gate=new T.Group();this.gate.position.set(8,0,.7);this.scene.add(this.gate);for(let x=-2;x<=2;x+=.5){const m=new T.Mesh(this.geometry,this.mat(metal));m.scale.set(.10,3.8,.16);m.position.set(x,2.9,0);this.gate.add(m);}for(const y of [1.1,3,4.8]){const m=new T.Mesh(this.geometry,this.mat(0xc3ab76));m.position.y=y;m.scale.set(4.2,.12,.2);this.gate.add(m);}this.gateLift=0;
 

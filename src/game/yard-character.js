@@ -130,7 +130,7 @@ export function dressMineEntrance(world){
   for(const y of [1.7,4.3])b(x,y,.58,.67,.2,.1,iron);
  }
  b(-10,5,.15,5.5,.65,.9,wood);b(-10,5.45,.15,5.9,.22,1.05,iron);
- world.sign(['MINE / DEEPWELL', ['STARTER SEAM','EXCAVATION','DEEP WORKS'][s]],-10,5,.76,4.7,.85,0,g,'#f2b55a');
+ world.sign(['MINE'],-10,5,.76,4.5,.56,0,g,'#f2b55a');
  // Three overhead portal ribs establish depth while keeping the ramp open.
  for(const z of [-.8,-2.2]){
   for(const x of [-12.15,-7.85])b(x,3,z,.28,4,.3,wood);
