@@ -1,0 +1,5 @@
+# Build 64 — Light on the stone
+
+Three bounded amber spotlights now illuminate the mine jambs and a cell facade, with one static 512px shadow map. These work lights remain at half strength during the day and rise continuously to full strength at night. Existing night-only lamps keep their schedule. Older yard floods are reduced so they do not erase local contrast; their color is warmer. Lamp panes use untone-mapped amber materials, avoiding exposed white rectangles. Cool sky fill, a small night readability fill and lower daytime ambient create separation between warm work areas and cool masonry. Dungeon fill stays unchanged. The single-line mine sign is centered and larger.
+
+116 checks pass, including a regression for work-light day/night behavior and amber lens color. Local browser preview inspected at sunset and after nightfall with clear entrance pools, readable paving and no console errors. Layout, collisions, progression, save schema and tool animations are unchanged. Hardware performance has not been benchmarked; only one additional small shadow map is used.

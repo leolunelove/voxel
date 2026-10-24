@@ -1,14 +1,14 @@
 import * as T from '../../vendor/three.module.js';
-import {buildUnderblockEntry} from './underblock-entry.js?v=63.1';
-import {entryFloor} from './underblock-entry-rules.js?v=63.1';
-import {World,keyOf} from './world.js?v=63.1';
-import {BLOCKS} from './rules.js?v=63.1';
-import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=63.1';
+import {buildUnderblockEntry} from './underblock-entry.js?v=64';
+import {entryFloor} from './underblock-entry-rules.js?v=64';
+import {World,keyOf} from './world.js?v=64';
+import {BLOCKS} from './rules.js?v=64';
+import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=64';
 export const TREE_SPOTS=[[7,-4],[10,-7],[7,-8],[13,-4],[13,-9],[5,-11],[16,-4],[16,-12],[10,-14],[4,-15]];
-import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=63.1';
-import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=63.1';
-import {buildIronEmber} from './iron-ember.js?v=63.1';
-import {buildCell} from './cell.js?v=63.1';
+import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=64';
+import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=64';
+import {buildIronEmber} from './iron-ember.js?v=64';
+import {buildCell} from './cell.js?v=64';
 export class CampWorld{
  constructor(scene){
   this.scene=scene;this.layout={spawn:CAMP_SPAWN};this.geometry=new T.BoxGeometry(1,1,1);this.materials=BLOCKS.map((b,i)=>new T.MeshStandardMaterial({map:World.prototype.texture.call(this,i),color:0xffffff,roughness:1}));this.paint=new Map();this.blocks=new Map();this.meshes=[];this.trees=[];this.excavated=new Set();this.blockers=[];this.mineLevel=-1;this.forestLevel=-1;this.level=1;this.time=0;this.refillIn=-1;this.elapsed=0;
@@ -20,7 +20,7 @@ export class CampWorld{
  box(x,y,z,w,h,d,color,solid=false,group=this.scene){const m=new T.Mesh(this.geometry,this.mat(color));m.position.set(x,y,z);m.scale.set(w,h,d);group.add(m);if(solid)this.blockers.push(new T.Box3().setFromObject(m));return m;}
  sign(lines,x,y,z,w=6,h=1.4,angle=0,group=this.scene,color='#efb55e'){
   const c=document.createElement('canvas');c.width=1024;c.height=256;const ctx=c.getContext('2d');ctx.fillStyle='#292a2f';ctx.fillRect(0,0,1024,256);ctx.fillStyle=color;ctx.fillRect(0,0,12,256);
-  lines.forEach((line,i)=>{let size=i===0?76:43;ctx.font='bold '+size+'px monospace';while(ctx.measureText(line).width>940&&size>12){size-=2;ctx.font='bold '+size+'px monospace';}ctx.fillStyle=i===0?color:'#c9bca4';ctx.fillText(line,40,lines.length===1?160:105+i*100);});
+  lines.forEach((line,i)=>{let size=lines.length===1?170:i===0?76:43;ctx.font='bold '+size+'px monospace';while(ctx.measureText(line).width>940&&size>12){size-=2;ctx.font='bold '+size+'px monospace';}ctx.fillStyle=i===0?color:'#c9bca4';ctx.fillText(line,lines.length===1?(1024-ctx.measureText(line).width)/2:40,lines.length===1?180:105+i*100);});
   const tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;const m=new T.Mesh(new T.PlaneGeometry(w,h),new T.MeshBasicMaterial({map:tex}));m.position.set(x,y,z);m.rotation.y=angle;group.add(m);return m;
  }
  build(){

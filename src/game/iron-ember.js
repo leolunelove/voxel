@@ -60,6 +60,20 @@ export function buildIronEmber(world){
  const matrix=new T.Matrix4(),pos=new T.Vector3(),scale=new T.Vector3(),q=new T.Quaternion();
  rows.forEach((r,i)=>{matrix.compose(pos.set(r.x,r.y,r.z),q,scale.set(r.w,r.h,r.d));mesh.setMatrixAt(i,matrix);mesh.setColorAt(i,new T.Color(r.color));});
  mesh.name='Instanced charcoal masonry, conduit and safety markings';mesh.castShadow=true;mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);
+ world.yardFill=new T.AmbientLight(0x9baac2,.35);root.add(world.yardFill);
+ // Local work lamps provide real amber pools on the portal and cell doors.
+ // Three bounded cones, one 512px shadow map; other fixtures stay inexpensive.
+ const pools=[[-13.15,3.5,1.35,-13.15,1.25,.4],[-6.85,3.5,1.35,-6.85,1.25,.4],[-15,4.0,13.35,-15,1.4,14.3]];
+ for(const [i,p]of pools.entries()){
+  const light=new T.SpotLight(0xffa641,i===2?42:38,6.5,.94,.72,2);
+  light.position.set(...p.slice(0,3));light.target.position.set(...p.slice(3));root.add(light,light.target);
+  light.userData.workLight=true;light.castShadow=i===0;
+  if(light.castShadow){light.shadow.mapSize.set(512,512);light.shadow.camera.near=.15;light.shadow.camera.far=7;light.shadow.bias=-.001;light.shadow.normalBias=.035;light.shadow.autoUpdate=false;light.shadow.needsUpdate=true;}
+ }
+ // Restrain the older yard floodlights so local pools retain contrast at night.
+ world.scene.traverse(o=>{if(o.isPointLight&&!o.userData.alwaysOn&&Math.abs(o.position.x)<20&&o.position.z<16&&o.position.z>-18){o.intensity*=.65;o.color.setHex(0xffb458);}});
+ // Lens color must stay amber instead of being exposed into a white rectangle.
+ world.scene.traverse(o=>{if(o.userData.prisonBulb){o.material=new T.MeshBasicMaterial({color:0xffba55,toneMapped:false});o.castShadow=false;}});
  // Sun shadows belong to static scenery, not individual ore blocks. Updating
  // this small set avoids thousands of ore shadow submissions per frame.
  world.scene.traverse(o=>{if(o.isMesh&&!o.userData.key&&!o.isInstancedMesh){o.castShadow=true;o.receiveShadow=true;}});

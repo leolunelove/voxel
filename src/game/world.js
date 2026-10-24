@@ -1,7 +1,7 @@
 import * as T from '../../vendor/three.module.js';
-import {BLOCKS,oreFor} from './rules.js?v=63.1';
-import {LAYOUTS,columnsFor,columnTop} from './layouts.js?v=63.1';
-import {buildEnvironment,disposeEnvironment} from './environment.js?v=63.1';
+import {BLOCKS,oreFor} from './rules.js?v=64';
+import {LAYOUTS,columnsFor,columnTop} from './layouts.js?v=64';
+import {buildEnvironment,disposeEnvironment} from './environment.js?v=64';
 export const keyOf=(x,y,z)=>x+','+y+','+z;
 export class World{
  constructor(scene){this.scene=scene;this.mine=0;this.layout=LAYOUTS[0];this.blockers=[];this.blocks=new Map();this.meshes=[];this.geometry=new T.BoxGeometry(1,1,1);this.materials=BLOCKS.map((b,i)=>new T.MeshStandardMaterial({map:this.texture(i),roughness:.93,emissive:i===7?0x6f3521:0,emissiveIntensity:.12}));this.environmentsEnabled=true;this.generate();}
