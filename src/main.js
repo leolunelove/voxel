@@ -1,35 +1,35 @@
 import * as T from '../vendor/three.module.js';
-import {entryDepth} from './game/underblock-entry-rules.js?v=65';
+import {entryDepth} from './game/underblock-entry-rules.js?v=66';
 const entryFogColor=new T.Color(0x263e38);
-import {Input} from './engine/input.js?v=65';
-import {Audio} from './engine/audio.js?v=65';
-import {Feedback} from './engine/feedback.js?v=65';
-import {CampWorld} from './game/camp.js?v=65';
-import {campLevel,LEVEL_TWO,AXES,treeYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=65';
-import {Player} from './game/player.js?v=65';
-import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=65';
-import {Pickups} from './game/pickups.js?v=65';
-import {HUD} from './ui/hud.js?v=65';
+import {Input} from './engine/input.js?v=66';
+import {Audio} from './engine/audio.js?v=66';
+import {Feedback} from './engine/feedback.js?v=66';
+import {CampWorld} from './game/camp.js?v=66';
+import {campLevel,LEVEL_TWO,AXES,treeYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=66';
+import {Player} from './game/player.js?v=66';
+import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=66';
+import {Pickups} from './game/pickups.js?v=66';
+import {HUD} from './ui/hud.js?v=66';
 
-import {Hunt} from './game/hunt.js?v=65';
-import {freshHunt,loadHunt,inHunt,bank,retreat,attackLevel,swordDamage,MONSTERS,MAX_HP,hurt} from './game/hunt-rules.js?v=65';
+import {Hunt} from './game/hunt.js?v=66';
+import {freshHunt,loadHunt,inHunt,bank,retreat,attackLevel,swordDamage,MONSTERS,MAX_HP,hurt} from './game/hunt-rules.js?v=66';
 
-import {Archery} from './game/archery.js?v=65';
-import {Dungeon} from './game/dungeon.js?v=65';
-import {inRange,atDungeonGate,skillLevel,finishDungeon,DIFFICULTIES} from './game/dungeon-rules.js?v=65';
+import {Archery} from './game/archery.js?v=66';
+import {Dungeon} from './game/dungeon.js?v=66';
+import {inRange,atDungeonGate,skillLevel,finishDungeon,DIFFICULTIES} from './game/dungeon-rules.js?v=66';
 
-import {SkillBook} from './ui/skills.js?v=65';
+import {SkillBook} from './ui/skills.js?v=66';
 
-import {SWORDS,BOWS,forgeWeapon,weaponReason} from './game/weapons.js?v=65';
+import {SWORDS,BOWS,forgeWeapon,weaponReason} from './game/weapons.js?v=66';
 
-import {SHIELDS,freshGuard,tickGuard,defend,forgeShield,shieldReason} from './game/shield-rules.js?v=65';
-import {skillLedger} from './game/skills.js?v=65';
-import {freshShift,loadShift,tickShift,fatigue,shiftClock,closeShift,loadSummary} from './game/shift-rules.js?v=65';
-import {atBed,CELL_WAKE} from './game/cell.js?v=65';
-import {ShiftUI} from './ui/shift.js?v=65';
-import {RestFlow} from './game/rest-flow.js?v=65';
-import {Daylight} from './engine/daylight.js?v=65';
-import {updateHTML} from './ui/dom.js?v=65';
+import {SHIELDS,freshGuard,tickGuard,defend,forgeShield,shieldReason} from './game/shield-rules.js?v=66';
+import {skillLedger} from './game/skills.js?v=66';
+import {freshShift,loadShift,tickShift,fatigue,shiftClock,closeShift,loadSummary} from './game/shift-rules.js?v=66';
+import {atBed,CELL_WAKE} from './game/cell.js?v=66';
+import {ShiftUI} from './ui/shift.js?v=66';
+import {RestFlow} from './game/rest-flow.js?v=66';
+import {Daylight} from './engine/daylight.js?v=66';
+import {updateHTML} from './ui/dom.js?v=66';
 const canvas=document.getElementById('game');
 const scene=new T.Scene();scene.background=new T.Color(0x1d302a);scene.fog=new T.FogExp2(0x1d302a,.024);
 let renderer;try{renderer=new T.WebGLRenderer({canvas,antialias:true});}catch(error){document.querySelector('#interface').textContent='This prototype needs WebGL. Please open it in a desktop browser with hardware acceleration enabled.';throw error;}
@@ -121,7 +121,7 @@ function frame(now){requestAnimationFrame(frame);const dt=Math.min((now-last)/10
  daylight.update(clock.hour,dt,!!dungeon);
  if(dungeon)dungeon.atmosphere(world,scene,player.position,dt);
  if(!dungeon){const depth=entryDepth(player.position);if(depth){scene.fog.color.lerp(entryFogColor,depth*.8);scene.fog.density+=depth*.045;scene.background.lerp(entryFogColor,depth*.5);world.skyLight.intensity*=1-depth*.7;world.sun.intensity*=1-depth*.95;}}
- audio.environment(currentArea===7?3:currentArea===6?1:currentArea===8?1:currentArea===5?3:currentArea===4?4:currentArea>=0?currentArea:0,mode==='playing');world.update(mode==='playing'?dt:0,feedback.reduced,player.position);if(world.refillEvent){world.refillEvent=false;if(world.area(player.position)===0)player.home();mining.reset();hud.toast('A fresh seam is ready. Your haul stays yours.');}if(mode!=='playing'){if(mode==='menu')menuTime=(menuTime+dt)%(Math.PI*2*6);menuMotion+=((mode==='menu'&&!feedback.reduced?1:0)-menuMotion)*(1-Math.exp(-dt*3));const phase=menuTime/6,sway=Math.sin(phase)*menuMotion,depth=(1-Math.cos(phase))*menuMotion;menuCamera.position.set(4+sway*.65,4.5+Math.sin(phase*2)*menuMotion*.06,10+depth*.18);menuCamera.lookAt(-9+sway*.12,3.6,0);}renderer.render(scene,(mode==='playing'||mode==='skills'||mode==='sleep'||mode==='waking'||mode==='sleep-transition')?camera:menuCamera);feedback.render(renderer,mode==='playing');
+ audio.environment(currentArea===7?3:currentArea===6?1:currentArea===8?1:currentArea===5?3:currentArea===4?4:currentArea>=0?currentArea:0,mode==='playing');world.update(mode==='playing'?dt:0,feedback.reduced,player.position);if(world.refillEvent){world.refillEvent=false;if(world.area(player.position)===0)player.home();mining.reset();hud.toast('A fresh seam is ready. Your haul stays yours.');}if(mode!=='playing'){if(mode==='menu')menuTime=(menuTime+dt)%(Math.PI*2*6);menuMotion+=((mode==='menu'&&!feedback.reduced?1:0)-menuMotion)*(1-Math.exp(-dt*3));const phase=menuTime/6,sway=Math.sin(phase)*menuMotion,depth=(1-Math.cos(phase))*menuMotion;menuCamera.position.set(4+sway*.65,4.5+Math.sin(phase*2)*menuMotion*.06,10+depth*.18);menuCamera.lookAt(-9+sway*.12,3.6,-6);}renderer.render(scene,(mode==='playing'||mode==='skills'||mode==='sleep'||mode==='waking'||mode==='sleep-transition')?camera:menuCamera);feedback.render(renderer,mode==='playing');
 }
 function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();menuCamera.aspect=camera.aspect;menuCamera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);feedback.resize(camera.aspect);}
 window.addEventListener('resize',resize);resize();requestAnimationFrame(frame);

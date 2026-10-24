@@ -5,7 +5,7 @@ import * as T from '../../vendor/three.module.js';
 export function buildIronEmber(world){
  const root=new T.Group();root.name='Iron & Ember / courtyard';world.scene.add(root);
  const rows=[],iron=0x303238,stone=0x4c4d52,trim=0x67666a,orange=0xd78b3b;
- const b=(x,y,z,w,h,d,color,solid=false)=>{rows.push({x,y,z,w,h,d,color});if(solid)world.blockers.push(new T.Box3(new T.Vector3(x-w/2,y-h/2,z-d/2),new T.Vector3(x+w/2,y+h/2,z+d/2)));};
+ const b=(x,y,z,w,h,d,color,solid=false,move=z<1)=>{if(move)z-=6;rows.push({x,y,z,w,h,d,color});if(solid)world.blockers.push(new T.Box3(new T.Vector3(x-w/2,y-h/2,z-d/2),new T.Vector3(x+w/2,y+h/2,z+d/2)));};
  // An enclosed mine portal with side cheeks; the original 3.8m opening is clear.
  for(const [x,w]of [[-15.7,6.5],[-4.3,6.5]])b(x,3.7,.12,w,5.4,.55,stone,true);
  b(-10,6,.12,17.9,1.2,.55,stone);
@@ -14,12 +14,12 @@ export function buildIronEmber(world){
  // Shallow masonry patches, deliberately large and sparse like the mockup.
  for(const side of [-1,1]){
   for(let i=0;i<28;i++){
-   const z=-16+(i*7%32),y=1.8+(i*11%13)*.43;
+   const z=-22+(i*7%38),y=1.8+(i*11%13)*.43;
    if(z>3&&z<11)continue; // Side-room doorways remain legible and open.
-   b(side*19.485,y,z,.025,.26,.65+(i%3)*.24,i%4===0?0x6a4b41:0x565459);
+   b(side*19.485,y,z<1?z+6:z,.025,.26,.65+(i%3)*.24,i%4===0?0x6a4b41:0x565459);
   }
-  for(const z of [-16,-9,-2,14.5]){
-   b(side*19.38,4.1,z,.38,7,.6,trim);b(side*19.38,7.7,z,.65,.25,.85,trim);
+  for(const z of [-22,-15,-8,14.5]){
+   b(side*19.38,4.1,z<1?z+6:z,.38,7,.6,trim);b(side*19.38,7.7,z<1?z+6:z,.65,.25,.85,trim);
   }
  }
  for(let i=0;i<24;i++){
@@ -35,16 +35,19 @@ export function buildIronEmber(world){
  for(const x of [-17,-13,-9,-5])b(x,6.1,.51,.24,.24,.2,trim);
  b(-17.1,3.1,.53,.5,.8,.18,iron);b(-17.1,3.2,.64,.12,.06,.03,orange);
  // Keep rails and route markings level with the paving; no collision lips.
- for(const x of [-12.8,-7.2])b(x,1.04,5.2,.14,.025,5.1,orange);
- for(let i=0;i<8;i++)b(-10.7+i*.6,1.045,7.65,.38,.025,.24,orange);
- world.sign(['01 / DEEPWELL','FOLLOW THE AMBER LINE'],-14.8,4.45,.47,3.8,.85,0,root);
+ for(const x of [-12.8,-7.2])b(x,1.04,-.8,.14,.025,5.1,orange,false,false);
+ for(let i=0;i<8;i++)b(-10.7+i*.6,1.045,1.65,.38,.025,.24,orange);
+ world.sign(['01 / DEEPWELL','FOLLOW THE AMBER LINE'],-14.8,4.45,-5.53,3.8,.85,0,root);
 
  // Small wall fixtures and their emissive panes work with the existing clock.
  for(const [x,z,angle]of [[-17.4,14.0,Math.PI],[-5.1,14.0,Math.PI],[13.3,14.0,Math.PI],[-14.4,.6,0],[-5.6,.6,0]]){
   b(x,4.2,z,.68,.66,.2,iron);
-  const bulb=world.box(x,4.2,z+(angle?-.13:.13),.44,.36,.08,0xffbd65,false,root);
+  const bulb=world.box(x,4.2,(z<1?z-6:z)+(angle?-.13:.13),.44,.36,.08,0xffbd65,false,root);
   bulb.material=world.mat(0xffbd65,.45);bulb.userData.prisonBulb=true;
  }
+ // Faded muster lines give the added forecourt a human scale.
+ for(const x of [-3.5,3.5])b(x,1.035,-1,.055,.018,5,0x8a8276,false,false);
+ for(const z of [-3.5,1.5])b(0,1.035,z,7,.018,.055,0x8a8276,false,false);
  // One parked cart, off the mine approach, built from a few chunky boxes.
  b(-4.2,1.62,5.2,1.45,.72,1.15,iron,true);
  b(-4.2,2.04,5.2,1.65,.12,1.3,trim);
@@ -63,7 +66,7 @@ export function buildIronEmber(world){
  world.yardFill=new T.AmbientLight(0x9baac2,.35);root.add(world.yardFill);
  // Local work lamps provide real amber pools on the portal and cell doors.
  // Three bounded cones, one 512px shadow map; other fixtures stay inexpensive.
- const pools=[[-13.15,3.5,1.35,-13.15,1.25,.4],[-6.85,3.5,1.35,-6.85,1.25,.4],[-15,4.0,13.35,-15,1.4,14.3]];
+ const pools=[[-13.15,3.5,-4.65,-13.15,1.25,-5.6],[-6.85,3.5,-4.65,-6.85,1.25,-5.6],[-15,4.0,13.35,-15,1.4,14.3]];
  for(const [i,p]of pools.entries()){
   const light=new T.SpotLight(0xffa641,i===2?42:38,6.5,.94,.72,2);
   light.position.set(...p.slice(0,3));light.target.position.set(...p.slice(3));root.add(light,light.target);
@@ -71,7 +74,7 @@ export function buildIronEmber(world){
   if(light.castShadow){light.shadow.mapSize.set(512,512);light.shadow.camera.near=.15;light.shadow.camera.far=7;light.shadow.bias=-.001;light.shadow.normalBias=.035;light.shadow.autoUpdate=false;light.shadow.needsUpdate=true;}
  }
  // Restrain the older yard floodlights so local pools retain contrast at night.
- world.scene.traverse(o=>{if(o.isPointLight&&!o.userData.alwaysOn&&Math.abs(o.position.x)<20&&o.position.z<16&&o.position.z>-18){o.intensity*=.65;o.color.setHex(0xffb458);}});
+ world.scene.traverse(o=>{if(o.isPointLight&&!o.userData.alwaysOn&&Math.abs(o.position.x)<20&&o.position.z<16&&o.position.z>-24){o.intensity*=.65;o.color.setHex(0xffb458);}});
  // Lens color must stay amber instead of being exposed into a white rectangle.
  world.scene.traverse(o=>{if(o.userData.prisonBulb){o.material=new T.MeshBasicMaterial({color:0xffba55,toneMapped:false});o.castShadow=false;}});
  // Sun shadows belong to static scenery, not individual ore blocks. Updating

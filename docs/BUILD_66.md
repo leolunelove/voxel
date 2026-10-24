@@ -1,0 +1,5 @@
+# Build 66 — Breathing room
+
+The mine and forest plots move six metres north as complete working areas. The yard gains a six-metre-deep paved forecourt, increasing the space between the work portals and cellblock by roughly 38%. Plot dimensions, ore weights, tree counts, expansion costs and tool rhythm stay unchanged. The forest gate, trees, nursery, fences, mine stairs, entry facade, lamp pools and perimeter follow the new coordinates. Cell 07, combat rooms and side entrances stay in place. The shop canopies are raised 1.2m to open sightlines; faded muster lines give the added paving scale without adding obstacles. The menu camera faces the relocated work frontage.
+
+118 checks pass, including crossing the new forecourt, locked/unlocked forest access, all mine stairs, all plot-stage routes, archery lanes, cell sleep/wake access and the gallery. Static build verifies all local assets. Progress save formats are unchanged; the game does not persist a player position or mined-hole map across reload, so no position migration is required.

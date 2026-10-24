@@ -1,8 +1,8 @@
-import {bowMuzzle,ballisticVelocity} from '../engine/bow-space.js?v=65';
-import {BOWS,arrowDamage} from './weapons.js?v=65';
+import {bowMuzzle,ballisticVelocity} from '../engine/bow-space.js?v=66';
+import {BOWS,arrowDamage} from './weapons.js?v=66';
 import * as T from '../../vendor/three.module.js';
-import {shotXP} from './dungeon-rules.js?v=65';
-import {embedArrow} from './embedded-arrows.js?v=65';
+import {shotXP} from './dungeon-rules.js?v=66';
+import {embedArrow} from './embedded-arrows.js?v=66';
 export class Archery{
  constructor(scene,state,onScore,onFire=()=>{}){this.onFire=onFire;this.scene=scene;this.state=state;this.onScore=onScore;this.targets=[];this.arrows=[];this.impacts=[];this.charge=0;this.wasHeld=false;this.cooldown=0;this.geometry=new T.BoxGeometry(.035,.035,.65).translate(0,0,-.325);this.headGeometry=new T.ConeGeometry(.055,.13,4);this.featherGeometry=new T.BoxGeometry(.12,.012,.14);this.arrowTrim=new T.MeshLambertMaterial({color:0xbcbda3});this.material=new T.MeshLambertMaterial({color:0xd7bd81});this.root=new T.Group();scene.add(this.root);
   for(const z of [5.8,9,12.2]){const target=new T.Mesh(new T.CylinderGeometry(.9,.9,.15,24),new T.MeshLambertMaterial({color:0xd6c9a7}));target.rotation.z=Math.PI/2;target.position.set(35,2.5,z);target.userData.ready=0;this.root.add(target);this.targets.push(target);

@@ -1,4 +1,5 @@
 import * as T from '../../vendor/three.module.js';
+import {WORK_OFFSET} from './camp-rules.js?v=66';
 
 // Decoration stays outside the working plots and the central circulation routes.
 // Repeated masonry is instanced: richer walls without a draw call per brick.
@@ -73,7 +74,7 @@ export function buildYardCharacter(world){
  b(-10.8,5.9,12.23,15,.12,.12,iron);
  for(const x of [-18,-14,-10,-6])b(x,5.9,12.22,.23,.26,.2,trim);
  // The portal's fixed posts collide even as its stage-specific dressing changes.
- for(const x of [-12.15,-7.85])world.blockers.push(new T.Box3(new T.Vector3(x-.24,1,.15-.325),new T.Vector3(x+.24,4.8,.15+.325)));
+ for(const x of [-12.15,-7.85])world.blockers.push(new T.Box3(new T.Vector3(x-.24,1,.15+WORK_OFFSET-.325),new T.Vector3(x+.24,4.8,.15+WORK_OFFSET+.325)));
  // A worn circulation spine, patchwork paving and recessed drains.
  b(.5,1.012,7.5,4,.024,13,0x77716a);
  for(const x of [-1.8,2.8]){
@@ -119,14 +120,14 @@ export function buildYardCharacter(world){
 }
 
 export function dressMineEntrance(world){
- const g=world.mineDress,b=(...a)=>world.box(...a,false,g),s=world.mineLevel;
+ const g=world.mineDress,b=(x,y,z,w,h,d,c)=>world.box(x,y,z+WORK_OFFSET,w,h,d,c,false,g),s=world.mineLevel;
  const iron=0x303238,wood=0x785238,stone=0x4e4c4d;
  for(const x of [-12.15,-7.85]){
   b(x,3,.15,.56,4,.75,wood);b(x,1.2,.15,.85,.4,1,stone);
   for(const y of [1.7,4.3])b(x,y,.58,.67,.2,.1,iron);
  }
  b(-10,5,.15,5.5,.65,.9,wood);b(-10,5.45,.15,5.9,.22,1.05,iron);
- world.sign(['MINE'],-10,5,.76,4.5,.56,0,g,'#f2b55a');
+ world.sign(['MINE'],-10,5,.76+WORK_OFFSET,4.5,.56,0,g,'#f2b55a');
  // Three overhead portal ribs establish depth while keeping the ramp open.
  for(const z of [-.8,-2.2]){
   for(const x of [-12.15,-7.85])b(x,3,z,.28,4,.3,wood);

@@ -5,9 +5,9 @@ import * as T from '../../vendor/three.module.js';
 export function buildWorkyardCharacter(world){
  const root=new T.Group();root.name='Timber allotment and prison training wings';world.scene.add(root);
  const rows=[],iron=0x35483f,wood=0x856749,brick=0x776050,cream=0xb9b294;
- const b=(x,y,z,w,h,d,color,solid=false)=>{rows.push({x,y,z,w,h,d,color});if(solid)world.blockers.push(new T.Box3(new T.Vector3(x-w/2,y-h/2,z-d/2),new T.Vector3(x+w/2,y+h/2,z+d/2)));};
- const sign=(lines,x,y,z,w,h=.7,angle=0,color='#d4c39a')=>world.sign(lines,x,y,z,w,h,angle,root,color);
- const lamp=(x,y,z,color,power,range)=>{const bulb=world.box(x,y,z,.5,.16,.4,color,false,root);bulb.material=world.mat(color,.4);bulb.userData.prisonBulb=true;const light=new T.PointLight(color,power,range,2);light.position.set(x,y-.2,z);root.add(light);};
+ const b=(x,y,z,w,h,d,color,solid=false)=>{if(z<3)z-=6;rows.push({x,y,z,w,h,d,color});if(solid)world.blockers.push(new T.Box3(new T.Vector3(x-w/2,y-h/2,z-d/2),new T.Vector3(x+w/2,y+h/2,z+d/2)));};
+ const sign=(lines,x,y,z,w,h=.7,angle=0,color='#d4c39a')=>world.sign(lines,x,y,z<3?z-6:z,w,h,angle,root,color);
+ const lamp=(x,y,z,color,power,range)=>{if(z<3)z-=6;const bulb=world.box(x,y,z,.5,.16,.4,color,false,root);bulb.material=world.mat(color,.4);bulb.userData.prisonBulb=true;const light=new T.PointLight(color,power,range,2);light.position.set(x,y-.2,z);root.add(light);};
  // TIMBER: a salvaged nursery against the outer wall, not a wild forest.
  // All greenhouse geometry is behind the largest possible plot boundary.
  for(const x of [5,8,11,14,17]){
@@ -33,7 +33,7 @@ export function buildWorkyardCharacter(world){
   b(14.1+col*.67+row*.33,1.35+row*.48,2.42,.39,.29,.04,0xb49c70);
  }
  // The log pile has a single simple collision volume.
- world.blockers.push(new T.Box3(new T.Vector3(13.8,1,.55),new T.Vector3(16.4,2.6,2.45)));
+ world.blockers.push(new T.Box3(new T.Vector3(13.8,1,-5.45),new T.Vector3(16.4,2.6,-3.55)));
  sign(['TIMBER STORES','CUT · STACK · START AGAIN'],15.4,3.65,2.84,3.9,.8);
  sign(['02 / TIMBER ALLOTMENT','FOREST GATE / LEVEL 2'],8,4.4,1.35,6.1,1);
  for(let i=0;i<3;i++){
@@ -108,12 +108,12 @@ export function dressForestPlot(world){
  }
  // Later allotments get irrigation runs and benches near their rear fence.
  if(stage>0){
-  const z=stage===1?-11.65:-15.65;
+  const z=stage===1?-17.65:-21.65;
   world.box(stage===1?10:10.5,1.05,z,stage===1?11:14,.1,.18,0x4e7161,false,root);
   for(let x=5;x<16;x+=3)world.box(x,1.15,z,.18,.25,.28,0x94a78a,false,root);
  }
  if(stage===2){
-  world.box(16.7,1.1,-15,1.3,.2,1,0x866f49,false,root);
-  for(const x of [16.4,17])world.box(x,1.4,-15,.2,.6,.2,0x729656,false,root);
+  world.box(16.7,1.1,-21,1.3,.2,1,0x866f49,false,root);
+  for(const x of [16.4,17])world.box(x,1.4,-21,.2,.6,.2,0x729656,false,root);
  }
 }
