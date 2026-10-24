@@ -39,12 +39,8 @@ export function buildYardCharacter(world){
  for(let x=-2.8;x<3;x+=.55)b(x,7.6,14.1,.065,1.2,.1,iron);
  b(0,8.2,14.1,6,.08,.1,iron);
  sign(['CELLBLOCK / 07'],0,9.1,14.24,5.2,.85,Math.PI);
- // Real cell entrance retains its full doorway and resting position.
- b(5.5,4.55,9.65,5.5,.35,.75,trim);
- for(const x of [3,8])b(x,2.85,9.7,.36,3.7,.55,brick,true);
- sign(['07','LIGHTS OUT / YOUR OWN TIME'],5.5,3.85,9.48,3.3,.9,Math.PI);
  // Closed neighboring cells and a receiving hatch sit at the courtyard edge.
- for(const x of [-15,-10,-5,13,17]){
+ for(const x of [-15,-10,-5,17]){
   b(x,2.7,14.5,2.5,3.4,.4,0x913e29,true);
   b(x,3.1,14.24,1.25,.6,.08,0x20252a);
   for(let dx=-.5;dx<=.5;dx+=.25)b(x+dx,3.1,14.12,.055,.6,.1,trim);
@@ -57,7 +53,7 @@ export function buildYardCharacter(world){
   for(const y of [2.2,4.3,6.4,8.5])b(x,y,13.84,.3,.12,.28,iron);
  }
  for(let i=0;i<16;i++){
-  const x=-18+i*2.4;if(Math.abs(x)<3.2)continue;
+  const x=-18+i*2.4;if(Math.abs(x)<3.2||(x>10.8&&x<15.2))continue;
   b(x,1.45+(i%3)*.12,15.4,1.2+(i%2)*.4,.7,.08,plaster);
  }
  // Walkable gallery stair: .46 rises fit the existing half-block step-up.
@@ -67,7 +63,7 @@ export function buildYardCharacter(world){
  }
  b(-15.5,4.55,12.35,2.1,.28,1.5,trim,true);
  // Pale cell numbers and amber wall lamps read against the rust-red doors.
- for(const [i,x]of [-15,-10,-5,13,17].entries()){
+ for(const [i,x]of [-15,-10,-5,17].entries()){
   sign(['C'+(i+1)],x,4.7,14.05,1,.42,Math.PI);
   b(x,4.05,14.02,.7,.38,.18,iron);
   const bulb=world.box(x,4.05,13.9,.48,.22,.08,0xffc36b,false,root);
@@ -111,7 +107,7 @@ export function buildYardCharacter(world){
  b(10.3,2.2,11.5,2.4,2.4,.5,0x3e4146,true);
  for(let i=0;i<4;i++){b(9.55+i*.5,2.7,11.15,.1,1,.1,0xa28957);b(9.55+i*.5,3.2,11.15,.4,.12,.2,0x9aa59a);}
  // Warm fixtures join the existing day/night lamp system.
- for(const [x,z]of [[-4.7,11.5],[5.5,9.3],[-10,2.2]]){
+ for(const [x,z]of [[-4.7,11.5],[13,13.7],[-10,2.2]]){
   const bulb=world.box(x,4.15,z,.48,.18,.4,0xf0cc8b,false,root);bulb.material=world.mat(0xf0cc8b,.35);bulb.userData.prisonBulb=true;
   const light=new T.PointLight(0xffcf91,11,8,2);light.position.set(x,3.9,z);root.add(light);
  }

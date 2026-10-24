@@ -25,7 +25,7 @@ test('cellblock dressing preserves access to bed, shops, combat and side rooms a
   s.mineLevel=stage;s.forestLevel=stage;world.configure(s);const p=player();
   for(const [a,b]of [
    [[.5,8],[.5,13]],[[.5,13],[.5,17]],
-   [[.5,8],[5.5,8]],[[5.5,8],[5.5,11.5]],
+   [[.5,8],[13.6,8]],[[13.6,8],[13.6,16.1]],
    [[.5,8],[-10,8]],[[.5,8],[10,8]],
    [[.5,8],[-25,8]],[[.5,8],[25,8]],
    [[.5,3],[-10,3]],[[-10,3],[-10,.5]],

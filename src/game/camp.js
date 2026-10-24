@@ -1,14 +1,14 @@
 import * as T from '../../vendor/three.module.js';
-import {buildUnderblockEntry} from './underblock-entry.js?v=64';
-import {entryFloor} from './underblock-entry-rules.js?v=64';
-import {World,keyOf} from './world.js?v=64';
-import {BLOCKS} from './rules.js?v=64';
-import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=64';
+import {buildUnderblockEntry} from './underblock-entry.js?v=65';
+import {entryFloor} from './underblock-entry-rules.js?v=65';
+import {World,keyOf} from './world.js?v=65';
+import {BLOCKS} from './rules.js?v=65';
+import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=65';
 export const TREE_SPOTS=[[7,-4],[10,-7],[7,-8],[13,-4],[13,-9],[5,-11],[16,-4],[16,-12],[10,-14],[4,-15]];
-import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=64';
-import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=64';
-import {buildIronEmber} from './iron-ember.js?v=64';
-import {buildCell} from './cell.js?v=64';
+import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=65';
+import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=65';
+import {buildIronEmber} from './iron-ember.js?v=65';
+import {buildCell,insideCell} from './cell.js?v=65';
 export class CampWorld{
  constructor(scene){
   this.scene=scene;this.layout={spawn:CAMP_SPAWN};this.geometry=new T.BoxGeometry(1,1,1);this.materials=BLOCKS.map((b,i)=>new T.MeshStandardMaterial({map:World.prototype.texture.call(this,i),color:0xffffff,roughness:1}));this.paint=new Map();this.blocks=new Map();this.meshes=[];this.trees=[];this.excavated=new Set();this.blockers=[];this.mineLevel=-1;this.forestLevel=-1;this.level=1;this.time=0;this.refillIn=-1;this.elapsed=0;
@@ -32,7 +32,7 @@ export class CampWorld{
   for(const side of [-1,1]){if(side>0)box(side*29.5,.5,9,19,1,12,0x77816a);box(side*39,4,9,1,8,13,stone,true);for(const z of [3,15])box(side*29.5,4,z,20,8,1,stone,true);box(side*29.5,6.5,9,19,.3,12,0x465c49);for(const z of [5.5,10.5])box(side*20,3.5,z,.6,5,.3,metal,true);this.sign([side>0?'04 / ARCHERY RANGE':'05 / THE UNDERBLOCK',side>0?'DRAW · RELEASE · BULLSEYE':'CONDEMNED SERVICE STAIRS'],side*19.4,5.2,8,5.2,1.4,side>0?-Math.PI/2:Math.PI/2);}
   
   box(0,4,-18,41,8,1,stone,true);
-  for(const x of [-11.5,11.5])box(x,4,16,18,8,1,stone,true);
+  box(-11.5,4,16,18,8,1,stone,true);box(6.6,4,16,8.2,8,1,stone,true);box(17.85,4,16,5.3,8,1,stone,true);
   for(const x of [-9,9])box(x,4,23.5,1,8,16,stone,true);box(0,4,31,19,8,1,stone,true);
   box(0,.5,23.5,18,1,15,0x746a57);
   for(const x of [-2.8,2.8])box(x,3.7,16,.35,5.4,.6,metal,true);box(0,6.5,16,6,.4,1,metal);
@@ -41,7 +41,7 @@ export class CampWorld{
   
   for(const x of [-7,7]){box(x,1.35,21,1.5,.7,1.5,0x4b5140,true);box(x,3.8,28,.18,5.6,.18,metal);const light=new T.PointLight(0xf3ad69,28,17);light.position.set(x,5.9,28);this.scene.add(light);const bulb=box(x,6,28,.8,.25,.8,0xe4b16e);bulb.material=this.mat(0xe4b16e,.7);bulb.userData.prisonBulb=true;}
   for(const x of [-17,-13,-9,9,13,17]){box(x,4.8,-17.43,2,2,.08,0x1e362d);for(let dx=-.8;dx<=.81;dx+=.4)box(x+dx,4.8,-17.34,.08,2,.12,0x9aa18b);}
-  for(const x of [-14,-10,10,14]){box(x,3.5,15.44,2,3.7,.1,0x1b3028);for(let dx=-.8;dx<=.81;dx+=.4)box(x+dx,3.5,15.35,.08,3.8,.12,0x8d9980);}
+  for(const x of [-14,-10,10]){box(x,3.5,15.44,2,3.7,.1,0x1b3028);for(let dx=-.8;dx<=.81;dx+=.4)box(x+dx,3.5,15.35,.08,3.8,.12,0x8d9980);}
   this.sign(['VOXEL / BLOCK 07','YOUR PLOTS. YOUR PROGRESS.'],-11,6.5,15.25,10,2,Math.PI);
   this.sign(['WORK YARD / 07','MINE  ←     FOREST  →'],.5,6,-17.3,11,2);
   for(const x of [-18,18]){box(x,6,-16,2.2,12,2.2,0x435e4c);box(x,12.2,-16,4,.4,4,0xafa992);box(x,13.2,-16,2.4,1.7,2.4,metal);box(x,14.2,-16,4,.3,4,0x8b967d);}
@@ -98,6 +98,7 @@ export class CampWorld{
  solid(x,y,z){
   if(this.dungeon&&x>45)return this.dungeon.solid(x,y,z);
   if(Math.abs(x)>19.5){if(Math.abs(x)>38.5||z<3.5||z>14.5)return true;return y<(x<0?entryFloor(x,z):1);}
+  if(insideCell(x,z))return y<1;
   if(z< -17.5||z>30.5)return true;
   if(z>15.5){if(Math.abs(x)>8.5)return true;return y<1;}
   const mine=MINE_STAGES[this.mineLevel??0],forest=FOREST_STAGES[this.forestLevel??0];if(!mine||!forest)return y<1;

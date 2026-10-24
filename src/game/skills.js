@@ -1,5 +1,5 @@
-import {SHIELDS} from './shield-rules.js?v=64';
-import {SWORDS,BOWS} from './weapons.js?v=64';
+import {SHIELDS} from './shield-rules.js?v=65';
+import {SWORDS,BOWS} from './weapons.js?v=65';
 export function skillProgress(xp,cap=20){const level=Math.min(cap,1+Math.floor(Math.sqrt(Math.max(0,xp)/30))),base=30*(level-1)**2,next=30*level**2;return {xp,level,maxed:level===cap,next,remaining:Math.max(0,next-xp),progress:level===cap?1:Math.max(0,Math.min(1,(xp-base)/(next-base)))};}
 export function skillLedger(work,hunt){return [
  {name:'Mining',symbol:'⛏',...skillProgress(work.mined*4),description:'4 XP per mined block. Better picks work faster.',detail:work.mined+' blocks mined'},

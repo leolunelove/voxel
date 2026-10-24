@@ -1,8 +1,8 @@
-import {swordDamage} from '../game/hunt-rules.js?v=64';
-import {SWORDS,BOWS} from '../game/weapons.js?v=64';
-import {toolIcon} from '../engine/pickaxe.js?v=64';
-import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=64';
-import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=64';
+import {swordDamage} from '../game/hunt-rules.js?v=65';
+import {SWORDS,BOWS} from '../game/weapons.js?v=65';
+import {toolIcon} from '../engine/pickaxe.js?v=65';
+import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=65';
+import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=65';
 
 const fmt=n=>n.toLocaleString();
 const swatch=b=>'<i class="ore-gem" style="--ore:#'+b.color.toString(16).padStart(6,'0')+'"></i>';
@@ -25,24 +25,18 @@ export class HUD{
  <div id="toast" role="status" aria-live="polite"></div>
 
  <section id="menu" class="overlay title-screen" role="dialog" aria-modal="true" aria-label="Voxel main menu">
-  <div class="title-topline"><span class="title-emblem">V</span><span>BLOCK 07 · WORKERS’ EDITION</span><span class="title-status"><i></i> YOUR SHIFT. YOUR PACE.</span></div>
+  <div class="title-topline"><span>BLOCK 07</span><span class="title-status">IRON & EMBER</span></div>
   <div class="start-shell">
-   <div class="start-identity">
-    <div class="edition"><span></span> A LITTLE FREEDOM. ONE BLOCK AT A TIME.</div>
-    <h1 aria-label="Voxel">VOXEL</h1><div class="wordmark-sub"><span>BLOCK 07</span><b>MINE YOUR WAY FORWARD</b></div>
-    <p class="manifesto">They own the walls.<br><strong>You own the next swing.</strong></p>
-    <p class="lore">Built to keep you in.<br>Everything you forge takes you further.</p>
-    <div class="brand-rules"><span>MINE</span><i></i><span>FORGE</span><i></i><span>RISE</span></div>
-   </div>
+   <div class="start-identity"><h1 aria-label="Voxel">VOXEL</h1><div class="wordmark-sub"><b>PRISON</b></div></div>
    <div class="start-actions">
     <div id="menu-main-actions">
-     <small class="eyebrow">WELCOME BACK, MINER</small><h2 id="start-title">Your shift is waiting.</h2><p id="start-summary">Pick up where you left off.</p>
-     <div class="shift-card"><span id="start-rank">A</span><div><small>CURRENT ASSIGNMENT</small><b id="start-mine"></b><em id="start-tool"></em></div><i class="save-check" aria-label="Progress stored locally">✓</i></div>
-     <button id="play" class="button primary menu-play">Continue mining <span>↗</span></button>
-     <button id="start-exchange" class="menu-link"><span><b>Workers’ Exchange</b><small>Expand your plots, forge tools & sell</small></span><span>→</span></button>
-     <button id="open-settings" class="menu-link"><span><b>Settings</b><small>Sound, motion & mouse sensitivity</small></span><span>→</span></button>
-     <button id="open-controls" class="menu-link"><span><b>How to play</b><small>The controls. The way forward.</small></span><span>→</span></button>
-     <small class="save-note"><i></i> SAVES AUTOMATICALLY ON THIS BROWSER</small><p id="lock-error" role="alert"></p>
+     <h2 id="start-title">Your next shift.</h2><p id="start-summary">Mine. Forge. Make this place yours.</p>
+     <button id="play" class="button primary menu-play">Continue <span>▶</span></button>
+     <button id="start-exchange" class="menu-link"><span><b>Workers’ Exchange</b></span><span>›</span></button>
+     <button id="open-settings" class="menu-link"><span><b>Settings</b></span><span>›</span></button>
+     <button id="open-controls" class="menu-link"><span><b>Controls</b></span><span>›</span></button>
+     <div class="shift-card"><span id="start-rank">A</span><div><small>LOCAL SAVE</small><b id="start-mine"></b><em id="start-tool"></em></div><i class="save-check" aria-label="Progress stored locally">✓</i></div>
+     <small class="save-note">PROGRESS SAVES AUTOMATICALLY</small><p id="lock-error" role="alert"></p>
     </div>
     <div id="menu-settings" hidden><button data-menu-back class="menu-back">← Main menu</button><small class="eyebrow">MAKE IT YOURS</small><h2>Settings</h2><p class="setting-intro">A comfortable shift is a good shift.</p>
      <div class="setting-range"><label for="volume">Master volume <output id="volume-value">75%</output></label><input id="volume" type="range" min="0" max="100" value="75"></div>
@@ -50,9 +44,9 @@ export class HUD{
      <label class="setting-toggle"><span><b>Reduced motion</b><small>Less tool movement and fewer particles.</small></span><input id="motion" type="checkbox"></label>
      <div class="setting-range"><label for="sensitivity">Mouse sensitivity <output id="sensitivity-value">100%</output></label><input id="sensitivity" type="range" min="40" max="180" step="5" value="100"></div><small class="save-note">YOUR SETTINGS SAVE BETWEEN SHIFTS.</small>
     </div>
-    <div id="menu-controls" hidden><button data-menu-back class="menu-back">← Main menu</button><small class="eyebrow">LEARN THE ROPES</small><h2>Find your rhythm.</h2>
-     <div class="control-list"><span>Move <kbd>W A S D</kbd></span><span>Look <kbd>MOUSE</kbd></span><span>Mine / harvest <kbd>HOLD LMB</kbd></span><span>Jump <kbd>SPACE</kbd></span><span>Sprint <kbd>SHIFT</kbd></span><span>Workers’ Exchange <kbd>E</kbd></span><span>Return to central yard <kbd>R</kbd></span><span>Pause <kbd>ESC</kbd></span></div>
-     <p class="controls-note">Mine on the left. Forest on the right. Mine 20 blocks to reach level 2 and open your forest farm. Your axe equips automatically near trees. Break two separate trunk blocks to fell the tree. Logs pull toward you and saplings regrow. Sell hauls, expand both plots and forge stronger tools at the Exchange.<br><br>Walk through the gate behind the work yard to hunt. Your sword equips there. Hold LMB to strike; backstep or jump during a monster’s windup. Walk out to bank monster loot. At zero HP you return to the yard and lose every unbanked monster reward. R is an emergency retreat and also forfeits that loot. Attack XP, banked credits, ore, timber and gear stay safe. Pause freezes combat; reload forfeits risky loot.<br><br>If mouse capture is unavailable, hold the right mouse button to look. Arrow keys also turn and aim. Press Q in combat to switch sword/bow. Forge stronger swords and bows at skill levels 2, 4 and 7 in the Exchange. Press Tab for your skill book; the game pauses while it is open.<br><br>Archery is through the east gate. Hold LMB to draw and release to fire real arrows; bullseyes earn more Archery XP. The west gate leads to the Underblock lobby. Press E on its rune to enter a newly generated dungeon. Clear every enemy, follow the corridors and press E at the final gold exit for Dungeoneering XP. R abandons the run and forfeits monster loot. Dungeon layouts and unfinished runs reset on reload.</p>
+    <div id="menu-controls" hidden><button data-menu-back class="menu-back">← Main menu</button><h2>Controls</h2>
+     <div class="control-list"><span>Move <kbd>W A S D</kbd></span><span>Look <kbd>MOUSE / ARROWS</kbd></span><span>Mine / strike <kbd>HOLD LMB</kbd></span><span>Bow <kbd>HOLD / RELEASE LMB</kbd></span><span>Jump <kbd>SPACE</kbd></span><span>Sprint <kbd>SHIFT</kbd></span><span>Interact / rest <kbd>E</kbd></span><span>Swap weapon <kbd>Q</kbd></span><span>Dungeon guard <kbd>RMB / SWORD</kbd></span><span>Skills <kbd>TAB</kbd></span><span>Return to yard <kbd>R</kbd></span><span>Pause <kbd>ESC</kbd></span></div>
+     <p class="controls-note">Mine 20 blocks to unlock the forest. Break two trunk blocks to fell a tree. Sell and forge at the Exchange.</p><p class="controls-note">Walk out of combat to bank loot. Defeat, retreat or reload loses unbanked monster loot. Skills and gear stay yours.</p><small class="save-note">NO MOUSE CAPTURE? HOLD RMB TO LOOK.</small>
     </div>
    </div>
   </div>
@@ -90,6 +84,7 @@ export class HUD{
  wayfinding(text){this.set('prison-route',text);}
  set(id,value){document.getElementById(id).textContent=value;}
  update(s){
+ if(!this.started){const first=s.mined===0&&s.money===0;this.set('start-title',first?'Your first shift.':'Your next shift.');document.getElementById('play').firstChild.textContent=first?'Start shift ':'Continue ';}
  this.state=s;const count=bagCount(s),cap=capacity(s),next=PICKS[s.pick+1],m=MINE_STAGES[s.mineLevel],f=FOREST_STAGES[s.forestLevel],mn=MINE_STAGES[s.mineLevel+1],fn=FOREST_STAGES[s.forestLevel+1],level=campLevel(s);
  if(this.iconPick!==s.pick){document.getElementById('slot-pick').src=toolIcon(s.pick);this.iconPick=s.pick;}if(this.iconAxe!==s.axe){document.getElementById('slot-axe').src=toolIcon(s.axe,'axe');this.iconAxe=s.axe;}this.set('bag-mini',count);
  if(this.nextIconPick!==s.pick){document.getElementById('forge-icon').src=toolIcon(Math.min(PICKS.length-1,s.pick+1));this.nextIconPick=s.pick;}if(this.nextIconAxe!==s.axe){document.getElementById('forge-axe-icon').src=toolIcon(Math.min(AXES.length-1,s.axe+1),'axe');this.nextIconAxe=s.axe;}
@@ -119,7 +114,7 @@ export class HUD{
 
  menuPanel(name){for(const panel of ['main-actions','settings','controls'])document.getElementById('menu-'+panel).hidden=panel!==name;const area=document.getElementById('menu-'+name);area.querySelector('button,input')?.focus();}
  settings(s){document.getElementById('mute').checked=s.muted;document.getElementById('motion').checked=s.reduced;document.getElementById('volume').value=s.volume*100;document.getElementById('sensitivity').value=s.sensitivity;this.set('volume-value',Math.round(s.volume*100)+'%');this.set('sensitivity-value',s.sensitivity+'%');}
- menu(show){document.getElementById('menu').hidden=!show;document.body.classList.toggle('modal-open',show||!document.getElementById('shop').hidden);document.querySelector('.game-hud').setAttribute('aria-hidden',String(show||!document.getElementById('shop').hidden));if(show&&this.started){this.set('start-title','Your shift is waiting.');document.getElementById('play').firstChild.textContent='Resume mining ';}if(!show)this.started=true;}
+ menu(show){document.getElementById('menu').hidden=!show;document.body.classList.toggle('modal-open',show||!document.getElementById('shop').hidden);document.querySelector('.game-hud').setAttribute('aria-hidden',String(show||!document.getElementById('shop').hidden));if(show&&this.started){this.set('start-title','Paused.');document.getElementById('play').firstChild.textContent='Resume shift ';}if(!show)this.started=true;}
  shop(show){document.getElementById('shop').hidden=!show;document.body.classList.toggle('modal-open',show||!document.getElementById('menu').hidden);document.querySelector('.game-hud').setAttribute('aria-hidden',String(show||!document.getElementById('menu').hidden));}
  toast(message){this.set('toast',message);document.getElementById('toast').classList.add('visible');clearTimeout(this.timeout);this.timeout=setTimeout(()=>document.getElementById('toast').classList.remove('visible'),3000);}
 }
