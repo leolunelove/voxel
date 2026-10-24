@@ -1,4 +1,4 @@
-import {PICKS,upgradePick} from './rules.js?v=63';
+import {PICKS,upgradePick} from './rules.js?v=63.1';
 export const LEVEL_TWO=20;
 export const campLevel=s=>s.mined>=LEVEL_TWO?2:1;
 export const MINE_STAGES=[
