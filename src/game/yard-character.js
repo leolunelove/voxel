@@ -1,5 +1,5 @@
 import * as T from '../../vendor/three.module.js';
-import {WORK_OFFSET} from './camp-rules.js?v=66';
+import {WORK_OFFSET} from './camp-rules.js?v=67';
 
 // Decoration stays outside the working plots and the central circulation routes.
 // Repeated masonry is instanced: richer walls without a draw call per brick.
@@ -13,6 +13,25 @@ export function buildYardCharacter(world){
  // Its open central passage still leads straight to the hunting yard.
  for(const side of [-1,1]){
   const cx=side*11.2;
+  // Full-depth upper storeys and outer ground-floor wings, not facade flats.
+  b(cx,9.68,17.1,16.7,.38,6.8,trim,true);
+  b(cx,7,20.2,16.3,5.2,.55,brick,true);
+  b(side*19.35,5.3,17.6,.55,8.6,5.2,brick,true);
+  b(side*14.15,2.8,20.2,10.4,3.6,.55,brick,true);
+  b(side*9.1,2.8,18.5,.35,3.6,2.9,brick,true);
+  b(cx,10.02,20.35,16.8,.42,.4,iron);
+  b(side*19.55,10.02,17.1,.4,.42,6.8,iron);
+  for(const z of [16.8,19]){
+   b(side*19.66,7.2,z,.05,1.55,1.15,0x22262b);
+   for(const dz of [-.4,0,.4])b(side*19.71,7.2,z+dz,.07,1.55,.055,iron);
+  }
+  for(const x of [5,10,15]){
+   b(side*x,7.2,20.51,1.35,1.55,.05,0x22262b);
+   for(const dx of [-.45,0,.45])b(side*x+dx,7.2,20.55,.055,1.55,.07,iron);
+  }
+  b(side*13,10.23,17.8,1.4,.7,1.25,iron);
+  b(side*13,10.62,17.8,1.65,.12,1.5,trim);
+
   b(cx,7,15.15,16.3,5.2,1.5,brick,true);
   b(cx,4.55,14.2,16.5,.28,3.6,trim,true);
   b(cx,9.65,14.7,16.7,.35,2.4,trim);

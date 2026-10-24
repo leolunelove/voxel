@@ -1,8 +1,8 @@
-import {bowRig,applyBowRig} from './bow-motion.js?v=66';
-import {BOW_ROTATION,BOW_VIEW_SCALE,bowPosition} from './bow-space.js?v=66';
-import {SWORDS,BOWS} from '../game/weapons.js?v=66';
+import {bowRig,applyBowRig} from './bow-motion.js?v=67';
+import {BOW_ROTATION,BOW_VIEW_SCALE,bowPosition} from './bow-space.js?v=67';
+import {SWORDS,BOWS} from '../game/weapons.js?v=67';
 import * as T from '../../vendor/three.module.js';
-// A thin pixel-built item, with a diagonal wooden shaft and a stepped silhouette.
+// Solid stepped tools with a square shaft, socket and tapered working edges.
 const PALETTES=[[0x566161,0xb9c3bc,0xe2e6da],[0x4c5657,0xc9d4cc,0xf1f3e8],[0x20594c,0x54c7a7,0xa0f1cf],[0x364e5f,0x92b8cc,0xd9edf2],[0x765a24,0xd4ac45,0xffdf83],[0x713e31,0xe18a59,0xffc388]];
 export function toolArtwork(tier,axe=false){
  const grid=Array.from({length:16},()=>Array(16).fill('.'));
@@ -84,11 +84,13 @@ export function swordSwingPose(phase){
 }
 export function heldPose(phase,aspect,motion=1,kind='pick',draw=0,recoil=0){
  if(kind==='bow')return bowPose(draw,aspect,recoil);
- const p=kind==='sword'?swordSwingPose(phase):swingPose(phase),halfWidth=Math.tan(24*Math.PI/180)*TOOL_DEPTH*aspect,x=Math.min(.42,halfWidth*.44),distance=phase<.30?.30-phase:Math.max(0,phase-.34),t=Math.max(0,1-distance/.14),contact=t*t*(3-2*t);
- const rotation=[-.15+p[3]*motion*(kind==='axe'?1.14:1),-.72+p[4]*motion,-.05+p[5]*motion];
+ const p=kind==='sword'?swordSwingPose(phase):swingPose(phase),halfWidth=Math.tan(24*Math.PI/180)*TOOL_DEPTH*aspect,x=Math.min(.56,Math.max(.08,halfWidth-.82)),distance=phase<.30?.30-phase:Math.max(0,phase-.34),t=Math.max(0,1-distance/.14),contact=t*t*(3-2*t);
+ // Hold the silhouette diagonally at the right shoulder. Pitch does the work;
+ // yaw stays quiet so the head drives forward instead of sweeping sideways.
+ const rotation=[-.32+p[3]*motion*1.55,-.48+p[4]*motion*.35,-.48+p[5]*motion*1.8];
  if(kind==='sword'){rotation[0]=-.35+p[3]*motion*1.4;rotation[1]=-.25+p[4]*motion;rotation[2]=-.25+p[5]*motion;}
- const position=[x*(kind==='pick'?.72:1)+p[0]*motion+(.45-x)*contact*motion-(kind==='axe'?.20*contact*motion:0),-.40+p[1]*motion+(kind==='axe'?.09*contact*motion:0),-TOOL_DEPTH+p[2]*motion];
- position[0]=Math.min(position[0],halfWidth*.30);if(kind==='sword')position[2]-=.16*contact*motion;
+ const position=[x+p[0]*motion,-.43+p[1]*motion,-TOOL_DEPTH+p[2]*motion];
+ position[0]=Math.min(position[0],halfWidth*.62);if(kind==='sword')position[2]-=.16*contact*motion;
  const tip=(kind==='sword'?SWORD_TIP:kind==='pick'?CONTACT_TIP:AXE_TIP).clone().multiplyScalar(TOOL_SCALE).applyEuler(new T.Euler(...rotation));position[0]+=(-tip.x-position[0])*contact*motion;position[1]+=(-tip.y-position[1])*contact*motion;
  return {position,rotation};
 }

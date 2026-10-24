@@ -45,3 +45,17 @@ test('every tier stays framed horizontally through the actual held swing on narr
 test('the forward working point strikes close to the reticle without a large position correction',()=>{for(const kind of ['pick','axe'])for(const aspect of [.9,4/3,16/9]){const pose=heldPose(.30,aspect,1,kind),view=new T.PerspectiveCamera(48,aspect,.01,10);const tip=(kind==='axe'?AXE_TIP:CONTACT_TIP).clone().multiplyScalar(TOOL_SCALE).applyEuler(new T.Euler(...pose.rotation)).add(new T.Vector3(...pose.position)).project(view);assert.ok(Math.abs(tip.x)<.15);assert.ok(Math.abs(tip.y)<.04);}});
 
  test('sword stays framed through its full slash and contacts the reticle',()=>{for(const aspect of [.9,16/9])for(let n=0;n<=100;n++){const phase=n/100,tool=createSword(),pose=heldPose(phase,aspect,1,'sword'),camera=new T.PerspectiveCamera(48,aspect,.01,10);tool.scale.setScalar(TOOL_SCALE);tool.position.fromArray(pose.position);tool.rotation.fromArray(pose.rotation);tool.updateMatrixWorld(true);tool.traverse(m=>{if(!m.geometry)return;const v=m.geometry.attributes.position;for(let i=0;i<v.count;i++){const p=new T.Vector3().fromBufferAttribute(v,i).applyMatrix4(m.matrixWorld).project(camera);if(p.y>=-1)assert.ok(Math.abs(p.x)<1,`phase ${phase} aspect ${aspect} x ${p.x}`);}});if(n===30){const tip=SWORD_TIP.clone().applyMatrix4(tool.matrixWorld).project(camera);assert.ok(Math.abs(tip.x)<1e-6&&Math.abs(tip.y)<1e-6);}tool.traverse(m=>{m.geometry?.dispose();m.material?.dispose();});}assert.ok(swordSwingPose(.18)[5]>0);assert.ok(swordSwingPose(.30)[5]<-.2);});
+
+test('work tools rest at the right shoulder and pitch forward without a sideways sweep',()=>{
+ for(const kind of ['pick','axe']){
+  const rest=heldPose(0,16/9,1,kind),lift=heldPose(.16,16/9,1,kind),hit=heldPose(.30,16/9,1,kind);
+  assert.ok(rest.position[0]>.5,'grip sits to the right of the aiming line');
+  assert.ok(rest.rotation[2]<-.4,'diagonal shaft presents the broad head');
+  assert.ok(hit.rotation[0]<lift.rotation[0]-.6,'head pitches down and forward');
+  assert.ok(Math.abs(hit.rotation[1]-lift.rotation[1])<.04,'no large yaw sweep');
+  for(let n=1;n<=1000;n++){
+   const a=heldPose((n-1)/1000,16/9,1,kind),b=heldPose(n/1000,16/9,1,kind);
+   assert.ok(Math.hypot(...a.position.map((v,i)=>v-b.position[i]))<.035,'continuous contact approach');
+  }
+ }
+});

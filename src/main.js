@@ -1,35 +1,35 @@
 import * as T from '../vendor/three.module.js';
-import {entryDepth} from './game/underblock-entry-rules.js?v=66';
+import {entryDepth} from './game/underblock-entry-rules.js?v=67';
 const entryFogColor=new T.Color(0x263e38);
-import {Input} from './engine/input.js?v=66';
-import {Audio} from './engine/audio.js?v=66';
-import {Feedback} from './engine/feedback.js?v=66';
-import {CampWorld} from './game/camp.js?v=66';
-import {campLevel,LEVEL_TWO,AXES,treeYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=66';
-import {Player} from './game/player.js?v=66';
-import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=66';
-import {Pickups} from './game/pickups.js?v=66';
-import {HUD} from './ui/hud.js?v=66';
+import {Input} from './engine/input.js?v=67';
+import {Audio} from './engine/audio.js?v=67';
+import {Feedback} from './engine/feedback.js?v=67';
+import {CampWorld} from './game/camp.js?v=67';
+import {campLevel,LEVEL_TWO,AXES,treeYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=67';
+import {Player} from './game/player.js?v=67';
+import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=67';
+import {Pickups} from './game/pickups.js?v=67';
+import {HUD} from './ui/hud.js?v=67';
 
-import {Hunt} from './game/hunt.js?v=66';
-import {freshHunt,loadHunt,inHunt,bank,retreat,attackLevel,swordDamage,MONSTERS,MAX_HP,hurt} from './game/hunt-rules.js?v=66';
+import {Hunt} from './game/hunt.js?v=67';
+import {freshHunt,loadHunt,inHunt,bank,retreat,attackLevel,swordDamage,MONSTERS,MAX_HP,hurt} from './game/hunt-rules.js?v=67';
 
-import {Archery} from './game/archery.js?v=66';
-import {Dungeon} from './game/dungeon.js?v=66';
-import {inRange,atDungeonGate,skillLevel,finishDungeon,DIFFICULTIES} from './game/dungeon-rules.js?v=66';
+import {Archery} from './game/archery.js?v=67';
+import {Dungeon} from './game/dungeon.js?v=67';
+import {inRange,atDungeonGate,skillLevel,finishDungeon,DIFFICULTIES} from './game/dungeon-rules.js?v=67';
 
-import {SkillBook} from './ui/skills.js?v=66';
+import {SkillBook} from './ui/skills.js?v=67';
 
-import {SWORDS,BOWS,forgeWeapon,weaponReason} from './game/weapons.js?v=66';
+import {SWORDS,BOWS,forgeWeapon,weaponReason} from './game/weapons.js?v=67';
 
-import {SHIELDS,freshGuard,tickGuard,defend,forgeShield,shieldReason} from './game/shield-rules.js?v=66';
-import {skillLedger} from './game/skills.js?v=66';
-import {freshShift,loadShift,tickShift,fatigue,shiftClock,closeShift,loadSummary} from './game/shift-rules.js?v=66';
-import {atBed,CELL_WAKE} from './game/cell.js?v=66';
-import {ShiftUI} from './ui/shift.js?v=66';
-import {RestFlow} from './game/rest-flow.js?v=66';
-import {Daylight} from './engine/daylight.js?v=66';
-import {updateHTML} from './ui/dom.js?v=66';
+import {SHIELDS,freshGuard,tickGuard,defend,forgeShield,shieldReason} from './game/shield-rules.js?v=67';
+import {skillLedger} from './game/skills.js?v=67';
+import {freshShift,loadShift,tickShift,fatigue,shiftClock,closeShift,loadSummary} from './game/shift-rules.js?v=67';
+import {atBed,CELL_WAKE} from './game/cell.js?v=67';
+import {ShiftUI} from './ui/shift.js?v=67';
+import {RestFlow} from './game/rest-flow.js?v=67';
+import {Daylight} from './engine/daylight.js?v=67';
+import {updateHTML} from './ui/dom.js?v=67';
 const canvas=document.getElementById('game');
 const scene=new T.Scene();scene.background=new T.Color(0x1d302a);scene.fog=new T.FogExp2(0x1d302a,.024);
 let renderer;try{renderer=new T.WebGLRenderer({canvas,antialias:true});}catch(error){document.querySelector('#interface').textContent='This prototype needs WebGL. Please open it in a desktop browser with hardware acceleration enabled.';throw error;}
