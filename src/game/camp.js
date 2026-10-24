@@ -1,32 +1,33 @@
 import * as T from '../../vendor/three.module.js';
-import {buildUnderblockEntry} from './underblock-entry.js?v=62';
-import {entryFloor} from './underblock-entry-rules.js?v=62';
-import {World,keyOf} from './world.js?v=62';
-import {BLOCKS} from './rules.js?v=62';
-import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=62';
+import {buildUnderblockEntry} from './underblock-entry.js?v=63';
+import {entryFloor} from './underblock-entry-rules.js?v=63';
+import {World,keyOf} from './world.js?v=63';
+import {BLOCKS} from './rules.js?v=63';
+import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=63';
 export const TREE_SPOTS=[[7,-4],[10,-7],[7,-8],[13,-4],[13,-9],[5,-11],[16,-4],[16,-12],[10,-14],[4,-15]];
-import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=62';
-import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=62';
-import {buildCell} from './cell.js?v=62';
+import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=63';
+import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=63';
+import {buildIronEmber} from './iron-ember.js?v=63';
+import {buildCell} from './cell.js?v=63';
 export class CampWorld{
  constructor(scene){
   this.scene=scene;this.layout={spawn:CAMP_SPAWN};this.geometry=new T.BoxGeometry(1,1,1);this.materials=BLOCKS.map((b,i)=>new T.MeshStandardMaterial({map:World.prototype.texture.call(this,i),color:0xffffff,roughness:1}));this.paint=new Map();this.blocks=new Map();this.meshes=[];this.trees=[];this.excavated=new Set();this.blockers=[];this.mineLevel=-1;this.forestLevel=-1;this.level=1;this.time=0;this.refillIn=-1;this.elapsed=0;
   this.mineRoot=new T.Group();this.floorRoot=new T.Group();this.fenceRoot=new T.Group();this.forestRoot=new T.Group();this.mineDress=new T.Group();scene.add(this.mineRoot,this.floorRoot,this.fenceRoot,this.forestRoot,this.mineDress);
   scene.background=new T.Color(0x7f9690);scene.fog=new T.FogExp2(0x7f9690,.013);
-  this.build();buildCell(this);buildYardCharacter(this);buildWorkyardCharacter(this);buildUnderblockEntry(this);this.staticBlockers=[...this.blockers];
+  this.build();buildCell(this);buildYardCharacter(this);buildWorkyardCharacter(this);buildUnderblockEntry(this);buildIronEmber(this);this.staticBlockers=[...this.blockers];
  }
- mat(color,glow=0){const key=color+':'+glow;if(!this.paint.has(key))this.paint.set(key,new T.MeshStandardMaterial({color,roughness:.93,emissive:glow?color:0,emissiveIntensity:glow}));return this.paint.get(key);}
+ mat(color,glow=0){color=({0x344b3b:0x303238,0x647469:0x4c4d52,0x65716a:0x535156,0x46554a:0x34363b,0x435e4c:0x41434a,0x9a9f86:0x737277,0xafa992:0x7c7976,0x8b967d:0x5b5d64,0x3f5541:0x35373d,0x8d957b:0x5f5d5b,0x4c6248:0x48423b,0x425b40:0x36383d,0x496b5c:0x914731})[color]??color;const key=color+':'+glow;if(!this.paint.has(key))this.paint.set(key,new T.MeshStandardMaterial({color,roughness:.93,emissive:glow?color:0,emissiveIntensity:glow}));return this.paint.get(key);}
  box(x,y,z,w,h,d,color,solid=false,group=this.scene){const m=new T.Mesh(this.geometry,this.mat(color));m.position.set(x,y,z);m.scale.set(w,h,d);group.add(m);if(solid)this.blockers.push(new T.Box3().setFromObject(m));return m;}
- sign(lines,x,y,z,w=6,h=1.4,angle=0,group=this.scene,color='#dfbd82'){
-  const c=document.createElement('canvas');c.width=1024;c.height=256;const ctx=c.getContext('2d');ctx.fillStyle='#1b3028';ctx.fillRect(0,0,1024,256);ctx.fillStyle=color;ctx.fillRect(0,0,12,256);
-  lines.forEach((line,i)=>{let size=i===0?76:43;ctx.font='bold '+size+'px monospace';while(ctx.measureText(line).width>940&&size>12){size-=2;ctx.font='bold '+size+'px monospace';}ctx.fillStyle=i===0?color:'#b9c6ad';ctx.fillText(line,40,lines.length===1?160:105+i*100);});
+ sign(lines,x,y,z,w=6,h=1.4,angle=0,group=this.scene,color='#efb55e'){
+  const c=document.createElement('canvas');c.width=1024;c.height=256;const ctx=c.getContext('2d');ctx.fillStyle='#292a2f';ctx.fillRect(0,0,1024,256);ctx.fillStyle=color;ctx.fillRect(0,0,12,256);
+  lines.forEach((line,i)=>{let size=i===0?76:43;ctx.font='bold '+size+'px monospace';while(ctx.measureText(line).width>940&&size>12){size-=2;ctx.font='bold '+size+'px monospace';}ctx.fillStyle=i===0?color:'#c9bca4';ctx.fillText(line,40,lines.length===1?160:105+i*100);});
   const tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;const m=new T.Mesh(new T.PlaneGeometry(w,h),new T.MeshBasicMaterial({map:tex}));m.position.set(x,y,z);m.rotation.y=angle;group.add(m);return m;
  }
  build(){
-  const box=(...args)=>this.box(...args),metal=0x344b3b,stone=0x647469;
-  const paving=document.createElement('canvas');paving.width=paving.height=64;const ctx=paving.getContext('2d');ctx.fillStyle='#a7b0a4';ctx.fillRect(0,0,64,64);for(let n=0;n<140;n++){ctx.fillStyle=n%2?'#99a391':'#b0b7a9';ctx.fillRect(n*17%64,n*29%64,2,1);}ctx.fillStyle='#78856f';ctx.fillRect(0,0,64,1);ctx.fillRect(0,0,1,64);const texture=new T.CanvasTexture(paving);texture.magFilter=T.NearestFilter;texture.colorSpace=T.SRGBColorSpace;this.floorMat=new T.MeshStandardMaterial({map:texture,roughness:1});
+  const box=(...args)=>this.box(...args),metal=0x303238,stone=0x4c4d52;
+  const paving=document.createElement('canvas');paving.width=paving.height=64;const ctx=paving.getContext('2d');ctx.fillStyle='#868079';ctx.fillRect(0,0,64,64);for(let n=0;n<140;n++){ctx.fillStyle=n%2?'#807a75':'#8b847e';ctx.fillRect(n*17%64,n*29%64,2,1);}ctx.fillStyle='#77726e';ctx.fillRect(0,0,64,1);ctx.fillRect(0,0,1,64);const texture=new T.CanvasTexture(paving);texture.magFilter=T.NearestFilter;texture.colorSpace=T.SRGBColorSpace;this.floorMat=new T.MeshStandardMaterial({map:texture,roughness:1});
 
-  this.skyLight=new T.HemisphereLight(0xdde7d6,0x59624a,2.2);this.scene.add(this.skyLight);const sun=new T.DirectionalLight(0xffe2b1,2.4);this.sun=sun;sun.position.set(-12,25,8);this.scene.add(sun);
+  this.skyLight=new T.HemisphereLight(0xdce1ef,0x57504a,2.2);this.scene.add(this.skyLight);const sun=new T.DirectionalLight(0xffe2b1,2.4);this.sun=sun;sun.position.set(-12,25,8);this.scene.add(sun);
   for(const x of [-20,20]){box(x,4,-6.25,1,8,23.5,stone,true);box(x,4,13.25,1,8,5.5,stone,true);box(x,8.2,-1,1.7,.35,35,0x9a9f86);for(const y of [8.6,9.4])box(x+(x<0?.8:-.8),y,-1,.1,.1,35,metal);for(let z=-17;z<=15;z+=3)box(x+(x<0?.8:-.8),9,z,.1,1,.1,metal);}
   for(const side of [-1,1]){if(side>0)box(side*29.5,.5,9,19,1,12,0x77816a);box(side*39,4,9,1,8,13,stone,true);for(const z of [3,15])box(side*29.5,4,z,20,8,1,stone,true);box(side*29.5,6.5,9,19,.3,12,0x465c49);for(const z of [5.5,10.5])box(side*20,3.5,z,.6,5,.3,metal,true);this.sign([side>0?'04 / ARCHERY RANGE':'05 / THE UNDERBLOCK',side>0?'DRAW · RELEASE · BULLSEYE':'CONDEMNED SERVICE STAIRS'],side*19.4,5.2,8,5.2,1.4,side>0?-Math.PI/2:Math.PI/2);}
   
@@ -49,14 +50,14 @@ export class CampWorld{
    this.sign([label,'E / SELL · TOOLS · EXPANSIONS'],x,3.35,11.4,5,1.15);box(x,2.64,10,2,.1,.9,color);
   }
   box(11.3,2.9,10,.65,.45,.45,0x65786c);box(11.3,3.17,10,1.1,.15,.55,0xb7c5b5);
-  for(const x of [-17,17]){for(const z of [6,12]){box(x,1.5,z,3,.2,.9,0x98784c,true);for(const dx of [-1,1])box(x+dx,1.25,z,.15,.5,.6,metal);box(x,2,z+.3,3,.15,.15,0x98784c);}box(x,4,9,.16,6,.16,metal);const m=box(x,7,9,.8,.2,.8,0xffd295);m.material=this.mat(0xffd295,.7);m.userData.prisonBulb=true;const light=new T.PointLight(0xffd199,28,20);light.position.set(x,6.7,9);this.scene.add(light);}
+  for(const x of [17]){for(const z of [6,12]){box(x,1.5,z,3,.2,.9,0x98784c,true);for(const dx of [-1,1])box(x+dx,1.25,z,.15,.5,.6,metal);box(x,2,z+.3,3,.15,.15,0x98784c);}box(x,4,9,.16,6,.16,metal);const m=box(x,7,9,.8,.2,.8,0xffd295);m.material=this.mat(0xffd295,.7);m.userData.prisonBulb=true;const light=new T.PointLight(0xffd199,28,20);light.position.set(x,6.7,9);this.scene.add(light);}
   for(const x of [-18,18]){const lamp=new T.PointLight(0xffd39a,85,30);lamp.position.set(x,11.7,-15);this.scene.add(lamp);const bulb=box(x,11.9,-14.7,1,.25,.55,0xffd39a);bulb.material=this.mat(0xffd39a,.7);bulb.userData.prisonBulb=true;}
   // Color-coded routes are only a few seconds long.
-  box(-4.8,1.015,4,.13,.02,7,0xd9b77c);box(-7,1.015,3.5,4.5,.02,.13,0xd9b77c);box(4.8,1.015,4,.13,.02,7,0xb4ce94);box(6.6,1.015,3.5,3.5,.02,.13,0xb4ce94);
+  box(-4.8,1.015,4,.13,.02,7,0xdd8d39);box(-7,1.015,3.5,4.5,.02,.13,0xdd8d39);box(4.8,1.015,4,.13,.02,7,0xb4ce94);box(6.6,1.015,3.5,3.5,.02,.13,0xb4ce94);
   for(const [x,words]of [[-10,'01 / THE DEEPWELL'],[8,'02 / TIMBER FARM']]){for(const dx of [-3.3,3.3])box(x+dx,3,1,.25,4,.25,metal);box(x,5.2,1,7,.3,.5,0x8d957b);this.sign(['CENTRAL YARD','EXCHANGE / FORGE'],x,4.3,.7,6,1.2,Math.PI);}
   
   this.gate=new T.Group();this.gate.position.set(8,0,.7);this.scene.add(this.gate);for(let x=-2;x<=2;x+=.5){const m=new T.Mesh(this.geometry,this.mat(metal));m.scale.set(.10,3.8,.16);m.position.set(x,2.9,0);this.gate.add(m);}for(const y of [1.1,3,4.8]){const m=new T.Mesh(this.geometry,this.mat(0xc3ab76));m.position.y=y;m.scale.set(4.2,.12,.2);this.gate.add(m);}this.gateLift=0;
-  for(const x of [-2.5,3.5])box(x,3.4,1.6,.16,4.8,.16,metal);this.sign(['DEEPWELL  ←     FOREST  →','E / SELL · TOOLS · EXPAND'],.5,3.8,1.7,5.5,1.1);
+
   this.motes=new T.InstancedMesh(new T.BoxGeometry(.023,.023,.023),new T.MeshBasicMaterial({color:0xf3dab0,transparent:true,opacity:.4}),32);this.scene.add(this.motes);this.matrix=new T.Matrix4();
  }
  configure(state,instant=false){
@@ -66,7 +67,7 @@ export class CampWorld{
   this.level=campLevel(state);if(instant)this.gateLift=this.level>=2?4:0;
   if(mineChanged||forestChanged)this.buildFences();this.refreshBlockers();
  }
- buildFloor(){this.floorRoot.traverse(o=>{if(o.isInstancedMesh)o.dispose();});this.floorRoot.clear();const s=MINE_STAGES[this.mineLevel],cells=[];for(let x=-20;x<20;x++)for(let z=-18;z<16;z++)if(!inside(x+.5,z+.5,s.bounds))cells.push([x,z]);const floor=new T.InstancedMesh(this.geometry,this.floorMat,cells.length),matrix=new T.Matrix4();cells.forEach(([x,z],i)=>{matrix.makeTranslation(x+.5,.5,z+.5);floor.setMatrixAt(i,matrix);floor.setColorAt(i,new T.Color(x>2&&z<0?0x8ca66b:0xaebba2));});this.floorRoot.add(floor);}
+ buildFloor(){this.floorRoot.traverse(o=>{if(o.isInstancedMesh)o.dispose();});this.floorRoot.clear();const s=MINE_STAGES[this.mineLevel],cells=[];for(let x=-20;x<20;x++)for(let z=-18;z<16;z++)if(!inside(x+.5,z+.5,s.bounds))cells.push([x,z]);const floor=new T.InstancedMesh(this.geometry,this.floorMat,cells.length),matrix=new T.Matrix4();cells.forEach(([x,z],i)=>{matrix.makeTranslation(x+.5,.5,z+.5);floor.setMatrixAt(i,matrix);floor.setColorAt(i,new T.Color(x>2&&z<0?0x929579:0xd4cdc7));});floor.receiveShadow=true;this.floorRoot.add(floor);}
  generateMine(preserve=false){
   if(!preserve){this.excavated.clear();this.elapsed=0;this.refillIn=-1;}
   this.mineRoot.clear();this.blocks.clear();const s=MINE_STAGES[this.mineLevel],[x0,x1,z0,z1]=s.bounds;

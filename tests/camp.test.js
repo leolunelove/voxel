@@ -66,3 +66,13 @@ test('condemned yard dressing leaves monster pursuit space and retreat route cle
  for(const z of [19,22,25,28])line(p,[-5,z],[5,z]);
  assert.ok(world.workyardCharacter.children.some(o=>o.isInstancedMesh),'repeated fixtures are batched');
 });
+
+test('Iron & Ember gallery stairs climb onto a solid upper walkway without blocking the main yard',()=>{
+ const p=player();p.position.set(-15.5,2.65,8.1);p.input.keys.add('KeyS');
+ for(let n=0;n<150;n++)p.step(1/60);
+ assert.ok(p.position.y>5.9,'walks up half-block steps onto upper gallery');
+ assert.ok(p.position.z>13.1,'reaches the landing');
+ assert.equal(p.fits(new T.Vector3(-15.5,5.7,13.7)),false,'gallery has a solid floor');
+ assert.ok(p.fits(new T.Vector3(-15.5,6.35,13.7)),'headroom above landing');
+ assert.ok(world.emberCharacter.children.some(o=>o.isInstancedMesh),'new masonry is instanced');
+});
