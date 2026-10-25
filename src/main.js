@@ -1,35 +1,35 @@
 import * as T from '../vendor/three.module.js';
-import {entryDepth} from './game/underblock-entry-rules.js?v=68';
+import {entryDepth} from './game/underblock-entry-rules.js?v=69';
 const entryFogColor=new T.Color(0x263e38);
-import {Input} from './engine/input.js?v=68';
-import {Audio} from './engine/audio.js?v=68';
-import {Feedback} from './engine/feedback.js?v=68';
-import {CampWorld} from './game/camp.js?v=68';
-import {campLevel,LEVEL_TWO,AXES,treeYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=68';
-import {Player} from './game/player.js?v=68';
-import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=68';
-import {Pickups} from './game/pickups.js?v=68';
-import {HUD} from './ui/hud.js?v=68';
+import {Input} from './engine/input.js?v=69';
+import {Audio} from './engine/audio.js?v=69';
+import {Feedback} from './engine/feedback.js?v=69';
+import {CampWorld} from './game/camp.js?v=69';
+import {campLevel,LEVEL_TWO,AXES,treeYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=69';
+import {Player} from './game/player.js?v=69';
+import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=69';
+import {Pickups} from './game/pickups.js?v=69';
+import {HUD} from './ui/hud.js?v=69';
 
-import {Hunt} from './game/hunt.js?v=68';
-import {freshHunt,loadHunt,inHunt,bank,retreat,attackLevel,swordDamage,MONSTERS,MAX_HP,hurt} from './game/hunt-rules.js?v=68';
+import {Hunt} from './game/hunt.js?v=69';
+import {freshHunt,loadHunt,inHunt,bank,retreat,attackLevel,swordDamage,MONSTERS,MAX_HP,hurt} from './game/hunt-rules.js?v=69';
 
-import {Archery} from './game/archery.js?v=68';
-import {Dungeon} from './game/dungeon.js?v=68';
-import {inRange,atDungeonGate,skillLevel,finishDungeon,DIFFICULTIES} from './game/dungeon-rules.js?v=68';
+import {Archery} from './game/archery.js?v=69';
+import {Dungeon} from './game/dungeon.js?v=69';
+import {inRange,atDungeonGate,skillLevel,finishDungeon,DIFFICULTIES} from './game/dungeon-rules.js?v=69';
 
-import {SkillBook} from './ui/skills.js?v=68';
+import {SkillBook} from './ui/skills.js?v=69';
 
-import {SWORDS,BOWS,forgeWeapon,weaponReason} from './game/weapons.js?v=68';
+import {SWORDS,BOWS,forgeWeapon,weaponReason} from './game/weapons.js?v=69';
 
-import {SHIELDS,freshGuard,tickGuard,defend,forgeShield,shieldReason} from './game/shield-rules.js?v=68';
-import {skillLedger} from './game/skills.js?v=68';
-import {freshShift,loadShift,tickShift,fatigue,shiftClock,closeShift,loadSummary} from './game/shift-rules.js?v=68';
-import {atBed,CELL_WAKE} from './game/cell.js?v=68';
-import {ShiftUI} from './ui/shift.js?v=68';
-import {RestFlow} from './game/rest-flow.js?v=68';
-import {Daylight} from './engine/daylight.js?v=68';
-import {updateHTML} from './ui/dom.js?v=68';
+import {SHIELDS,freshGuard,tickGuard,defend,forgeShield,shieldReason} from './game/shield-rules.js?v=69';
+import {skillLedger} from './game/skills.js?v=69';
+import {freshShift,loadShift,tickShift,fatigue,shiftClock,closeShift,loadSummary} from './game/shift-rules.js?v=69';
+import {atBed,CELL_WAKE} from './game/cell.js?v=69';
+import {ShiftUI} from './ui/shift.js?v=69';
+import {RestFlow} from './game/rest-flow.js?v=69';
+import {Daylight} from './engine/daylight.js?v=69';
+import {updateHTML} from './ui/dom.js?v=69';
 const canvas=document.getElementById('game');
 const scene=new T.Scene();scene.background=new T.Color(0x1d302a);scene.fog=new T.FogExp2(0x1d302a,.024);
 let renderer;try{renderer=new T.WebGLRenderer({canvas,antialias:true});}catch(error){document.querySelector('#interface').textContent='This prototype needs WebGL. Please open it in a desktop browser with hardware acceleration enabled.';throw error;}
@@ -106,15 +106,16 @@ function frame(now){requestAnimationFrame(frame);const dt=Math.min((now-last)/10
   impact=feedback.update(dt,active,tier,player.horizontal.lengthSq()>.1,{camera,point:impactPoint},heldKind,tool.power);
   const result=mining.tick(dt,target?.userData.key??null,target?.userData.type??0,tool.power,active,impact,BLOCKS[target?.userData.type??0].toughness);progress=result.progress;
   impactTarget=target;impactPoint=aimed?.point;
-  if(result.broken&&target&&!full&&tree&&target.userData.tree.cuts<1){feedback.burst(aimed.point,BLOCKS[8].color,true);audio.play('break',8,state.axe);world.remove(target);target=null;progress=0;hud.toast('One trunk block down / break one more to fell the tree.');}
-  else if(result.broken&&target&&!full){const type=target.userData.type;shift.resources[type]+=type===8?treeYield(state):dropCount(type);for(let n=0;n<(type===8?treeYield(state):dropCount(type));n++)pickups.spawn(aimed.point.clone().addScaledVector(aimed.face.normal,.16),type);if(type<8)state.mined++;else state.chopped++;feedback.burst(aimed.point,BLOCKS[type].color);audio.play('break',type,state.pick);world.remove(target);target=null;progress=0;changed();}
+  if(result.broken&&target&&!full&&tree&&target.userData.tree.cuts<1){feedback.blockImpact(target,aimed.point,aimed.face.normal.clone().transformDirection(target.matrixWorld),BLOCKS[8].color,1,true);audio.play('break',8,state.axe);world.remove(target);target=null;progress=0;hud.toast('One trunk block down / break one more to fell the tree.');}
+  else if(result.broken&&target&&!full){const type=target.userData.type;shift.resources[type]+=type===8?treeYield(state):dropCount(type);for(let n=0;n<(type===8?treeYield(state):dropCount(type));n++)pickups.spawn(aimed.point.clone().addScaledVector(aimed.face.normal,.16),type);if(type<8)state.mined++;else state.chopped++;feedback.blockImpact(target,aimed.point,aimed.face.normal.clone().transformDirection(target.matrixWorld),BLOCKS[type].color,1,true);audio.play('break',type,tier);world.remove(target);target=null;progress=0;changed();}
+  if(impact&&impactTarget&&target&&impactPoint){const type=impactTarget.userData.type;audio.play('hit',type,tier);feedback.blockImpact(impactTarget,impactPoint,aimed.face.normal.clone().transformDirection(impactTarget.matrixWorld),BLOCKS[type].color,progress);}
   fullNotice-=dt;if(full&&input.held&&fullNotice<=0){hud.toast('Not enough satchel space for this bundle · E to sell');fullNotice=4;}
   }
  }else{mining.reset();accumulator=0;player.stop();archery.cancel();feedback.update(dt,false,heldKind==='bow'?huntState.bow:heldKind==='sword'?huntState.sword:heldKind==='axe'?state.axe:state.pick,false,null,heldKind,heldKind==='axe'?AXES[state.axe].power:PICKS[state.pick].power);}
  input.guardMode=!!dungeon&&mode==='playing';feedback.updateShield(dt,!!dungeon&&combatWeapon==='sword'&&mode==='playing',dungeonGuard,huntState.shield);
  if(mode==='playing'){tickShift(shift,dt,(heldKind==='pick'||heldKind==='axe')&&active,inCombat()&&(input.held||dungeonGuard?.held));shiftSaveClock+=dt;if(shiftSaveClock>1){saveShift();shiftSaveClock=0;}}
  if(mode==='playing'){let collected=false;pickups.update(dt,player.position,state,(type)=>{audio.play('pickup',type);hud.pickup(BLOCKS[type].name);collected=true;},feedback.reduced);if(collected)changed();}
- feedback.target(target,progress);if(impact&&impactTarget&&target){audio.play('hit',impactTarget.userData.type,state.pick);if(impactPoint)feedback.burst(impactPoint,BLOCKS[impactTarget.userData.type].color,true);}uiClock+=dt;if(uiClock>.05){hud.target((inRange(player.position)||(inCombat()&&combatWeapon==='bow'))?(now<rangedHitUntil?rangedHitLabel:archery.charge>=.99?'FULL DRAW / RELEASE TO FIRE':archery.charge>0?'DRAWING / '+Math.round(archery.charge*100)+'%':'HOLD TO DRAW / RELEASE TO FIRE'):inCombat()?(huntTarget?huntTarget.stats.name+' / '+huntTarget.hp+' HP'+(huntTarget.windup>0?' / BACKSTEP!':''):'HOLD LEFT / STRIKE · Q / SWORD OR BOW'):target?target.userData.type===8?'TRUNK / '+(target.userData.tree.cuts??0)+' OF 2 BROKEN / '+treeYield(state)+' TIMBER WHEN FELLED':BLOCKS[target.userData.type].name+' / '+dropCount(target.userData.type)+' drops / '+BLOCKS[target.userData.type].value+' CR each':'',(inRange(player.position)||(inCombat()&&combatWeapon==='bow'))?archery.charge:inCombat()?(huntTarget?huntTarget.hp/huntTarget.maxHp:0):progress,target?.userData.type!==8);uiClock=0;}
+ feedback.target(target,progress);uiClock+=dt;if(uiClock>.05){hud.target((inRange(player.position)||(inCombat()&&combatWeapon==='bow'))?(now<rangedHitUntil?rangedHitLabel:archery.charge>=.99?'FULL DRAW / RELEASE TO FIRE':archery.charge>0?'DRAWING / '+Math.round(archery.charge*100)+'%':'HOLD TO DRAW / RELEASE TO FIRE'):inCombat()?(huntTarget?huntTarget.stats.name+' / '+huntTarget.hp+' HP'+(huntTarget.windup>0?' / BACKSTEP!':''):'HOLD LEFT / STRIKE · Q / SWORD OR BOW'):target?target.userData.type===8?'TRUNK / '+(target.userData.tree.cuts??0)+' OF 2 BROKEN / '+treeYield(state)+' TIMBER WHEN FELLED':BLOCKS[target.userData.type].name+' / '+dropCount(target.userData.type)+' drops / '+BLOCKS[target.userData.type].value+' CR each':'',(inRange(player.position)||(inCombat()&&combatWeapon==='bow'))?archery.charge:inCombat()?(huntTarget?huntTarget.hp/huntTarget.maxHp:0):progress,target?.userData.type!==8);uiClock=0;}
  document.body.classList.toggle('bow-equipped',heldKind==='bow');document.body.classList.toggle('bow-ready',heldKind==='bow'&&archery.charge>=.99);document.body.classList.toggle('bow-aim',heldKind==='bow'&&archery.charge>0);document.body.style.setProperty('--draw',String(archery.charge));const targetFov=heldKind==='bow'&&mode==='playing'&&!feedback.reduced?72-2*archery.charge:72;const nextFov=camera.fov+(targetFov-camera.fov)*(1-Math.exp(-dt*12));if(Math.abs(nextFov-camera.fov)>.001){camera.fov=nextFov;camera.updateProjectionMatrix();}document.body.classList.toggle('combat-contact',mode==='playing'&&!feedback.reduced&&now<hitMarkerUntil);huntUIClock+=dt;huntPanel.hidden=mode!=='playing'||!(inCombat()||inRange(player.position)||atDungeonGate(player.position));huntPanel.classList.toggle('danger',currentCombat().damageFlash>0);if(huntUIClock>.1){huntUIClock=0;updateHTML(huntPanel,'<b>ATTACK / LEVEL '+attackLevel(huntState.xp)+'</b><div>HP '+Math.ceil(huntState.hp)+' / 100</div><div class=hunt-health role=meter aria-label=Health aria-valuemin=0 aria-valuemax=100 aria-valuenow='+Math.ceil(huntState.hp)+'><i style=width:'+huntState.hp+'%></i></div><div>'+huntState.xp+' Attack XP · '+swordDamage(huntState.xp,huntState.sword)+' sword damage</div><em>'+(inCombat()&&currentCombat().enemies.some(e=>!e.dead&&e.windup>0)?'ATTACK INCOMING / BACKSTEP OR JUMP':'')+'</em><div>TAB / VIEW ALL SKILLS</div><strong>'+huntState.loot+' CR / MONSTER LOOT AT RISK</strong><small>'+(dungeon?((dungeon.roomAt(player.position)<0?'PASSAGE':'ROOM '+(dungeon.roomAt(player.position)+1))+' / '+dungeon.rooms.length+' · '+(dungeon.rooms[dungeon.roomAt(player.position)]?.style??'Passage')+' · '+dungeon.rules.name+' · '+currentCombat().enemies.filter(e=>!e.dead).length+' enemies left. '+(dungeon.cleared?'Reach the gold exit seal and press E.':'Clear the rooms. R abandons.')):inRange(player.position)?'Hold to draw; release to fire. Centre hits earn 6 XP. Arrows are supplied here.':atDungeonGate(player.position)?DIFFICULTIES[dungeonDifficulty].name+' / F changes difficulty · E enters. Enemy HP ×'+DIFFICULTIES[dungeonDifficulty].health+' · loot ×'+DIFFICULTIES[dungeonDifficulty].reward+' · completion +'+DIFFICULTIES[dungeonDifficulty].bonus+' CR. Defeat loses unbanked loot.':inHunt(player.position)?'Walk out to bank. R retreats and loses loot. Defeat or reload loses all unbanked loot.':'Hunting gate behind the yard. Heal here; your banked credits are safe.')+'</small>'+(dungeon&&dungeon.roomAt(player.position)===dungeon.rooms.length-1?'<div class=warden-status>THE UNDERWARDEN / '+dungeon.combat.enemies.at(-1).hp+' / '+dungeon.combat.enemies.at(-1).maxHp+' HP<br>Gold ring: backstep or jump.<br>SEAL REWARD / +'+dungeon.bonus+' CR · +'+dungeon.xp+' XP</div>':'')+(dungeon?'<div class=dungeon-route>ROUTE / '+dungeon.rooms.map((r,i)=>i===0?'1':((r.x>dungeon.rooms[i-1].x?' EAST ':r.x<dungeon.rooms[i-1].x?' WEST ':r.z>dungeon.rooms[i-1].z?' SOUTH ':' NORTH ')+(i+1))).join(' → ')+'</div>':''));}
  document.body.classList.toggle('in-dungeon',!!dungeon);dungeonPanel.hidden=!dungeon||mode!=='playing';if(dungeon&&dungeonGuard){const g=dungeonGuard,spec=SHIELDS[huntState.shield],room=dungeon.roomAt(player.position),boss=dungeon.combat.enemies.at(-1);huntPanel.hidden=true;updateHTML(dungeonPanel,'<small>THE UNDERBLOCK / '+dungeon.rules.name+'</small><h3>'+(room<0?'Passage':dungeon.rooms[room].style)+'</h3><div class=dungeon-vitals><label>HEALTH <b>'+Math.ceil(huntState.hp)+' / 100</b></label><meter aria-label="Dungeon health" min=0 max=100 value='+Math.ceil(huntState.hp)+'></meter><label>GUARD <b>'+Math.ceil(g.value)+' / '+spec.guard+'</b></label><meter aria-label="Shield guard" min=0 max='+spec.guard+' value='+Math.ceil(g.value)+'></meter></div><em>'+(g.lock>0?'GUARD BROKEN / RECOVERING':g.flash>0?(g.event==='perfect'?'PERFECT BLOCK':'BLOCKED'):g.held?'GUARDING / FRONT ONLY':combatWeapon==='bow'?'BOW EQUIPPED / SHIELD LOWERED':'RIGHT CLICK / BLOCK')+'</em><strong>'+huntState.loot+' CR / LOOT AT RISK</strong><p>Room '+(room<0?'—':room+1)+' / '+dungeon.rooms.length+' · '+dungeon.combat.enemies.filter(e=>!e.dead).length+' enemies remain</p><p>'+(dungeon.cleared?'SEAL OPEN / E at the gold exit':'Clear every chamber. Defeat loses your haul.')+'</p>'+(room===dungeon.rooms.length-1?'<p>UNDERWARDEN / '+boss.hp+' / '+boss.maxHp+' HP · DODGE THE SLAM</p>':'')+'<small>'+spec.name+' · Q / sword or bow · R / abandon<br>Completion / +'+dungeon.bonus+' CR · +'+dungeon.xp+' XP</small>');}
  const clock=shiftClock(shift);shiftPanel.hidden=mode!=='playing';updateHTML(shiftPanel,'<small>SHIFT '+shift.day+' / '+clock.label+(clock.night?' · NIGHT':'')+'</small><label>STAMINA <b>'+Math.ceil(shift.stamina)+' / 100</b></label><meter aria-label=Stamina min=0 max=100 value='+Math.ceil(shift.stamina)+'></meter><span>'+(shift.stamina<=0?'EXHAUSTED / Work at half pace. Walk home freely.':shift.stamina<20?'TIRED / Rest in your cell by the yard.':clock.night?'NIGHT SHIFT / Your bed is ready when you are.':atBed(player.position)?'E / Rest & end shift':'CELL 07 / Beside the yard · E at bed')+'</span>');

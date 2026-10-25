@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Voxel / block impact study</title>
+<style>body{margin:0;background:#25272b;color:#ead9b6;font:14px monospace}header{padding:16px}button{margin:5px;padding:12px;background:#4a4848;color:#ffcf7d;border:1px solid #a88042}canvas{display:block;width:100%}#status{padding:12px}</style>
+<header><h1>Voxel / block impact</h1><button id="hit">Strike stone</button><button id="break">Break block</button><button id="orbit">Orbit camera</button><button id="reset">Reset</button><button id="audio">Verify audio mix</button></header><div id="status">Ready</div><canvas id="study"></canvas>
+<script type="module">
+import * as T from '../vendor/three.module.js';
+import {Feedback} from '../src/engine/feedback.js?v=69';
+import {Audio} from '../src/engine/audio.js?v=69';
+const scene=new T.Scene();scene.background=new T.Color(0x52616a);scene.add(new T.HemisphereLight(0xcce1e4,0x453e35,2));const light=new T.DirectionalLight(0xffe5c1,2);light.position.set(2,5,3);scene.add(light);
+const block=new T.Mesh(new T.BoxGeometry(1,1,1),new T.MeshStandardMaterial({color:0x84908b,roughness:1}));block.userData={key:'impact-study',type:0};scene.add(block);const floor=new T.Mesh(new T.BoxGeometry(7,.1,7),new T.MeshStandardMaterial({color:0x59564e}));floor.position.y=-.65;scene.add(floor);
+const feedback=new Feedback(scene),audio=new Audio(),camera=new T.PerspectiveCamera(48,innerWidth/480,.01,40),renderer=new T.WebGLRenderer({canvas:document.querySelector('#study'),antialias:false});renderer.setSize(innerWidth,480,false);renderer.toneMapping=T.ACESFilmicToneMapping;let progress=0,angle=.7,orbit=false,last=performance.now();
+function status(t){document.querySelector('#status').textContent=t;}
+document.querySelector('#hit').onclick=()=>{progress=Math.min(.95,progress+.18);feedback.blockImpact(block,new T.Vector3(.5,.15,.20),new T.Vector3(1,0,0),0xc88758,progress);audio.unlock();audio.play('hit',0);status('Fracture '+Math.round(progress*100)+'% / anchored to the first struck face');};
+document.querySelector('#break').onclick=()=>{feedback.blockImpact(block,new T.Vector3(.5,.15,.20),new T.Vector3(1,0,0),0xc88758,1,true);block.visible=false;audio.unlock();audio.play('break',0);status('Block shattered / chips are presentation only');};
+document.querySelector('#orbit').onclick=()=>{orbit=!orbit;status(orbit?'Camera orbiting / fracture stays attached':'Camera stopped');};
+document.querySelector('#reset').onclick=()=>{progress=0;block.visible=true;feedback.target(null,0);status('Ready');};
+document.querySelector('#audio').onclick=async()=>{
+ const labels=[];for(const type of [0,3,6,8])for(const kind of ['hit','break']){
+ const offline=new OfflineAudioContext(1,22050,44100),a=new Audio();a.context=offline;a.master=offline.createGain();a.master.gain.value=.75;a.master.connect(offline.destination);a.noise=offline.createBuffer(1,44100,44100);const data=a.noise.getChannelData(0);let seed=123;for(let i=0;i<data.length;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;data[i]=seed/2147483648-1;}
+ a.play(kind,type,1);const rendered=await offline.startRendering(),wave=rendered.getChannelData(0);let peak=0,energy=0;for(const x of wave){peak=Math.max(peak,Math.abs(x));energy+=x*x;}if(!Number.isFinite(peak)||peak>=1||energy<=0)throw new Error('Invalid impact mix');labels.push(type+'/'+kind+' peak '+peak.toFixed(3));
+ }status('AUDIO PASS / 8 material mixes render without clipping / '+labels.join(' · '));
+};
+function frame(now){requestAnimationFrame(frame);const dt=Math.min(.05,(now-last)/1000);last=now;if(orbit)angle+=dt*.5;camera.position.set(Math.sin(angle)*3.2,1.25,Math.cos(angle)*3.2);camera.lookAt(0,0,0);feedback.update(dt,false,0);feedback.target(block.visible?block:null,progress);renderer.render(scene,camera);}requestAnimationFrame(frame);
+</script></html>

@@ -1,8 +1,9 @@
+import {BlockFracture} from './block-fracture.js?v=69';
 import * as T from '../../vendor/three.module.js';
-import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=68';
-import {PICKS} from '../game/rules.js?v=68';
-import {bowRig,applyBowRig} from './bow-motion.js?v=68';
-import {createShield} from './shield.js?v=68';
+import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=69';
+import {PICKS} from '../game/rules.js?v=69';
+import {bowRig,applyBowRig} from './bow-motion.js?v=69';
+import {createShield} from './shield.js?v=69';
 export class Feedback{
  constructor(scene){
  this.scene=scene;this.particles=[];this.geometry=new T.BoxGeometry(1,1,1);this.materials=new Map();this.reduced=false;this.phase=0;this.swinging=false;this.time=0;this.kick=0;this.equip=0;this.tier=-1;
@@ -10,21 +11,35 @@ export class Feedback{
  this.view.add(new T.HemisphereLight(0xe8f3f2,0x576657,1.5));const key=new T.DirectionalLight(0xffe2b0,1.8);key.position.set(-2,3,4);this.view.add(key);const rim=new T.DirectionalLight(0xb1dded,.8);rim.position.set(3,1,-2);this.view.add(rim);
  this.pivot=new T.Group();this.view.add(this.pivot);this.setTier(0);
  this.outline=new T.LineSegments(new T.EdgesGeometry(new T.BoxGeometry(1.006,1.006,1.006)),new T.LineBasicMaterial({color:0xf4dea6,transparent:true,opacity:.7}));scene.add(this.outline);this.outline.visible=false;
- const c=document.createElement('canvas');c.width=c.height=128;this.ctx=c.getContext('2d');this.texture=new T.CanvasTexture(c);this.texture.magFilter=T.NearestFilter;
- this.cracks=new T.Mesh(new T.BoxGeometry(1.009,1.009,1.009),new T.MeshBasicMaterial({map:this.texture,transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1}));scene.add(this.cracks);this.cracks.visible=false;this.stage=-1;
+ this.fracture=new BlockFracture(scene);
  }
+
  setTier(tier,kind='pick'){if(tier===this.tier&&kind===this.kind)return;if(this.tool){this.pivot.remove(this.tool);const mats=new Set();this.tool.traverse(o=>{o.geometry?.dispose();if(o.material)mats.add(o.material);});mats.forEach(m=>m.dispose());}this.tier=tier;this.kind=kind;this.tool=kind==='bow'?createBow(tier):kind==='sword'?createSword(tier):kind==='axe'?createAxe(tier):createPickaxe(tier);this.tool.scale.setScalar(kind==='bow'?BOW_SCALE:TOOL_SCALE);this.pivot.add(this.tool);this.equip=1;}
  updateShield(dt,enabled,guard,tier=0){
  if(this.shieldTier!==tier){if(this.shield){this.shield.removeFromParent();const mats=new Set();this.shield.traverse(o=>{o.geometry?.dispose();if(o.material)mats.add(o.material);});mats.forEach(m=>m.dispose());}this.shield=createShield(tier);this.shield.scale.setScalar(.60);this.view.add(this.shield);this.shieldTier=tier;}
  this.shield.visible=enabled;if(!enabled)return;this.shieldRaise=(this.shieldRaise??0)+(Number(guard.held)-(this.shieldRaise??0))*(1-Math.exp(-dt*18));const up=this.shieldRaise,kick=this.reduced?0:Math.sin(Math.min(1,guard.flash/.24)*Math.PI)*.09;
  this.shield.position.set(-.55+up*.15,-.40+up*.25,-1.15+up*.12+kick);this.shield.rotation.set(.06-up*.12,.35-up*.22,-.18+up*.13);if(guard.event==='broken'&&guard.flash>0&&!this.reduced)this.shield.rotation.z-=.2;}
- target(mesh,progress){this.outline.visible=!!mesh;this.cracks.visible=!!mesh&&progress>0;if(!mesh)return;mesh.getWorldPosition(this.outline.position);this.cracks.position.copy(this.outline.position);const stage=Math.min(9,Math.floor(progress*10));if(stage===this.stage)return;this.stage=stage;
- const ctx=this.ctx;ctx.clearRect(0,0,128,128);let seed=57;const rand=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
- for(let i=0;i<10;i++){const angle=i*2.399,reach=24+rand()*40,branch=(rand()-.5)*35;const pts=[[63,61],[63+Math.cos(angle)*reach*.4+(rand()-.5)*16,61+Math.sin(angle)*reach*.4],[63+Math.cos(angle)*reach,61+Math.sin(angle)*reach]];if(i>stage)continue;
- for(const [color,width]of [['rgba(228,230,208,.4)',5],['rgba(15,25,23,.92)',2+stage*.18]]){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();pts.forEach(([x,y],j)=>j?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();}
- if(stage>3){ctx.strokeStyle='#17241f';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(...pts[1]);ctx.lineTo(pts[1][0]+branch,pts[1][1]+branch*.7);ctx.stroke();}}
- this.texture.needsUpdate=true;
+ target(mesh,progress=0){
+ this.outline.visible=!!mesh;if(mesh){mesh.updateWorldMatrix(true,false);this.outline.matrixAutoUpdate=false;this.outline.matrix.copy(mesh.matrixWorld);this.outline.matrixWorldNeedsUpdate=true;}
+ this.fracture.target(progress>0?mesh:null);
  }
+ blockImpact(mesh,point,normal,color,progress,broken=false){
+ if(!broken)this.fracture.hit(mesh,point,normal,progress);
+ const n=normal.clone().normalize(),tangent=new T.Vector3().crossVectors(n,Math.abs(n.y)<.9?new T.Vector3(0,1,0):new T.Vector3(1,0,0)).normalize(),bitangent=new T.Vector3().crossVectors(n,tangent);
+ const count=this.reduced?(broken?6:2):(broken?22:5),wood=mesh.userData.type===8;
+ for(let i=0;i<count&&this.particles.length<160;i++){
+  const tint=i%3===0?color:wood?0x947047:i%2?0x566465:0x89918b;
+  let material=this.materials.get(tint);if(!material){material=new T.MeshStandardMaterial({color:tint,roughness:1});this.materials.set(tint,material);}
+  const m=new T.Mesh(this.geometry,material),size=(broken?.065:.025)+Math.random()*(broken?.065:.035),spread=broken?.20:.055;
+  m.scale.set(size,size*(wood?.35:.55),size*(.5+Math.random()*.5));m.rotation.set(Math.random()*3,Math.random()*3,Math.random()*3);
+  m.position.copy(point).addScaledVector(n,.025).addScaledVector(tangent,(Math.random()-.5)*spread).addScaledVector(bitangent,(Math.random()-.5)*spread);
+  const v=n.clone().multiplyScalar((broken?1.8:1.2)+Math.random()*1.8).addScaledVector(tangent,(Math.random()-.5)*(broken?3.2:1.5)).addScaledVector(bitangent,(Math.random()-.5)*1.6);v.y+=.55;
+  const life=this.reduced?.18:(broken?.42:.24)+Math.random()*.16;this.scene.add(m);this.particles.push({m,v,life,maxLife:life,initial:m.scale.clone(),spin:new T.Vector3((Math.random()-.5)*15,(Math.random()-.5)*15,(Math.random()-.5)*15)});
+ }
+ // Recoil belongs to the held tool; movement and the world camera stay free.
+ this.kick=this.reduced?0:broken?.65:.32;
+ }
+
  burst(position,color,small=false){
  let mat=this.materials.get(color);if(!mat){mat=new T.MeshStandardMaterial({color,roughness:.95});this.materials.set(color,mat);}
  const count=this.reduced?2:small?2:12;
@@ -55,7 +70,9 @@ export class Feedback{
  this.lastYaw=yaw;this.lastPitch=pitch;
  if(!this.reduced&&!impact&&kind!=='bow'){this.pivot.position.x+=dy*.05;this.pivot.position.y-=dp*.035;}
  }
- for(let i=this.particles.length-1;i>=0;i--){const p=this.particles[i];p.life-=dt;if(p.life<=0){this.scene.remove(p.m);this.particles.splice(i,1);continue;}p.v.y-=8*dt;p.m.position.addScaledVector(p.v,dt);p.m.rotation.x+=dt*5;p.m.scale.multiplyScalar(Math.exp(-dt*1.6));}return impact&&active;
+ for(let i=this.particles.length-1;i>=0;i--){const p=this.particles[i];p.life-=dt;if(p.life<=0){this.scene.remove(p.m);this.particles.splice(i,1);continue;}p.v.y-=(p.maxLife?12:8)*dt;p.m.position.addScaledVector(p.v,dt);
+ if(p.maxLife){p.m.rotation.x+=p.spin.x*dt;p.m.rotation.y+=p.spin.y*dt;p.m.rotation.z+=p.spin.z*dt;p.m.scale.copy(p.initial).multiplyScalar(Math.min(1,p.life/p.maxLife*2));}
+ else{p.m.rotation.x+=dt*5;p.m.scale.multiplyScalar(Math.exp(-dt*1.6));}}return impact&&active;
  }
  render(renderer,visible){if(!visible)return;renderer.autoClear=false;renderer.clearDepth();renderer.render(this.view,this.camera);renderer.autoClear=true;}
  resize(aspect){this.camera.aspect=aspect;this.camera.updateProjectionMatrix();}
