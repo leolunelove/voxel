@@ -1,6 +1,6 @@
-import {bowRig,applyBowRig} from './bow-motion.js?v=67';
-import {BOW_ROTATION,BOW_VIEW_SCALE,bowPosition} from './bow-space.js?v=67';
-import {SWORDS,BOWS} from '../game/weapons.js?v=67';
+import {bowRig,applyBowRig} from './bow-motion.js?v=68';
+import {BOW_ROTATION,BOW_VIEW_SCALE,bowPosition} from './bow-space.js?v=68';
+import {SWORDS,BOWS} from '../game/weapons.js?v=68';
 import * as T from '../../vendor/three.module.js';
 // Solid stepped tools with a square shaft, socket and tapered working edges.
 const PALETTES=[[0x566161,0xb9c3bc,0xe2e6da],[0x4c5657,0xc9d4cc,0xf1f3e8],[0x20594c,0x54c7a7,0xa0f1cf],[0x364e5f,0x92b8cc,0xd9edf2],[0x765a24,0xd4ac45,0xffdf83],[0x713e31,0xe18a59,0xffc388]];
@@ -26,33 +26,36 @@ function pixelTool(tier,axe=false){
  const root=new T.Group();root.add(new T.Mesh(geometry,new T.MeshLambertMaterial({vertexColors:true})));return root;
 }
 export function toolIcon(tier,kind='pick'){const {grid,colors}=toolArtwork(kind==='axe'?([0,1,2,4][tier]??0):tier,kind==='axe'),canvas=document.createElement('canvas');canvas.width=canvas.height=16;const ctx=canvas.getContext('2d');for(let y=0;y<16;y++)for(let x=0;x<16;x++)if(grid[y][x]!=='.'){ctx.fillStyle='#'+colors[grid[y][x]].toString(16).padStart(6,'0');ctx.fillRect(x,y,1,1);}return canvas.toDataURL();}
+// Tool space: +Y runs up the handle; -Z is the working direction.
+// A head aligned along Z can reach into a block without presenting a broadside.
 export function createPickaxe(tier){
  const root=new T.Group(),palette=PALETTES[Math.min(5,tier)];
  const wood=new T.MeshLambertMaterial({color:0x67401e}),grip=new T.MeshLambertMaterial({color:0x382719}),metal=new T.MeshLambertMaterial({color:palette[1]}),edge=new T.MeshLambertMaterial({color:palette[0]}),shine=new T.MeshLambertMaterial({color:palette[2]});
- const box=(size,position,material,angle=0)=>{const mesh=new T.Mesh(new T.BoxGeometry(...size),material);mesh.position.set(...position);mesh.rotation.z=angle;root.add(mesh);return mesh;};
- // A solid square shaft, with a real socket around its upper end.
- const bottom=new T.Vector3(-.32,-.49,.07),top=new T.Vector3(.19,.30,.02),mid=bottom.clone().add(top).multiplyScalar(.5),shaft=box([.085,bottom.distanceTo(top),.085],mid.toArray(),wood);
+ const box=(size,p,mat)=>{const m=new T.Mesh(new T.BoxGeometry(...size),mat);m.position.set(...p);root.add(m);return m;};
+ const bottom=new T.Vector3(0,-1.00,.22),top=new T.Vector3(0,.30,0),shaft=box([.075,bottom.distanceTo(top),.075],bottom.clone().lerp(top,.5).toArray(),wood);
  shaft.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),top.clone().sub(bottom).normalize());
- for(let i=0;i<4;i++){const p=bottom.clone().lerp(top,.10+i*.075),band=box([.098,.035,.098],p.toArray(),grip);band.quaternion.copy(shaft.quaternion);}
- box([.17,.20,.17],[.15,.27,.01],edge,-.12);
- box([.19,.055,.19],[.15,.35,.01],shine,-.12);
- // The working point reaches away from the player. Stepped sections taper
- // in all three dimensions instead of extruding a flat item silhouette.
- for(const [size,pos] of [ [[.22,.13,.18],[.015,.30,-.04]], [[.18,.105,.15],[-.16,.285,-.12]], [[.13,.075,.10],[-.30,.255,-.21]], [[.065,.045,.06],[-.385,.23,-.27]] ])box(size,pos,metal);
- box([.20,.11,.17],[.30,.235,.065],metal,-.32);
- box([.11,.14,.13],[.405,.15,.10],metal,-.27);
- box([.065,.13,.08],[.44,.045,.12],edge,-.12);
+ for(let i=0;i<4;i++){const band=box([.088,.028,.088],bottom.clone().lerp(top,.10+i*.075).toArray(),grip);band.quaternion.copy(shaft.quaternion);}
+ box([.155,.18,.17],[0,.285,0],edge);
+ box([.165,.035,.18],[0,.375,0],shine);
+ for(const [size,pos] of [ [[.14,.12,.20],[0,.30,-.12]], [[.115,.10,.16],[0,.28,-.28]], [[.085,.07,.12],[0,.25,-.40]], [[.05,.04,.06],[0,.22,-.48]] ])box(size,pos,metal);
+ // A shorter curved rear point and a darker socket keep the silhouette readable.
+ box([.14,.11,.19],[0,.275,.15],metal);
+ box([.10,.12,.13],[0,.20,.28],metal);
+ box([.065,.12,.08],[0,.105,.35],edge);
+ box([.145,.018,.18],[0,.365,-.12],shine);
  return root;
 }
 export function createAxe(tier){
  const root=new T.Group(),palette=PALETTES[[0,1,2,4][tier]??0];
  const wood=new T.MeshLambertMaterial({color:0x67401e}),grip=new T.MeshLambertMaterial({color:0x382719}),metal=new T.MeshLambertMaterial({color:palette[1]}),dark=new T.MeshLambertMaterial({color:palette[0]}),edge=new T.MeshLambertMaterial({color:palette[2]});
  const box=(size,p,mat)=>{const m=new T.Mesh(new T.BoxGeometry(...size),mat);m.position.set(...p);root.add(m);return m;};
- const bottom=new T.Vector3(-.28,-.49,.08),top=new T.Vector3(.14,.34,.01),direction=top.clone().sub(bottom),shaft=box([.09,direction.length(),.09],bottom.clone().lerp(top,.5).toArray(),wood);shaft.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),direction.normalize());
- for(let i=0;i<4;i++){const b=box([.105,.035,.105],bottom.clone().lerp(top,.10+i*.075).toArray(),grip);b.quaternion.copy(shaft.quaternion);}
- box([.18,.24,.19],[.12,.25,.01],dark);box([.18,.07,.19],[.27,.25,.02],metal);
- box([.22,.29,.18],[-.04,.26,-.045],metal);box([.14,.36,.13],[-.20,.25,-.13],metal);
- box([.075,.39,.075],[-.30,.245,-.20],edge);box([.045,.33,.045],[-.355,.245,-.24],edge);
+ const bottom=new T.Vector3(0,-1.00,.22),top=new T.Vector3(0,.32,0),shaft=box([.08,bottom.distanceTo(top),.08],bottom.clone().lerp(top,.5).toArray(),wood);shaft.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),top.clone().sub(bottom).normalize());
+ for(let i=0;i<4;i++){const band=box([.092,.028,.092],bottom.clone().lerp(top,.10+i*.075).toArray(),grip);band.quaternion.copy(shaft.quaternion);}
+ box([.17,.21,.18],[0,.27,0],dark);box([.14,.085,.16],[0,.27,.15],metal);
+ box([.15,.26,.19],[0,.275,-.12],metal);
+ box([.12,.34,.14],[0,.255,-.27],metal);
+ box([.075,.38,.08],[0,.245,-.36],edge);
+ box([.035,.33,.04],[0,.245,-.42],edge);
  return root;
 }
 export function createSword(tier=0){const spec=SWORDS[tier],root=new T.Group();const box=(s,p,c)=>{const m=new T.Mesh(new T.BoxGeometry(...s),new T.MeshLambertMaterial({color:c}));m.position.set(...p);root.add(m);};box([.09,.35,.09],[0,-.30,0],0x67401e);box([.14,.07,.14],[0,-.50,0],spec.trim);box([.38+(tier===3?.08:0),.07,.14],[0,-.10,0],spec.trim);box([.14+(tier>=2?.035:0),.65,.09],[0,.26,0],spec.color);box([.08,.13,.07],[0,.65,0],spec.color);box([.035,.65,.10],[-.065,.26,0],0xe3eade);if(tier>0)box([.055,.11,.12],[0,-.075,0],spec.color);return root;}
@@ -67,16 +70,16 @@ export function bowPose(draw,aspect,recoil=0){return {position:bowPosition(draw)
 export function swingPose(phase){
  // A deliberate lift, accelerating downstroke, two-frame contact, then a
  // short rebound. Recovery occupies most of the cycle so holding feels calm.
- const keys=[[0,0,0,0,0,0,0],[.16,.01,.13,.035,.08,-.04,.025],[.30,-.10,-.015,-.20,-.36,.05,-.04],[.34,-.10,-.015,-.20,-.36,.05,-.04],[.48,-.035,.09,.025,.045,-.025,.02],[.76,0,0,0,0,0,0],[1,0,0,0,0,0,0]];
+ const keys=[[0,0,0,0,0,0,0],[.16,.008,.22,.035,.08,-.04,.025],[.30,-.10,-.015,-.20,-.36,.05,-.04],[.34,-.10,-.015,-.20,-.36,.05,-.04],[.44,-.02,.13,.045,.065,-.025,.02],[.76,0,0,0,0,0,0],[1,0,0,0,0,0,0]];
  for(let i=1;i<keys.length;i++){const a=keys[i-1],b=keys[i];if(phase<=b[0]){if(phase===b[0])return b.slice(1);let t=Math.max(0,(phase-a[0])/(b[0]-a[0]));t=i===2?t*t:t*t*(3-2*t);return a.slice(1).map((v,j)=>v+(b[j+1]-v)*t);}}
  return [0,0,0,0,0,0];
 }
 
-export const TOOL_SCALE=1.08;
+export const TOOL_SCALE=.78;
 export const BOW_SCALE=BOW_VIEW_SCALE;
 export const TOOL_DEPTH=1.90;
-export const CONTACT_TIP=new T.Vector3(-.4175,.23,-.30);
-export const AXE_TIP=new T.Vector3(-.3775,.245,-.2625);
+export const CONTACT_TIP=new T.Vector3(0,.22,-.51);
+export const AXE_TIP=new T.Vector3(0,.245,-.44);
 export const SWORD_TIP=new T.Vector3(0,.715,0);
 export function swordSwingPose(phase){
  const keys=[[0,0,0,0,0,0,0],[.18,.035,.10,.05,.11,-.08,.20],[.30,-.08,-.06,-.23,-.44,.12,-.24],[.34,-.08,-.06,-.23,-.44,.12,-.24],[.50,.015,.055,.04,.08,-.025,.08],[.82,0,0,0,0,0,0],[1,0,0,0,0,0,0]];
@@ -87,11 +90,20 @@ export function heldPose(phase,aspect,motion=1,kind='pick',draw=0,recoil=0){
  const p=kind==='sword'?swordSwingPose(phase):swingPose(phase),halfWidth=Math.tan(24*Math.PI/180)*TOOL_DEPTH*aspect,x=Math.min(.56,Math.max(.08,halfWidth-.82)),distance=phase<.30?.30-phase:Math.max(0,phase-.34),t=Math.max(0,1-distance/.14),contact=t*t*(3-2*t);
  // Hold the silhouette diagonally at the right shoulder. Pitch does the work;
  // yaw stays quiet so the head drives forward instead of sweeping sideways.
- const rotation=[-.32+p[3]*motion*1.55,-.48+p[4]*motion*.35,-.48+p[5]*motion*1.8];
+ const rotation=[-.12+p[3]*motion*1.25,.38+p[4]*motion*.25,.20-p[5]*motion*.65];
  if(kind==='sword'){rotation[0]=-.35+p[3]*motion*1.4;rotation[1]=-.25+p[4]*motion;rotation[2]=-.25+p[5]*motion;}
- const position=[x+p[0]*motion,-.43+p[1]*motion,-TOOL_DEPTH+p[2]*motion];
+ const position=[x+p[0]*motion,(kind==='sword'?-.43:-.22)+p[1]*motion,-TOOL_DEPTH+p[2]*motion];
  position[0]=Math.min(position[0],halfWidth*.62);if(kind==='sword')position[2]-=.16*contact*motion;
- const tip=(kind==='sword'?SWORD_TIP:kind==='pick'?CONTACT_TIP:AXE_TIP).clone().multiplyScalar(TOOL_SCALE).applyEuler(new T.Euler(...rotation));position[0]+=(-tip.x-position[0])*contact*motion;position[1]+=(-tip.y-position[1])*contact*motion;
+ const tip=(kind==='sword'?SWORD_TIP:kind==='pick'?CONTACT_TIP:AXE_TIP).clone().multiplyScalar(TOOL_SCALE).applyEuler(new T.Euler(...rotation));
+ if(kind!=='sword'){
+  // Animate the working point, then solve the grip behind it. Blending the
+  // grip toward a reticle correction made the old tip dip and float back up.
+  const right=Math.min(.40,halfWidth*.36),rest=[right,-.18,-2.28];
+  const keys=[[0,...rest],[.16,right+.008,.18,-2.22],[.30,0,0,-2.48],[.34,0,0,-2.48],[.44,right*.38,.085,-2.26],[.76,...rest],[1,...rest]];
+  let point=rest;
+  for(let i=1;i<keys.length;i++){const a=keys[i-1],b=keys[i];if(phase<=b[0]){let u=Math.max(0,(phase-a[0])/(b[0]-a[0]));u=i===2?u*u:u*u*(3-2*u);point=a.slice(1).map((v,j)=>v+(b[j+1]-v)*u);break;}}
+  for(let i=0;i<3;i++)position[i]=rest[i]+(point[i]-rest[i])*motion-tip.getComponent(i);
+ }else{position[0]+=(-tip.x-position[0])*contact*motion;position[1]+=(-tip.y-position[1])*contact*motion;}
  return {position,rotation};
 }
 // Solve the viewmodel tip onto the aimed surface's screen position, independent

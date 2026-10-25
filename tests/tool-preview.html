@@ -1,14 +1,17 @@
-<!doctype html><meta charset="utf-8"><title>Voxel / pickaxe motion study</title>
-<style>body{margin:20px;background:#18251e;color:#e8dcc0;font:14px monospace}main{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}canvas{width:100%;display:block}h2{font-size:14px}</style>
-<h1>Pickaxe / contact study</h1><p>Read-only poses from the live tool model. Lift → strike → stop → recoil → rest.</p><main></main>
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Voxel / forward strike study</title>
+<style>body{margin:16px;background:#25272b;color:#e8dcc0;font:14px monospace}header{display:flex;gap:12px;align-items:center}button{padding:8px;background:#4a4848;color:#ffcf7d;border:1px solid #a88042;cursor:pointer}main{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}canvas{width:100%;display:block}h2{font-size:14px}article>div{position:relative}.reticle{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:white}</style>
+<header><h1>Voxel / tool contact study</h1><button id="pick">Pickaxe</button><button id="axe">Axe</button></header><p>The actual game models and pose solver. Head leads forward, lifts above the aim, strikes down and rebounds.</p><main></main>
 <script type="module">
-import * as T from '../vendor/three.module.js?v=30';
-import {Feedback} from '../src/engine/feedback.js?v=30';
-import {heldPose,TOOL_SCALE} from '../src/engine/pickaxe.js?v=30';
-for(const [label,phase] of [['Rest',0],['Lift',.16],['Downstroke',.25],['Contact',.30],['Recoil',.48],['Recovery',.8]]){
- const article=document.createElement('article');article.innerHTML='<h2>'+label+'</h2><canvas></canvas>';document.querySelector('main').append(article);
- const f=new Feedback(new T.Scene());f.resize(1.3);f.setTier(2);const p=heldPose(phase,1.3);f.pivot.position.fromArray(p.position);f.pivot.rotation.fromArray(p.rotation);f.tool.scale.setScalar(TOOL_SCALE);
- const renderer=new T.WebGLRenderer({canvas:article.querySelector('canvas'),antialias:false});renderer.setSize(390,300,false);renderer.setClearColor(0x536052);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.render(f.view,f.camera);
- const marker=document.createElement('div');marker.textContent='+';marker.style='position:absolute;left:50%;top:50%;color:white';const wrap=document.createElement('div');wrap.style='position:relative';article.append(wrap);wrap.append(article.querySelector('canvas'),marker);
+import * as T from '../vendor/three.module.js';
+import {Feedback} from '../src/engine/feedback.js?v=68';
+import {heldPose,TOOL_SCALE} from '../src/engine/pickaxe.js?v=68';
+let kind='pick';const views=[];
+for(const [label,phase] of [['Ready',0],['Lift',.16],['Downstroke',.26],['Contact',.30],['Recoil',.44],['Recovery',.8]]){
+ const article=document.createElement('article');article.innerHTML='<h2>'+label+'</h2><div><canvas></canvas><span class="reticle">+</span></div>';document.querySelector('main').append(article);
+ const feedback=new Feedback(new T.Scene());feedback.resize(16/9);
+ const renderer=new T.WebGLRenderer({canvas:article.querySelector('canvas'),antialias:false});renderer.setSize(480,270,false);renderer.setClearColor(0x52616a);renderer.toneMapping=T.ACESFilmicToneMapping;
+ views.push({feedback,renderer,phase});
 }
-</script>
+function draw(){for(const {feedback:f,renderer,phase} of views){f.setTier(1,kind);const p=heldPose(phase,16/9,1,kind);f.pivot.position.fromArray(p.position);f.pivot.rotation.fromArray(p.rotation);f.tool.scale.setScalar(TOOL_SCALE);renderer.render(f.view,f.camera);}}
+document.querySelector('#pick').onclick=()=>{kind='pick';draw();};document.querySelector('#axe').onclick=()=>{kind='axe';draw();};draw();
+</script></html>

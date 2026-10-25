@@ -50,12 +50,36 @@ test('work tools rest at the right shoulder and pitch forward without a sideways
  for(const kind of ['pick','axe']){
   const rest=heldPose(0,16/9,1,kind),lift=heldPose(.16,16/9,1,kind),hit=heldPose(.30,16/9,1,kind);
   assert.ok(rest.position[0]>.5,'grip sits to the right of the aiming line');
-  assert.ok(rest.rotation[2]<-.4,'diagonal shaft presents the broad head');
-  assert.ok(hit.rotation[0]<lift.rotation[0]-.6,'head pitches down and forward');
+  assert.ok(Math.abs(rest.rotation[2])<.3,'restrained grip roll, not a broadside presentation');
+  assert.ok(hit.rotation[0]<lift.rotation[0]-.5,'head pitches down and forward');
   assert.ok(Math.abs(hit.rotation[1]-lift.rotation[1])<.04,'no large yaw sweep');
   for(let n=1;n<=1000;n++){
    const a=heldPose((n-1)/1000,16/9,1,kind),b=heldPose(n/1000,16/9,1,kind);
    assert.ok(Math.hypot(...a.position.map((v,i)=>v-b.position[i]))<.035,'continuous contact approach');
   }
+ }
+});
+
+test('the working edge faces into the scene and follows a downward contact path',()=>{
+ for(const kind of ['pick','axe']){
+  const localTip=kind==='pick'?CONTACT_TIP:AXE_TIP;
+  const tipAt=phase=>{const p=heldPose(phase,16/9,1,kind);return localTip.clone().multiplyScalar(TOOL_SCALE).applyEuler(new T.Euler(...p.rotation)).add(new T.Vector3(...p.position));};
+  for(const phase of [0,.16,.26,.30,.44]){
+   const p=heldPose(phase,16/9,1,kind),edge=localTip.clone().sub(new T.Vector3(0,.285,0)).normalize().applyEuler(new T.Euler(...p.rotation));
+   assert.ok(-edge.z>.7,'head points forward rather than broadside');
+   assert.ok(-edge.z>Math.abs(edge.x)*1.7,'forward reach dominates sideways reach');
+  }
+  assert.ok(tipAt(.16).y>.15,'windup visibly lifts above the target');
+  for(let n=17;n<=30;n++){
+   const before=tipAt((n-1)/100),after=tipAt(n/100);
+   assert.ok(after.y<=before.y+1e-8,'downstroke never floats upward toward contact');
+   assert.ok(after.z<before.z,'point drives into the surface');
+  }
+  const hit=tipAt(.30),rebound=tipAt(.44);
+  assert.ok(Math.abs(hit.x)<1e-8&&Math.abs(hit.y)<1e-8);
+  assert.ok(rebound.y>hit.y+.07&&rebound.z>hit.z+.18,'short upward/backward recoil');
+  // The lower handle remains below and to the right of the contacting point.
+  const p=heldPose(.30,16/9,1,kind),grip=new T.Vector3(0,-1,.22).multiplyScalar(TOOL_SCALE).applyEuler(new T.Euler(...p.rotation)).add(new T.Vector3(...p.position));
+  assert.ok(grip.x>hit.x+.3&&grip.y<hit.y-.4,'grip supports the forward head');
  }
 });

@@ -1,13 +1,13 @@
 import * as T from '../../vendor/three.module.js';
-import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=67';
-import {PICKS} from '../game/rules.js?v=67';
-import {bowRig,applyBowRig} from './bow-motion.js?v=67';
-import {createShield} from './shield.js?v=67';
+import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=68';
+import {PICKS} from '../game/rules.js?v=68';
+import {bowRig,applyBowRig} from './bow-motion.js?v=68';
+import {createShield} from './shield.js?v=68';
 export class Feedback{
  constructor(scene){
  this.scene=scene;this.particles=[];this.geometry=new T.BoxGeometry(1,1,1);this.materials=new Map();this.reduced=false;this.phase=0;this.swinging=false;this.time=0;this.kick=0;this.equip=0;this.tier=-1;
  this.view=new T.Scene();this.camera=new T.PerspectiveCamera(48,1,.01,10);
- this.view.add(new T.HemisphereLight(0xe8f3f2,0x576657,2.4));const key=new T.DirectionalLight(0xffe2b0,3);key.position.set(-2,3,4);this.view.add(key);const rim=new T.DirectionalLight(0xb1dded,1.5);rim.position.set(3,1,-2);this.view.add(rim);
+ this.view.add(new T.HemisphereLight(0xe8f3f2,0x576657,1.5));const key=new T.DirectionalLight(0xffe2b0,1.8);key.position.set(-2,3,4);this.view.add(key);const rim=new T.DirectionalLight(0xb1dded,.8);rim.position.set(3,1,-2);this.view.add(rim);
  this.pivot=new T.Group();this.view.add(this.pivot);this.setTier(0);
  this.outline=new T.LineSegments(new T.EdgesGeometry(new T.BoxGeometry(1.006,1.006,1.006)),new T.LineBasicMaterial({color:0xf4dea6,transparent:true,opacity:.7}));scene.add(this.outline);this.outline.visible=false;
  const c=document.createElement('canvas');c.width=c.height=128;this.ctx=c.getContext('2d');this.texture=new T.CanvasTexture(c);this.texture.magFilter=T.NearestFilter;
