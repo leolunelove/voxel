@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import * as T from '../vendor/three.module.js';
-import {faceUV,fractureLines,BlockFracture} from '../src/engine/block-fracture.js';
+import {faceUV,fractureLines,woodCutLines,BlockFracture} from '../src/engine/block-fracture.js';
 import {impactSound} from '../src/engine/impact-sound.js';
 import {Feedback} from '../src/engine/feedback.js';
 function canvas(){return {width:128,height:128,getContext:()=>({clearRect(){},beginPath(){},moveTo(){},lineTo(){},stroke(){},fillRect(){}})};}globalThis.document={createElement:canvas};
@@ -37,4 +37,16 @@ test('mining sounds have a sharp bounded transient, material identities and a se
   for(const x of layers){assert.ok(x.frequency>0&&x.frequency<8000);assert.ok(x.volume>0&&x.volume<=.12);assert.ok(x.delay+x.duration<.2);}
  }
  assert.notDeepEqual(impactSound('hit',0),impactSound('hit',3));assert.notDeepEqual(impactSound('hit',3),impactSound('hit',6));assert.notDeepEqual(impactSound('hit',0),impactSound('hit',8));assert.ok(impactSound('break',0).length>impactSound('hit',0).length);
+});
+
+test('wood notches cut across the grain and widen as the log weakens',()=>{
+ assert.deepEqual(woodCutLines('tree',0),[]);
+ const bounds=stage=>{const points=woodCutLines('tree',stage).flat();return {width:Math.max(...points.map(p=>p[0]))-Math.min(...points.map(p=>p[0])),height:Math.max(...points.map(p=>p[1]))-Math.min(...points.map(p=>p[1]))};};
+ assert.ok(bounds(8).width>bounds(2).width*2);assert.ok(bounds(8).width>bounds(8).height*2);
+});
+test('final tree break scatters canopy fragments without removing or rewarding game objects',()=>{
+ const scene=new T.Scene(),f=new Feedback(scene),visual=new T.Group();visual.position.set(7,1,-10);scene.add(visual);
+ for(const y of [3.3,4.3,5.1]){const m=new T.Mesh(new T.BoxGeometry(1,1,1),new T.MeshStandardMaterial({color:0x648b48}));m.position.y=y;m.userData.canopy=true;visual.add(m);}
+ f.treeBreak({visual});assert.equal(f.particles.length,15);assert.equal(visual.children.length,3);for(const p of f.particles)assert.ok(p.m.position.y>3.8);
+ f.particles=[];f.reduced=true;f.treeBreak({visual});assert.equal(f.particles.length,3);
 });

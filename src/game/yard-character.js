@@ -1,5 +1,5 @@
 import * as T from '../../vendor/three.module.js';
-import {WORK_OFFSET} from './camp-rules.js?v=69';
+import {WORK_OFFSET} from './camp-rules.js?v=70';
 
 // Decoration stays outside the working plots and the central circulation routes.
 // Repeated masonry is instanced: richer walls without a draw call per brick.

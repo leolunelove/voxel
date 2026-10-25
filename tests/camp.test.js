@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import * as T from '../vendor/three.module.js';
 import {CampWorld} from '../src/game/camp.js';
 import {Player} from '../src/game/player.js';
-import {freshState,validateSave,Mining,capacity,bagCount,collect} from '../src/game/rules.js';
-import {MINE_STAGES,FOREST_STAGES,AXES,expandPlot,forgePick,upgradeAxe,campLevel,TREE_TOUGHNESS,treeYield,stairTop} from '../src/game/camp-rules.js';
+import {freshState,validateSave,Mining,BLOCKS,capacity,bagCount,collect} from '../src/game/rules.js';
+import {MINE_STAGES,FOREST_STAGES,AXES,expandPlot,forgePick,upgradeAxe,campLevel,TREE_TOUGHNESS,treeYield,treeLogYield,stairTop} from '../src/game/camp-rules.js';
 globalThis.document={createElement:()=>({getContext:()=>({fillRect(){},strokeRect(){},fillText(){},measureText:s=>({width:s.length*10})})})};
 const world=new CampWorld(new T.Scene());
 const state=freshState();world.configure(state,true);
@@ -13,8 +13,8 @@ function line(p,a,b){const steps=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])*10);f
 test('compact yard has clear short routes to one mine and one forest',()=>{const p=player();line(p,[.5,8],[.5,3]);line(p,[.5,3],[-10,3]);line(p,[-10,3],[-10,-5.5]);assert.equal(world.solid(7,2,-7),true);state.mined=20;world.configure(state);world.update(3);line(p,[.5,3],[8,3]);line(p,[8,3],[8,-7]);assert.equal(campLevel(state),2);});
 test('expansions charge exactly once, open larger plots, retain mined holes and add trees',()=>{const s={...freshState(),money:10000,mined:20};world.configure(s);const target=[...world.blocks.values()].find(m=>m.userData.x===-12&&m.userData.y===0);world.remove(target);const key=target.userData.key,oldCount=world.blocks.size;assert.equal(expandPlot(s,'mine'),true);world.configure(s);assert.ok(world.blocks.size>oldCount);assert.equal(world.blocks.has(key),false);assert.equal(s.money,10000-MINE_STAGES[1].cost);const oldTrees=world.trees.length;assert.equal(expandPlot(s,'forest'),true);world.configure(s);assert.ok(world.trees.length>oldTrees);assert.equal(world.trees.length,FOREST_STAGES[1].trees);assert.equal(expandPlot(s,'mine'),true);assert.equal(expandPlot(s,'mine'),false);});
 test('forest cannot be expanded or axe forged before level two',()=>{const s=freshState();s.money=9999;assert.equal(expandPlot(s,'forest'),false);assert.equal(upgradeAxe(s),false);s.mined=20;assert.equal(upgradeAxe(s),true);assert.equal(s.axe,1);assert.equal(s.money,9999-AXES[1].cost);});
-test('whole-tree harvest removes all trunk targets, falls, and regrows safely',()=>{const s={...freshState(),mined:20};world.configure(s);const tree=world.trees[0],before=world.meshes.filter(m=>m.userData.tree===tree).length;assert.equal(before,3);world.remove(tree.targets[0]);assert.equal(tree.status,'ready');assert.equal(tree.targets.length,2);assert.equal(tree.cuts,1);world.remove(tree.targets[0]);assert.equal(tree.status,'falling');assert.equal(world.meshes.some(m=>m.userData.tree===tree),false);world.update(1);assert.equal(tree.status,'regrowing');world.update(40,false,new T.Vector3(tree.x,2.65,tree.z));assert.equal(tree.status,'regrowing','never regrow inside the player');world.update(2,false,new T.Vector3(0,2.65,8));assert.equal(tree.status,'ready');assert.equal(tree.targets.length,3);});
-test('axe upgrades noticeably reduce complete-tree cutting time and capacity reserves the entire haul',()=>{const time=power=>{const mining=new Mining();let elapsed=0;while(elapsed<10){elapsed+=1/120;if(mining.tick(1/120,'tree',8,power,true,true,TREE_TOUGHNESS).broken)return elapsed;}};assert.ok(time(AXES[1].power)<time(AXES[0].power)*.6);const s=freshState();const yieldCount=treeYield(s);for(let n=0;n<capacity(s)-yieldCount;n++)collect(s,0);assert.equal(capacity(s)-bagCount(s),yieldCount);for(let n=0;n<yieldCount;n++)assert.equal(collect(s,8),true);assert.equal(collect(s,8),false);});
+test('whole-tree harvest removes all trunk targets, falls, and regrows safely',()=>{const s={...freshState(),mined:20};world.configure(s);const tree=world.trees[0],before=world.meshes.filter(m=>m.userData.tree===tree).length;assert.equal(before,3);world.remove(tree.targets[0]);assert.equal(tree.status,'ready');assert.equal(tree.targets.length,2);assert.equal(tree.cuts,1);world.remove(tree.targets[0]);assert.equal(tree.status,'ready');assert.equal(tree.targets.length,1);assert.equal(tree.cuts,2);world.remove(tree.targets[0]);assert.equal(tree.status,'falling');assert.equal(world.meshes.some(m=>m.userData.tree===tree),false);world.update(1);assert.equal(tree.status,'regrowing');world.update(40,false,new T.Vector3(tree.x,2.65,tree.z));assert.equal(tree.status,'regrowing','never regrow inside the player');world.update(2,false,new T.Vector3(0,2.65,8));assert.equal(tree.status,'ready');assert.equal(tree.targets.length,3);});
+test('axe upgrades speed up cutting and each log reserves only its own timber bundle',()=>{const time=power=>{const mining=new Mining();let elapsed=0,logs=0;while(elapsed<20){elapsed+=1/120;if(mining.tick(1/120,'tree:'+logs,8,power,true,true,BLOCKS[8].toughness).broken){logs++;if(logs===3)return elapsed;}}};assert.ok(time(AXES[1].power)<time(AXES[0].power)*.6);const s=freshState();const yieldCount=treeLogYield(s);for(let n=0;n<capacity(s)-yieldCount;n++)collect(s,0);assert.equal(capacity(s)-bagCount(s),yieldCount);for(let n=0;n<yieldCount;n++)assert.equal(collect(s,8),true);assert.equal(collect(s,8),false);});
 test('all three mine stages have walkable stairs down and back to the yard',()=>{const s={...freshState(),money:9999,mined:20};for(let level=0;level<3;level++){s.mineLevel=level;world.configure(s);const p=player();p.position.set(-10,2.65,-5.5);for(let n=0;n<20;n++)p.step(1/120);p.input.keys.add('KeyW');for(let n=0;n<360;n++)p.step(1/120);assert.ok(p.position.y<2,'descend stage '+level);p.input.keys.clear();p.input.keys.add('KeyS');for(let n=0;n<440;n++)p.step(1/120);assert.ok(p.position.z>-5.6&&p.position.y>2.6,'walk out of stage '+level);}});
 test('old permits migrate into plot stages while money, inventory and gear survive reload',()=>{const old={version:3,money:777,inventory:[1,2,3,4,5,0,0,0,6],pick:3,bagLevel:2,mined:60,rank:1,mine:1};const s=validateSave(old);assert.equal(s.version,4);assert.equal(s.mineLevel,1);assert.equal(s.money,777);assert.equal(s.pick,3);assert.deepEqual(s.inventory,old.inventory);assert.equal(s.axe,0);s.money=9999;assert.equal(expandPlot(s,'forest'),true);assert.equal(upgradeAxe(s),true);assert.deepEqual(validateSave(s),s);});
 test('automatic seam refill warns, preserves progression, and actually restores ore',()=>{const s={...freshState(),mineLevel:0};world.configure(s);world.refill();const before=world.blocks.size;world.remove([...world.blocks.values()][0]);world.update(151);assert.ok(world.refillIn>=0);world.update(6);assert.equal(world.blocks.size,before);assert.equal(world.refillEvent,true);assert.equal(s.mineLevel,0);});
@@ -85,4 +85,29 @@ test('new six-metre forecourt is open ground, while the moved work gates and per
  assert.equal(world.solid(8,.5,-3),true,'the new forecourt has ground');
  assert.equal(world.solid(0,2,-24),true,'northern perimeter remains closed');
  s.mined=20;world.configure(s);world.update(3);line(p,[8,-3],[8,-7]);
+});
+
+
+test('all logs must be cut in any order and their three bundles preserve each plot yield',()=>{
+ for(let stage=0;stage<3;stage++){
+  const s={...freshState(),mined:20,forestLevel:stage};world.configure(s);const tree=world.trees[0];world.makeTree(tree);const [bottom,middle,top]=tree.targets;
+  assert.equal(world.remove(middle),false);assert.equal(tree.targets.length,2);
+  assert.equal(world.remove(middle),false,'removed logs cannot be cut twice');assert.equal(tree.cuts,1);
+  assert.equal(world.remove(top),false);assert.equal(tree.status,'ready');assert.equal(tree.targets[0],bottom);
+  assert.equal(world.remove(bottom),true);assert.equal(tree.cuts,3);assert.equal(tree.targets.length,0);
+  assert.equal(treeLogYield(s)*3,treeYield(s));assert.ok(Number.isInteger(treeLogYield(s)));
+  assert.ok(tree.visual.children.every(m=>m.userData.canopy),'no uncut trunk gets removed by the canopy break');
+ }
+});
+test('mine workroom has solid perimeter walls and ceiling with a clear portal at every stage',()=>{
+ const p=player();
+ for(let stage=0;stage<3;stage++){
+  const s={...freshState(),mined:20,mineLevel:stage,forestLevel:stage};world.configure(s);
+  line(p,[-10,3],[-10,-5.5]);line(p,[8,3],[8,-7]);
+  for(const x of [-19.2,-1.1])assert.equal(p.fits(new T.Vector3(x,2.65,-14)),false,'solid mine side wall');
+  assert.equal(p.fits(new T.Vector3(-10,2.65,-23.1)),false,'solid mine rear wall');
+  assert.equal(p.fits(new T.Vector3(-14,7.4,-14)),false,'solid roof above the workroom');
+  const ray=new T.Ray(new T.Vector3(-10,2.65,-5),new T.Vector3(0,0,-1));assert.equal(world.obstructed(ray,2),false,'door and stairs have clear sightlines');
+ }
+ assert.ok(world.skillRooms.children.some(m=>m.isInstancedMesh),'room architecture is batched');
 });

@@ -1,9 +1,9 @@
-import {BlockFracture} from './block-fracture.js?v=69';
+import {BlockFracture} from './block-fracture.js?v=70';
 import * as T from '../../vendor/three.module.js';
-import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=69';
-import {PICKS} from '../game/rules.js?v=69';
-import {bowRig,applyBowRig} from './bow-motion.js?v=69';
-import {createShield} from './shield.js?v=69';
+import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=70';
+import {PICKS} from '../game/rules.js?v=70';
+import {bowRig,applyBowRig} from './bow-motion.js?v=70';
+import {createShield} from './shield.js?v=70';
 export class Feedback{
  constructor(scene){
  this.scene=scene;this.particles=[];this.geometry=new T.BoxGeometry(1,1,1);this.materials=new Map();this.reduced=false;this.phase=0;this.swinging=false;this.time=0;this.kick=0;this.equip=0;this.tier=-1;
@@ -45,6 +45,15 @@ export class Feedback{
  const count=this.reduced?2:small?2:12;
  for(let i=0;i<count&&this.particles.length<160;i++){const m=new T.Mesh(this.geometry,mat),size=small?.025+Math.random()*.035:.04+Math.random()*.1;m.scale.set(size,size*(.5+Math.random()),size);m.position.copy(position);m.position.add(new T.Vector3((Math.random()-.5)*.35,(Math.random()-.5)*.35,(Math.random()-.5)*.35));m.rotation.set(Math.random()*3,Math.random()*3,0);this.scene.add(m);this.particles.push({m,v:new T.Vector3((Math.random()-.5)*3,1+Math.random()*2,(Math.random()-.5)*3),life:small?.22:.45+Math.random()*.25});}
  if(!small)this.kick=1;
+ }
+ treeBreak(tree){
+ tree.visual.updateWorldMatrix(true,false);
+ const leaves=tree.visual.children.filter(m=>m.userData.canopy),count=this.reduced?3:15;
+ for(let i=0;i<count&&this.particles.length<160;i++){
+  const leaf=leaves[i%leaves.length];if(!leaf)break;const color=leaf.material.color.getHex();let mat=this.materials.get(color);if(!mat){mat=new T.MeshStandardMaterial({color,roughness:1});this.materials.set(color,mat);}
+  const m=new T.Mesh(this.geometry,mat),size=.10+Math.random()*.12;m.scale.set(size,size*.45,size);m.position.copy(leaf.getWorldPosition(new T.Vector3())).add(new T.Vector3((Math.random()-.5)*2,(Math.random()-.5)*.7,(Math.random()-.5)*2));m.rotation.set(Math.random()*3,Math.random()*3,0);this.scene.add(m);
+  const life=this.reduced?.2:.5+Math.random()*.25;this.particles.push({m,v:new T.Vector3((Math.random()-.5)*3,.3+Math.random(),(Math.random()-.5)*3),life,maxLife:life,initial:m.scale.clone(),spin:new T.Vector3(4,6,3)});
+ }
  }
  releaseBow(charge=1){this.bowRecoil=charge;this.bowReleaseAge=0;this.releasedCharge=charge;this.nockDelay=.24;}
  confirmHit(){this.contactStop=this.reduced?0:.035;this.kick=this.reduced?0:.65;}

@@ -1,0 +1,7 @@
+# Voxel 70 - Timber cutting and skill rooms
+
+All three trunk blocks must now be cut, in any order. Every block drops one third of the tree's total timber (3, 4 or 5 by forest stage); bag capacity reserves only that block's bundle. The final log clears the canopy, scatters leaves and awards the existing 12 Woodcutting XP. The canopy contracts and breaks rather than toppling sideways. Regrowth remains clear of the player. Wood impacts produce cross-grain notches, wooden chips, a restrained canopy quiver and a distinct finishing crunch. Total tree yield is unchanged.
+
+The Deepwell now has a full masonry shell outside the maximum excavation bounds, a high ceiling, glazed rooflight, structural ribs, conduit and work lamps. Mine expansion still grows the pit inside the room. Timber gets a gatehouse and enclosed open-air allotment, while Attack and the existing Archery/Underblock wings have finished thresholds. All five skills have identifiable physical entrances.
+
+Validation: 129 tests pass, including three-log ordering, duplicate-cut protection, per-log capacity/yield, canopy fragments, and all mine stages' stairs, entrance, walls, ceiling and forest access. Local Chrome: individually cut middle, lower and upper logs; collected 15 timber; completion awarded 12 XP; mined and jumped in the roofed room; collected haul and Woodcutting progress survived reload. No console errors in that run. Audio feel was not judged by ear. Live verification is reported in the chat.
