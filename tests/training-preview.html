@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Voxel / training room lighting study</title><style>body{margin:0;background:#17191d;font:14px monospace}canvas{display:block}nav{position:fixed;left:20px;bottom:20px;display:flex;gap:8px}button{background:#22272d;color:#efd09d;border:1px solid #c59658;padding:12px;cursor:pointer}</style><nav><button id="combat">Iron Hall</button><button id="archery">Long Room</button><button id="day">Day / 12:00</button><button id="night">Night / 22:00</button></nav><script type="module">
+import * as T from '../vendor/three.module.js';
+import {CampWorld} from '../src/game/camp.js?v=71';
+import {freshState} from '../src/game/rules.js?v=71';
+import {Daylight} from '../src/engine/daylight.js?v=71';
+import {Archery} from '../src/game/archery.js?v=71';
+import {Hunt} from '../src/game/hunt.js?v=71';
+import {freshHunt} from '../src/game/hunt-rules.js?v=71';
+const scene=new T.Scene(),world=new CampWorld(scene);world.configure({...freshState(),mined:20},true);
+const skills=freshHunt();new Archery(scene,skills,()=>{});new Hunt(scene,skills);const daylight=new Daylight(world,scene);
+const camera=new T.PerspectiveCamera(72,innerWidth/innerHeight,.05,200),renderer=new T.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;document.body.prepend(renderer.domElement);
+let hour=12;function render(){daylight.update(hour,1);renderer.render(scene,camera);}function room(name){if(name==='archery'){camera.position.set(21.8,2.65,8.8);camera.lookAt(35,2.75,9);}else{camera.position.set(0,2.65,17.35);camera.lookAt(0,3.3,29);}render();}
+document.getElementById('combat').onclick=()=>room('combat');document.getElementById('archery').onclick=()=>room('archery');document.getElementById('day').onclick=()=>{hour=12;render();};document.getElementById('night').onclick=()=>{hour=22;render();};addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);render();});room('combat');
+</script></html>

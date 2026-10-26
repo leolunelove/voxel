@@ -49,7 +49,7 @@ export function buildSkillRooms(world){
   b(side*19.35,1.035,8,.65,.025,4.8,side>0?0xc2a366:0x967e65);
  }
  for(const x of [-3.45,3.45]){b(x,3.35,15.8,.7,4.7,.8,stone,true);b(x,5.8,15.8,.95,.2,1.05,trim);}
- world.sign(['03 / HUNTING YARD','ATTACK · RETURN THROUGH THE GATE TO BANK'],0,5.9,15.48,6.5,.8,Math.PI,root);
+
  const mesh=new T.InstancedMesh(world.geometry,new T.MeshStandardMaterial({roughness:1}),rows.length),matrix=new T.Matrix4(),q=new T.Quaternion(),pos=new T.Vector3(),scale=new T.Vector3();
  rows.forEach((r,i)=>{matrix.compose(pos.set(r.x,r.y,r.z),q,scale.set(r.w,r.h,r.d));mesh.setMatrixAt(i,matrix);mesh.setColorAt(i,new T.Color(r.color));});mesh.name='Instanced skill-room masonry and structure';mesh.castShadow=true;mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);world.skillRooms=root;
 }

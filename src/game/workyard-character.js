@@ -50,14 +50,14 @@ export function buildWorkyardCharacter(world){
   b(35.05,1.6,z,.55,1.2,.55,wood);
   b(35.17,2.5,z,.24,2.3,2.4,0x9d8858);
   // Numbered plaques face the archer, looking east down the room.
-  sign(['0'+(Math.round((z-5.8)/3.2)+1)],37.5,4.7,z,1,.6,-Math.PI/2);
+  
   b(29.25,1.018,z,11.5,.03,2.3,0x8a856b);
   for(const dz of [-1.22,1.22])b(29.25,1.04,z+dz,11.5,.025,.07,0xc6b58b);
   b(24.4,1.06,z,.12,.03,2.4,0xd7bd82);
   for(const dx of [-.22,.22])b(23.7+dx,1.07,z,.2,.025,.55,0x4e5e4c);
  }
  for(const x of [22,27,32,37]){
-  b(x,6.1,9,.24,.35,11.5,0x4b5b4b);
+  b(x,6.1,9,.24,.35,11.5,0x3b3b40);
   for(const z of [3.7,14.3]){b(x,3.6,z,.2,5,.25,brick);b(x,1.25,z,.55,.5,.65,cream);}
  }
  // Rack and arrow bundles sit against the side wall, off all three lanes.
@@ -67,12 +67,12 @@ export function buildWorkyardCharacter(world){
   b(21.2+i*.55,3.15,13.8,.32,.08,.15,cream);
  }
  b(36.2,1.6,4,1.2,1.2,.6,0x806c49,true);
- sign(['04 / THE LONG ROOM','STAND AT THE LINE · FIND YOUR MARK'],29,5.15,14.2,8,1,Math.PI);
+
  sign(['RETURN EQUIPMENT','PRISON PROPERTY'],22.4,4.2,14.05,3.1,.75,Math.PI);
  lamp(27,5.7,9,0xffdcaa,19,13);lamp(35,5.7,9,0xffd39a,14,10);
  // MELEE: the condemned exercise yard. No new obstacles inside AI bounds.
  for(const x of [-8.35,8.35]){
-  b(x,3.2,24,.18,4.4,12,0x5a6556);
+  b(x,3.2,24,.18,4.4,12,0x4b4b50);
   b(x,5.55,24,.3,.25,12.5,brick);
   for(let z=19;z<30;z+=2.8){
    b(x,4,z,.23,2.6,.16,iron);
@@ -89,8 +89,8 @@ export function buildWorkyardCharacter(world){
   b(x,3.25,30.23,1.5,2.4,.08,0x26352c);
   for(let dx=-.6;dx<=.6;dx+=.3)b(x+dx,3.25,30.1,.065,2.4,.12,iron);
  }
- sign(['NO ONE COUNTS THE LAPS ANYMORE'],0,5.65,30.2,11,.8,Math.PI,'#b9aa83');
- sign(['03 / CONDEMNED YARD','RETURN THROUGH THIS GATE TO BANK YOUR LOOT'],0,5.4,15.35,5.8,1.05,Math.PI,'#d4b080');
+ sign(['NO ONE COUNTS THE LAPS ANYMORE'],0,5.5,30.15,10,.55,Math.PI,'#b9aa83');
+
  // Torn strips on the walls give this wing its rust-red identity.
  for(const x of [-8.1,8.1])for(let i=0;i<4;i++)b(x,4.3-i*.4,20.5+i*.1,.08,.5,1.3-i*.2,0x8b6350);
  const material=new T.MeshStandardMaterial({roughness:1});

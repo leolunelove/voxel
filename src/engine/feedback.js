@@ -1,9 +1,9 @@
-import {BlockFracture} from './block-fracture.js?v=70';
+import {BlockFracture} from './block-fracture.js?v=71';
 import * as T from '../../vendor/three.module.js';
-import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=70';
-import {PICKS} from '../game/rules.js?v=70';
-import {bowRig,applyBowRig} from './bow-motion.js?v=70';
-import {createShield} from './shield.js?v=70';
+import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=71';
+import {PICKS} from '../game/rules.js?v=71';
+import {bowRig,applyBowRig} from './bow-motion.js?v=71';
+import {createShield} from './shield.js?v=71';
 export class Feedback{
  constructor(scene){
  this.scene=scene;this.particles=[];this.geometry=new T.BoxGeometry(1,1,1);this.materials=new Map();this.reduced=false;this.phase=0;this.swinging=false;this.time=0;this.kick=0;this.equip=0;this.tier=-1;

@@ -1,8 +1,8 @@
-import {swordDamage} from '../game/hunt-rules.js?v=70';
-import {SWORDS,BOWS} from '../game/weapons.js?v=70';
-import {toolIcon} from '../engine/pickaxe.js?v=70';
-import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=70';
-import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=70';
+import {swordDamage} from '../game/hunt-rules.js?v=71';
+import {SWORDS,BOWS} from '../game/weapons.js?v=71';
+import {toolIcon} from '../engine/pickaxe.js?v=71';
+import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=71';
+import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=71';
 
 const fmt=n=>n.toLocaleString();
 const swatch=b=>'<i class="ore-gem" style="--ore:#'+b.color.toString(16).padStart(6,'0')+'"></i>';
@@ -79,7 +79,7 @@ export class HUD{
  document.addEventListener('keydown',e=>{if(e.code==='Escape'&&!document.getElementById('menu').hidden){this.menuPanel('main-actions');}});document.getElementById('motion').onchange=e=>actions.motion(e.target.checked);
  document.addEventListener('keydown',e=>{if(e.code!=='Tab')return;const modal=!document.getElementById('shop').hidden?document.getElementById('shop'):!document.getElementById('menu').hidden?document.getElementById('menu'):null;if(!modal)return;const controls=[...modal.querySelectorAll('button:not(:disabled),input')].filter(el=>el.getClientRects().length);if(!controls.length)return;const first=controls[0],last=controls.at(-1);if(e.shiftKey&&(document.activeElement===first||!modal.contains(document.activeElement))){e.preventDefault();last.focus();}else if(!e.shiftKey&&(document.activeElement===last||!modal.contains(document.activeElement))){e.preventDefault();first.focus();}});
  }
- location(area,level){this.area=area;this.set('hud-rank','L'+level);this.set('hud-mine',area===7?'The Underblock':area===6?'Archery Range':area===8?'Dungeon Entrance':area===5?'Old Exercise Yard':area===4?'Timber Works':area===0?'The Deepwell':'Work Yard');this.set('hud-wing','Block 07 / Level '+level);}
+ location(area,level){this.area=area;this.set('hud-rank','L'+level);this.set('hud-mine',area===7?'The Underblock':area===6?'The Long Room':area===8?'Dungeon Entrance':area===5?'The Iron Hall':area===4?'Timber Works':area===0?'The Deepwell':'Work Yard');this.set('hud-wing','Block 07 / Level '+level);}
  tool(kind,s,skills=this.combatSkills??{sword:0,bow:0}){this.combatSkills=skills;const key=kind+':'+(kind==='bow'?skills.bow:kind==='sword'?skills.sword:kind==='axe'?s.axe:s.pick)+':'+(kind==='sword'?skills.xp:0);if(this.toolKey===key)return;this.toolKey=key;document.querySelectorAll('[data-tool-slot]').forEach(el=>el.classList.toggle('selected',el.dataset.toolSlot===kind));if(kind==='bow'){this.set('pick-name',BOWS[skills.bow].name);this.set('pick-power',BOWS[skills.bow].damage+' damage / '+BOWS[skills.bow].draw+'s draw');document.querySelector('[data-tool-slot=bow] svg path').setAttribute('stroke','#'+BOWS[skills.bow].trim.toString(16));return;}if(kind==='sword'){this.set('pick-name',SWORDS[skills.sword].name);this.set('pick-power',swordDamage(skills.xp,skills.sword)+' damage / hold to strike');document.querySelector('[data-tool-slot=sword] svg path').setAttribute('fill','#'+SWORDS[skills.sword].color.toString(16));return;}const t=kind==='axe'?AXES[s.axe]:PICKS[s.pick];this.set('pick-name',t.name);this.set('pick-power',t.power.toFixed(2)+'× '+(kind==='axe'?'cutting':'mining')+' power');}
  wayfinding(text){this.set('prison-route',text);}
  set(id,value){document.getElementById(id).textContent=value;}

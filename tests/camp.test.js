@@ -111,3 +111,24 @@ test('mine workroom has solid perimeter walls and ceiling with a clear portal at
  }
  assert.ok(world.skillRooms.children.some(m=>m.isInstancedMesh),'room architecture is batched');
 });
+
+test('training halls keep their entrances, jumping clearance, pursuit floor and firing lanes connected',()=>{
+ world.configure({...freshState(),mined:20,mineLevel:2,forestLevel:2});const p=player();
+ line(p,[.5,8],[.5,19]);line(p,[.5,8],[24,8]);
+ for(const z of [18,23,26,29])line(p,[-7.5,z],[7.5,z]);
+ for(const x of [-5,0,5])line(p,[x,18],[x,29]);
+ for(const [x,z]of [[0,15.8],[19.2,8],[21,8]])assert.ok(p.fits(new T.Vector3(x,3.8,z)),'jump through entrance '+[x,z]);
+ for(const z of [5.8,9,12.2]){
+  line(p,[24,z],[34,z]);
+  for(const y of [1.8,2.5,3.2])assert.equal(world.obstructed(new T.Ray(new T.Vector3(24,y,z),new T.Vector3(1,0,0)),10.8),false,'unobstructed target silhouette');
+ }
+});
+test('training rooms have solid ceilings and lit interiors without extra objects in combat space',()=>{
+ const p=player();assert.equal(p.fits(new T.Vector3(4,8.2,24)),false,'Iron Hall roof is solid');
+ assert.equal(world.obstructed(new T.Ray(new T.Vector3(0,4,24),new T.Vector3(0,1,0)),5),true,'rooflight stops arrows');
+ assert.equal(p.fits(new T.Vector3(29,6.5,9)),false,'Long Room ceiling is solid');
+ assert.ok(world.trainingRooms.children.some(m=>m.isInstancedMesh),'repeated structure is batched');
+ const lamps=[];world.scene.traverse(o=>{if(o.isLight&&o.userData.workLight&&((Math.abs(o.position.x)<8&&o.position.z>17)||(o.position.x>20&&o.position.z>3)))lamps.push(o);});
+ assert.ok(lamps.length>=7,'both rooms keep work lamps on during daylight');
+ assert.ok(lamps.every(o=>o.position.y>5),'fixtures sit above combat and arrows');
+});
