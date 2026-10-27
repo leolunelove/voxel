@@ -1,3 +1,4 @@
+import {impactRecoil} from './arrow-impact.js?v=73.2';
 import * as T from '../../vendor/three.module.js';
 // Presentation is independent of damage and reward rules.
 export function dressWarden(root,arms){
@@ -13,7 +14,7 @@ export function dressWarden(root,arms){
 export function animateWarden(e,reduced){const v=e.warden;if(!v)return;const charge=Math.max(0,Math.min(1,1-e.windup/e.stats.windup));
  if(e.dead){v.shock.visible=false;return;}
  if(!reduced){if(e.windup>0){e.arms[1].rotation.x=-charge*2.65;e.arms[0].rotation.x=-charge*.8;e.root.rotation.x=-charge*.12;}else if(e.lunge>0){e.arms[1].rotation.x=.9;e.root.rotation.x=.22;}else{e.arms[1].rotation.x=.08;}
- e.body.rotation.z=Math.sin(e.hit/.18*Math.PI)*.09;e.root.rotation.x-=Math.sin(e.hit/.18*Math.PI)*.1;}
- v.steel.emissive.setHex(e.hit>0?0x6e3421:0x000000);v.steel.emissiveIntensity=e.hit/.18;
+ e.body.rotation.z=impactRecoil(e.hit,e.hitDuration)*.09;e.root.rotation.x-=impactRecoil(e.hit,e.hitDuration)*.1;}
+ v.steel.emissive.setHex(e.hit>0?0x6e3421:0x000000);v.steel.emissiveIntensity=Math.min(1,e.hit/(e.hitDuration??.18));
  v.shock.visible=e.lunge>0;v.shock.scale.setScalar(reduced?e.stats.reach:e.stats.reach*(1-e.lunge/.4));v.shock.material.opacity=Math.max(0,e.lunge/.4)*.8;
 }

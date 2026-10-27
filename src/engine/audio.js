@@ -1,4 +1,4 @@
-import {impactSound} from './impact-sound.js?v=72';
+import {impactSound} from './impact-sound.js?v=73.2';
 export class Audio{
  constructor(){this.context=null;this.muted=false;this.noise=null;this.variant=0;}
  unlock(){this.context??=new(window.AudioContext||window.webkitAudioContext)();this.context.resume();if(!this.master){this.master=this.context.createGain();this.master.gain.value=this.volume??.75;this.master.connect(this.context.destination);}if(!this.noise){const c=this.context;this.noise=c.createBuffer(1,c.sampleRate,c.sampleRate);const d=this.noise.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;}}
@@ -15,7 +15,7 @@ export class Audio{
  if(kind==='bow-ready'){this.tone(t,460,.09,.018,'triangle',620);return;}
  if(kind==='boss-victory'){[220,330,440,554,660].forEach((f,i)=>this.tone(t+i*.13,f,.65,.045,'triangle',f));this.grit(t,.4,.07,180);return;}
  if(kind==='armor-hit'){this.tone(t,105,.12,.07,'triangle',42);this.tone(t,1750,.14,.035,'sine',900);this.grit(t,.065,.09,1700);return;}
- if(kind==='monster-arrow-hit'){this.tone(t,92,.13,.085,'triangle',38);this.grit(t,.045,.11,1150);this.grit(t+.025,.09,.045,320);return;}
+ if(kind==='monster-arrow-hit'||kind==='arrow-armor-hit'){const power=Math.max(0,Math.min(1,type)),metal=kind==='arrow-armor-hit';this.grit(t,.022,.045+power*.055,metal?3300:2100,'highpass',.001);this.tone(t,metal?150:108,.09+power*.045,.035+power*.045,'triangle',metal?58:40,.001);this.grit(t+.012,.065,.025+power*.025,metal?1200:480);if(metal)this.tone(t+.003,1950,.11,.012+power*.018,'sine',1050,.001);if(power>=.999)this.tone(t+.025,880,.07,.014,'sine',660,.001);return;}
  if(kind==='arrow-wall'){this.tone(t,145,.09,.025+type*.025,'triangle',58);this.grit(t,.055,.03+type*.03,850);return;}
  if(kind==='arrow-hit'||kind==='bullseye'){this.grit(t,.06,.09,650);this.tone(t,kind==='bullseye'?1046:740,.16,.045,'sine',kind==='bullseye'?1568:900);return;}
  if(kind==='bow-release'){this.tone(t,290,.045,.035+type*.035,'triangle',65);this.grit(t,.055,.045+type*.05,2600+type*700);this.tone(t+.012,440,.14,.012+type*.012,'sine',130);return;}

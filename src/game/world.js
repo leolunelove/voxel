@@ -1,16 +1,12 @@
+import {surfaceTexture} from '../engine/surface-textures.js?v=73.2';
 import * as T from '../../vendor/three.module.js';
-import {BLOCKS,oreFor} from './rules.js?v=72';
-import {LAYOUTS,columnsFor,columnTop} from './layouts.js?v=72';
-import {buildEnvironment,disposeEnvironment} from './environment.js?v=72';
+import {BLOCKS,oreFor} from './rules.js?v=73.2';
+import {LAYOUTS,columnsFor,columnTop} from './layouts.js?v=73.2';
+import {buildEnvironment,disposeEnvironment} from './environment.js?v=73.2';
 export const keyOf=(x,y,z)=>x+','+y+','+z;
 export class World{
  constructor(scene){this.scene=scene;this.mine=0;this.layout=LAYOUTS[0];this.blockers=[];this.blocks=new Map();this.meshes=[];this.geometry=new T.BoxGeometry(1,1,1);this.materials=BLOCKS.map((b,i)=>new T.MeshStandardMaterial({map:this.texture(i),roughness:.93,emissive:i===7?0x6f3521:0,emissiveIntensity:.12}));this.environmentsEnabled=true;this.generate();}
- texture(type){const c=document.createElement('canvas');c.width=c.height=32;const ctx=c.getContext('2d');ctx.fillStyle='#'+BLOCKS[0].color.toString(16);ctx.fillRect(0,0,32,32);
- let seed=211+type;const rand=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
- for(let i=0;i<130;i++){const v=Math.floor(85+rand()*65);ctx.fillStyle=`rgb(${v},${v+10},${v+9})`;ctx.fillRect(Math.floor(rand()*16)*2,Math.floor(rand()*16)*2,2+rand()*4,2);}
- if(type)for(let i=0;i<18;i++){ctx.fillStyle='#'+BLOCKS[type].color.toString(16);ctx.fillRect(Math.floor(rand()*14)*2,Math.floor(rand()*14)*2,3,3);}
- if(type===8){ctx.fillStyle='#89603e';ctx.fillRect(0,0,32,32);for(let x=1;x<32;x+=4){ctx.fillStyle=x%3?'#a47a4c':'#67482f';ctx.fillRect(x,0,2,32);ctx.fillRect(x+1,8+(x%4)*3,2,8);}ctx.fillStyle='#5b412e';ctx.fillRect(12,13,5,7);ctx.fillStyle='#be925a';ctx.fillRect(13,15,2,3);}
- ctx.strokeStyle='#334642';ctx.strokeRect(.5,.5,31,31);const texture=new T.CanvasTexture(c);texture.magFilter=T.NearestFilter;texture.colorSpace=T.SRGBColorSpace;return texture;}
+ texture(type){return surfaceTexture(type===8?'bark':'ore',type);}
  generate(index=this.mine){
  this.mine=index;this.layout=LAYOUTS[index];this.scene.background=new T.Color(this.layout.sky);if(this.scene.fog){this.scene.fog.color.setHex(this.layout.sky);this.scene.fog.density=this.layout.fog;}
  for(const mesh of this.meshes)this.scene.remove(mesh);this.meshes=[];this.blocks.clear();

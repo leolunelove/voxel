@@ -1,9 +1,9 @@
-import {BlockFracture} from './block-fracture.js?v=72';
+import {BlockFracture} from './block-fracture.js?v=73.2';
 import * as T from '../../vendor/three.module.js';
-import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=72';
-import {PICKS} from '../game/rules.js?v=72';
-import {bowRig,applyBowRig} from './bow-motion.js?v=72';
-import {createShield} from './shield.js?v=72';
+import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=73.2';
+import {PICKS} from '../game/rules.js?v=73.2';
+import {bowRig,applyBowRig} from './bow-motion.js?v=73.2';
+import {createShield} from './shield.js?v=73.2';
 export class Feedback{
  constructor(scene){
  this.scene=scene;this.particles=[];this.geometry=new T.BoxGeometry(1,1,1);this.materials=new Map();this.reduced=false;this.phase=0;this.swinging=false;this.time=0;this.kick=0;this.equip=0;this.tier=-1;
@@ -45,6 +45,15 @@ export class Feedback{
  const count=this.reduced?2:small?2:12;
  for(let i=0;i<count&&this.particles.length<160;i++){const m=new T.Mesh(this.geometry,mat),size=small?.025+Math.random()*.035:.04+Math.random()*.1;m.scale.set(size,size*(.5+Math.random()),size);m.position.copy(position);m.position.add(new T.Vector3((Math.random()-.5)*.35,(Math.random()-.5)*.35,(Math.random()-.5)*.35));m.rotation.set(Math.random()*3,Math.random()*3,0);this.scene.add(m);this.particles.push({m,v:new T.Vector3((Math.random()-.5)*3,1+Math.random()*2,(Math.random()-.5)*3),life:small?.22:.45+Math.random()*.25});}
  if(!small)this.kick=1;
+ }
+ arrowImpact(point,velocity,charge=1,armored=false){
+ const color=armored?0xffd48a:0xc7b38b;let mat=this.materials.get(color);if(!mat){mat=new T.MeshStandardMaterial({color,roughness:.65,emissive:color,emissiveIntensity:armored?.8:.15});this.materials.set(color,mat);}
+ const count=this.reduced?2:Math.round(4+charge*7),out=velocity.clone().normalize().multiplyScalar(-1);
+ for(let i=0;i<count&&this.particles.length<160;i++){
+  const m=new T.Mesh(this.geometry,mat),size=.018+Math.random()*.025;m.scale.set(size,size*(armored?3:1.3),size);m.position.copy(point).addScaledVector(out,.025);m.rotation.set(Math.random()*3,Math.random()*3,0);this.scene.add(m);
+  const v=out.clone().multiplyScalar(.7+charge*1.5).add(new T.Vector3((Math.random()-.5)*2,Math.random()*2,(Math.random()-.5)*2)),life=this.reduced?.12:.14+Math.random()*.12;
+  this.particles.push({m,v,life,maxLife:life,initial:m.scale.clone(),spin:new T.Vector3(6,9,3)});
+ }
  }
  treeBreak(tree){
  tree.visual.updateWorldMatrix(true,false);

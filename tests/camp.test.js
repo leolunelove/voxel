@@ -132,3 +132,7 @@ test('training rooms have solid ceilings and lit interiors without extra objects
  assert.ok(lamps.length>=7,'both rooms keep work lamps on during daylight');
  assert.ok(lamps.every(o=>o.position.y>5),'fixtures sit above combat and arrows');
 });
+
+test('batched ore remains individually targetable, exposes neighbors and clears the broken instance',()=>{
+ world.configure({...freshState(),mineLevel:2,mined:20},true);world.refill();assert.ok(world.mineBatches.length<=8);const mesh=[...world.blocks.values()].find(m=>m.visible&&m.userData.y===0);assert.ok(mesh);assert.equal(mesh.parent,null);const {batch,index}=mesh.userData.instance,matrix=new T.Matrix4();batch.getMatrixAt(index,matrix);assert.ok(new T.Vector3().setFromMatrixPosition(matrix).distanceTo(mesh.position)<1e-6);mesh.updateMatrixWorld();const hit=new T.Raycaster(mesh.position.clone().add(new T.Vector3(0,2,0)),new T.Vector3(0,-1,0)).intersectObject(mesh)[0];assert.ok(hit);world.remove(mesh);batch.getMatrixAt(index,matrix);assert.equal(matrix.elements[0],0);assert.equal(world.blocks.has(mesh.userData.key),false);assert.equal(world.meshes.includes(mesh),false);world.refill();assert.ok(world.blocks.size>0);
+});
