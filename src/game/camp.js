@@ -1,16 +1,16 @@
-import {buildTrainingRooms} from './training-rooms.js?v=71';
-import {buildSkillRooms} from './skill-rooms.js?v=71';
+import {buildTrainingRooms} from './training-rooms.js?v=72';
+import {buildSkillRooms} from './skill-rooms.js?v=72';
 import * as T from '../../vendor/three.module.js';
-import {buildUnderblockEntry} from './underblock-entry.js?v=71';
-import {entryFloor} from './underblock-entry-rules.js?v=71';
-import {World,keyOf} from './world.js?v=71';
-import {BLOCKS} from './rules.js?v=71';
-import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,WORK_OFFSET,TREE_LOGS,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=71';
+import {buildUnderblockEntry} from './underblock-entry.js?v=72';
+import {entryFloor} from './underblock-entry-rules.js?v=72';
+import {World,keyOf} from './world.js?v=72';
+import {BLOCKS} from './rules.js?v=72';
+import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,WORK_OFFSET,TREE_LOGS,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=72';
 export const TREE_SPOTS=[[7,-4],[10,-7],[7,-8],[13,-4],[13,-9],[5,-11],[16,-4],[16,-12],[10,-14],[4,-15]].map(([x,z])=>[x,z+WORK_OFFSET]);
-import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=71';
-import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=71';
-import {buildIronEmber} from './iron-ember.js?v=71';
-import {buildCell,insideCell} from './cell.js?v=71';
+import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=72';
+import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=72';
+import {buildIronEmber} from './iron-ember.js?v=72';
+import {buildCell,insideCell} from './cell.js?v=72';
 export class CampWorld{
  constructor(scene){
   this.scene=scene;this.layout={spawn:CAMP_SPAWN};this.geometry=new T.BoxGeometry(1,1,1);this.materials=BLOCKS.map((b,i)=>new T.MeshStandardMaterial({map:World.prototype.texture.call(this,i),color:0xffffff,roughness:1}));this.paint=new Map();this.blocks=new Map();this.meshes=[];this.trees=[];this.excavated=new Set();this.blockers=[];this.mineLevel=-1;this.forestLevel=-1;this.level=1;this.time=0;this.refillIn=-1;this.elapsed=0;

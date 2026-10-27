@@ -1,3 +1,4 @@
+import {bowMoveSpeed} from './bow-rules.js?v=72';
 import * as T from '../../vendor/three.module.js';
 export class Player{
  constructor(camera,input,world){this.camera=camera;this.input=input;this.world=world;this.position=new T.Vector3(.5,2.65,2);this.horizontal=new T.Vector3();this.velocity=0;this.grounded=false;this.coyote=0;this.buffer=0;this.jumpHeld=false;this.landing=0;}
@@ -11,7 +12,7 @@ export class Player{
  const i=this.input,jump=i.keys.has('Space');if(jump&&!this.jumpHeld)this.buffer=.13;else this.buffer=Math.max(0,this.buffer-dt);this.jumpHeld=jump;
  this.coyote=this.grounded?.10:Math.max(0,this.coyote-dt);
  if(this.buffer>0&&this.coyote>0){this.velocity=7.6;this.grounded=false;this.coyote=0;this.buffer=0;}
- const dx=Number(i.keys.has('KeyD'))-Number(i.keys.has('KeyA')),dz=Number(i.keys.has('KeyS'))-Number(i.keys.has('KeyW')),n=Math.hypot(dx,dz)||1,speed=i.keys.has('ShiftLeft')?5.8:4.3;
+ const dx=Number(i.keys.has('KeyD'))-Number(i.keys.has('KeyA')),dz=Number(i.keys.has('KeyS'))-Number(i.keys.has('KeyW')),n=Math.hypot(dx,dz)||1,speed=bowMoveSpeed(!!this.drawingBow,i.keys.has('ShiftLeft'));
  const tx=(dx*Math.cos(i.yaw)+dz*Math.sin(i.yaw))/n*speed,tz=(-dx*Math.sin(i.yaw)+dz*Math.cos(i.yaw))/n*speed;
  const rate=this.grounded?(dx||dz?32:25):10,blend=1-Math.exp(-rate*dt);
  this.horizontal.x+=(tx-this.horizontal.x)*blend;this.horizontal.z+=(tz-this.horizontal.z)*blend;

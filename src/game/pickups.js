@@ -1,5 +1,5 @@
 import * as T from '../../vendor/three.module.js';
-import {BLOCKS,collect} from './rules.js?v=71';
+import {BLOCKS,collect} from './rules.js?v=72';
 // Pending ore reserves capacity. The snapshot includes it so reloads never lose a haul.
 export class Pickups{
  constructor(scene,materials){this.scene=scene;this.pending=[];this.geometry=new T.BoxGeometry(.12,.12,.12);this.materials=materials??BLOCKS.map(b=>new T.MeshStandardMaterial({color:b.color,roughness:.55,emissive:b.color,emissiveIntensity:.12}));}

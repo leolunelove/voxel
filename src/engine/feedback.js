@@ -1,9 +1,9 @@
-import {BlockFracture} from './block-fracture.js?v=71';
+import {BlockFracture} from './block-fracture.js?v=72';
 import * as T from '../../vendor/three.module.js';
-import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=71';
-import {PICKS} from '../game/rules.js?v=71';
-import {bowRig,applyBowRig} from './bow-motion.js?v=71';
-import {createShield} from './shield.js?v=71';
+import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=72';
+import {PICKS} from '../game/rules.js?v=72';
+import {bowRig,applyBowRig} from './bow-motion.js?v=72';
+import {createShield} from './shield.js?v=72';
 export class Feedback{
  constructor(scene){
  this.scene=scene;this.particles=[];this.geometry=new T.BoxGeometry(1,1,1);this.materials=new Map();this.reduced=false;this.phase=0;this.swinging=false;this.time=0;this.kick=0;this.equip=0;this.tier=-1;
@@ -64,7 +64,7 @@ export class Feedback{
  const rig=kind==='bow'?bowRig(this.bowDraw??0,this.bowReleaseAge,this.releasedCharge,this.reduced):null;
  const renderPhase=impact?.30:this.phase,motion=this.reduced?.13:1,pose=heldPose(renderPhase,this.camera.aspect,motion,kind,rig?.stance??this.bowDraw??0,this.reduced?0:this.bowRecoil),bob=moving&&!this.reduced?Math.sin(this.time*10)*.004:0;
  this.pivot.position.fromArray(pose.position);this.pivot.position.y+=(kind==='bow'?bob*(1-(this.bowDraw??0)):bob)-(kind==='bow'?0:this.equip*.22);this.pivot.position.z+=this.kick*.012;
- if(kind==='bow'){applyBowRig(this.tool,rig);this.pivot.position.z+=rig.follow;}
+ if(kind==='bow'){applyBowRig(this.tool,rig);this.pivot.position.z+=rig.follow;if(!this.reduced&&this.bowDraw>=.999)this.pivot.position.y+=Math.sin(this.time*32)*.002;}
  this.pivot.rotation.fromArray([...pose.rotation,'XYZ']);if(kind!=='bow')this.pivot.rotation.z-=this.equip*.04;
  if(aim?.point&&this.swinging){
  const smooth=(a,b,x)=>{let t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t);};

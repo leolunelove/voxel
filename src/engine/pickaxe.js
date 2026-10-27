@@ -1,6 +1,6 @@
-import {bowRig,applyBowRig} from './bow-motion.js?v=71';
-import {BOW_ROTATION,BOW_VIEW_SCALE,bowPosition} from './bow-space.js?v=71';
-import {SWORDS,BOWS} from '../game/weapons.js?v=71';
+import {bowRig,applyBowRig} from './bow-motion.js?v=72';
+import {BOW_ROTATION,BOW_VIEW_SCALE,bowPosition} from './bow-space.js?v=72';
+import {SWORDS,BOWS} from '../game/weapons.js?v=72';
 import * as T from '../../vendor/three.module.js';
 // Solid stepped tools with a square shaft, socket and tapered working edges.
 const PALETTES=[[0x566161,0xb9c3bc,0xe2e6da],[0x4c5657,0xc9d4cc,0xf1f3e8],[0x20594c,0x54c7a7,0xa0f1cf],[0x364e5f,0x92b8cc,0xd9edf2],[0x765a24,0xd4ac45,0xffdf83],[0x713e31,0xe18a59,0xffc388]];
@@ -60,10 +60,10 @@ export function createAxe(tier){
 }
 export function createSword(tier=0){const spec=SWORDS[tier],root=new T.Group();const box=(s,p,c)=>{const m=new T.Mesh(new T.BoxGeometry(...s),new T.MeshLambertMaterial({color:c}));m.position.set(...p);root.add(m);};box([.09,.35,.09],[0,-.30,0],0x67401e);box([.14,.07,.14],[0,-.50,0],spec.trim);box([.38+(tier===3?.08:0),.07,.14],[0,-.10,0],spec.trim);box([.14+(tier>=2?.035:0),.65,.09],[0,.26,0],spec.color);box([.08,.13,.07],[0,.65,0],spec.color);box([.035,.65,.10],[-.065,.26,0],0xe3eade);if(tier>0)box([.055,.11,.12],[0,-.075,0],spec.color);return root;}
 export function createBow(tier=0){const spec=BOWS[tier],root=new T.Group(),mat=new T.MeshLambertMaterial({color:spec.color}),trim=new T.MeshLambertMaterial({color:spec.trim});
- const grip=new T.Mesh(new T.BoxGeometry(.13,.24,.17),mat);grip.position.set(.31,0,-.20);root.add(grip);
- for(const y of [-.08,0,.08]){const wrap=new T.Mesh(new T.BoxGeometry(.145,.025,.185),trim);wrap.position.set(.31,y,-.20);root.add(wrap);}
- const rest=new T.Mesh(new T.BoxGeometry(.16,.035,.12),trim);rest.position.set(.23,.115,-.20);root.add(rest);
- for(const side of [-1,1]){const limb=new T.Group();limb.name=side>0?'upper-limb':'lower-limb';root.add(limb);for(const [y,z,angle]of [[.20,-.16,-.30],[.39,-.075,-.50]]){const m=new T.Mesh(new T.BoxGeometry(.085+(tier===3?.025:0),.25,.12),mat);m.position.set(.28,side*y,z);m.rotation.x=side*angle;limb.add(m);}const cap=new T.Mesh(new T.BoxGeometry(.10,.08,.10),trim);cap.position.set(.28,side*.49,-.015);limb.add(cap);}
+ const grip=new T.Mesh(new T.BoxGeometry(.13,.24,.17),mat);grip.position.set(.31,0,-.40);root.add(grip);
+ for(const y of [-.08,0,.08]){const wrap=new T.Mesh(new T.BoxGeometry(.145,.025,.185),trim);wrap.position.set(.31,y,-.40);root.add(wrap);}
+ const rest=new T.Mesh(new T.BoxGeometry(.16,.035,.12),trim);rest.position.set(.23,.115,-.40);root.add(rest);
+ for(const side of [-1,1]){const limb=new T.Group();limb.name=side>0?'upper-limb':'lower-limb';root.add(limb);const nodes=[[.10,-.40],[.24,-.36],[.40,-.22],[.50,-.015]].map(([y,z])=>new T.Vector3(.28,side*y,z));for(let i=1;i<nodes.length;i++){const a=nodes[i-1],b=nodes[i],delta=b.clone().sub(a),m=new T.Mesh(new T.BoxGeometry(.085+(tier===3?.025:0),delta.length()+.025,.10),mat);m.position.copy(a).add(b).multiplyScalar(.5);m.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),delta.normalize());limb.add(m);}const cap=new T.Mesh(new T.BoxGeometry(.10,.08,.10),trim);cap.position.set(.28,side*.49,-.015);limb.add(cap);}
  const geometry=new T.BufferGeometry().setFromPoints([new T.Vector3(.28,-.50,-.015),new T.Vector3(.20,0,.02),new T.Vector3(.28,.50,-.015)]),string=new T.Line(geometry,new T.LineBasicMaterial({color:0xe0d6b6}));string.name='bowstring';root.add(string);for(const name of ['string-upper','string-lower']){const cord=new T.Mesh(new T.CylinderGeometry(.005,.005,1,5),new T.MeshLambertMaterial({color:0xe0d6b6}));cord.name=name;root.add(cord);}
  const arrow=new T.Group();arrow.name='loaded-arrow';const shaft=new T.Mesh(new T.BoxGeometry(.028,.028,1.40),new T.MeshLambertMaterial({color:0xd4bb84}));shaft.position.z=-.64;arrow.add(shaft);const tip=new T.Mesh(new T.ConeGeometry(.045,.12,4),trim);tip.rotation.x=-Math.PI/2;tip.position.z=-1.39;arrow.add(tip);for(const angle of [0,Math.PI*2/3,Math.PI*4/3]){const feather=new T.Mesh(new T.BoxGeometry(.10,.012,.16),trim);feather.rotation.z=angle;feather.position.z=.025;arrow.add(feather);}arrow.position.x=.20;root.add(arrow);applyBowRig(root,bowRig(0));return root;}
 export function bowPose(draw,aspect,recoil=0){return {position:bowPosition(draw).toArray(),rotation:[...BOW_ROTATION]};}

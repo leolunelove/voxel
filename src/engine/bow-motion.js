@@ -1,14 +1,14 @@
 import * as T from '../../vendor/three.module.js';
-import {BOW_ROTATION,BOW_REST,easeDraw,localBowFlight} from './bow-space.js?v=71';
-export {BOW_ROTATION} from './bow-space.js?v=71';
+import {BOW_ROTATION,BOW_REST,easeDraw,localBowFlight} from './bow-space.js?v=72';
+export {BOW_ROTATION} from './bow-space.js?v=72';
 export const ARROW_DIRECTION=new T.Vector3(0,0,-1);
 export function bowRig(draw,releaseAge=Infinity,releasedCharge=1,reduced=false){
- const d=Math.max(0,Math.min(1,draw)),age=Math.max(0,releaseAge),releasing=age<.24;
+ const d=Math.max(0,Math.min(1,draw)),age=Math.max(0,releaseAge),releasing=age<.24&&d===0;
  const stance=releasing?releasedCharge*(1-easeDraw(age/.20)):d,pull=easeDraw(d);
  const tension=releasing?easeDraw(releasedCharge)*Math.exp(-age*36)*Math.cos(age*105):pull;
- const flight=localBowFlight(stance),nock=BOW_REST.clone().addScaledVector(flight,-(.22+.94*tension));
+ const flight=localBowFlight(stance),nock=BOW_REST.clone().addScaledVector(flight,-.94*tension);
  return {pull,stance,aim:easeDraw(stance),tension,nock:nock.toArray(),flight:flight.toArray(),bend:tension*.32,
- arrowVisible:!releasing||age<.026,arrowLaunch:releasing?Math.min(1,age/.026)*3.2:0,
+ arrowVisible:d>0||(releasing&&age<.026),arrowLaunch:releasing?Math.min(1,age/.026)*3.2:0,
  follow:reduced?0:releasing?-.055*Math.sin(Math.min(1,age/.14)*Math.PI)*Math.exp(-age*10):0};
 }
 const up=new T.Vector3(0,1,0),forward=new T.Vector3(0,0,-1);
