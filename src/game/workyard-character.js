@@ -1,4 +1,5 @@
-import {FOREST_OFFSET} from './conservatory-layout.js?v=75.3';
+import {ATTACK_OFFSET,ARCHERY_OFFSET} from './training-layout.js?v=76.1';
+import {FOREST_OFFSET} from './conservatory-layout.js?v=76.1';
 import * as T from '../../vendor/three.module.js';
 
 // Only edge fixtures collide. Firing lanes, monster navigation and tree work
@@ -6,9 +7,10 @@ import * as T from '../../vendor/three.module.js';
 export function buildWorkyardCharacter(world){
  const root=new T.Group();root.name='Timber allotment and prison training wings';world.scene.add(root);
  const rows=[],iron=0x35483f,wood=0x856749,brick=0x776050,cream=0xb9b294;
- const b=(x,y,z,w,h,d,color,solid=false)=>{if(z<3)z-=6;rows.push({x,y,z,w,h,d,color});if(solid)world.blockers.push(new T.Box3(new T.Vector3(x-w/2,y-h/2,z-d/2),new T.Vector3(x+w/2,y+h/2,z+d/2)));};
- const sign=(lines,x,y,z,w,h=.7,angle=0,color='#d4c39a')=>world.sign(lines,x,y,z<3?z-6:z,w,h,angle,root,color);
- const lamp=(x,y,z,color,power,range)=>{if(z<3)z-=6;const bulb=world.box(x,y,z,.5,.16,.4,color,false,root);bulb.material=world.mat(color,.4);bulb.userData.prisonBulb=true;const light=new T.PointLight(color,power,range,2);light.position.set(x,y-.2,z);root.add(light);};
+ const shift=(x,z)=>{const o=z>16?ATTACK_OFFSET:ARCHERY_OFFSET;return [x+o.x,z+o.z];};
+ const b=(x,y,z,w,h,d,color,solid=false)=>{[x,z]=shift(x,z);rows.push({x,y,z,w,h,d,color});if(solid)world.blockers.push(new T.Box3(new T.Vector3(x-w/2,y-h/2,z-d/2),new T.Vector3(x+w/2,y+h/2,z+d/2)));};
+ const sign=(lines,x,y,z,w,h=.7,angle=0,color='#d4c39a')=>{[x,z]=shift(x,z);return world.sign(lines,x,y,z,w,h,angle,root,color);};
+ const lamp=(x,y,z,color,power,range)=>{[x,z]=shift(x,z);const bulb=world.box(x,y,z,.5,.16,.4,color,false,root);bulb.material=world.mat(color,.4);bulb.userData.prisonBulb=true;const light=new T.PointLight(color,power,range,2);light.position.set(x,y-.2,z);root.add(light);};
  // ARCHERY: converted covered exercise hall. Clear lanes end at timber butts.
  b(37.8,3.25,9,.4,4.5,10.9,wood,true);
  for(let z=3.8;z<14.5;z+=.48)b(37.55,3.25,z,.08,4.4,.07,0x5b503d);

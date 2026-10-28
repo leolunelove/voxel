@@ -29,13 +29,6 @@ export function buildSkillRooms(world){
   const bulb=world.box(-10.15,6.08,z,1.65,.08,.42,0xffc982,false,root);bulb.material=world.mat(0xffc982,.5);bulb.userData.prisonBulb=true;
   const lamp=new T.PointLight(0xffd6a1,65,13,2);lamp.position.set(-10.15,5.8,z);lamp.userData.workLight=true;root.add(lamp);
  }
- // The combat and training skills already occupy separate wings; finish their thresholds.
- for(const side of [-1,1]){
-  for(const z of [5.2,10.8])b(side*19.3,3.1,z,.5,4.2,.45,trim,true);
-  b(side*19.3,5.6,8,.5,.45,6.05,iron);
-  b(side*19.35,1.035,8,.65,.025,4.8,side>0?0xc2a366:0x967e65);
- }
- for(const x of [-3.45,3.45]){b(x,3.35,15.8,.7,4.7,.8,stone,true);b(x,5.8,15.8,.95,.2,1.05,trim);}
 
  const mesh=new T.InstancedMesh(world.geometry,new T.MeshStandardMaterial({roughness:1}),rows.length),matrix=new T.Matrix4(),q=new T.Quaternion(),pos=new T.Vector3(),scale=new T.Vector3();
  rows.forEach((r,i)=>{matrix.compose(pos.set(r.x,r.y,r.z),q,scale.set(r.w,r.h,r.d));mesh.setMatrixAt(i,matrix);mesh.setColorAt(i,new T.Color(r.color));});mesh.name='Instanced skill-room masonry and structure';mesh.castShadow=true;mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);world.skillRooms=root;

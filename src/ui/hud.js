@@ -1,8 +1,8 @@
-import {swordDamage} from '../game/hunt-rules.js?v=75.3';
-import {SWORDS,BOWS} from '../game/weapons.js?v=75.3';
-import {toolIcon} from '../engine/pickaxe.js?v=75.3';
-import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=75.3';
-import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=75.3';
+import {swordDamage} from '../game/hunt-rules.js?v=76.1';
+import {SWORDS,BOWS} from '../game/weapons.js?v=76.1';
+import {toolIcon} from '../engine/pickaxe.js?v=76.1';
+import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=76.1';
+import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=76.1';
 
 const fmt=n=>n.toLocaleString();
 const swatch=b=>'<i class="ore-gem" style="--ore:#'+b.color.toString(16).padStart(6,'0')+'"></i>';
@@ -46,7 +46,7 @@ export class HUD{
     </div>
     <div id="menu-controls" hidden><button data-menu-back class="menu-back">← Main menu</button><h2>Controls</h2>
      <div class="control-list"><span>Move <kbd>W A S D</kbd></span><span>Look <kbd>MOUSE / ARROWS</kbd></span><span>Mine / strike <kbd>HOLD LMB</kbd></span><span>Bow <kbd>HOLD / RELEASE LMB</kbd></span><span>Jump <kbd>SPACE</kbd></span><span>Sprint <kbd>SHIFT</kbd></span><span>Interact / rest <kbd>E</kbd></span><span>Swap weapon <kbd>Q</kbd></span><span>Dungeon guard <kbd>RMB / SWORD</kbd></span><span>Skills <kbd>TAB</kbd></span><span>Return to yard <kbd>R</kbd></span><span>Pause <kbd>ESC</kbd></span></div>
-     <p class="controls-note">Mine 20 blocks to open the Level 2 Conservatory checkpoint. Follow the service corridor beyond it. Chop all three trunk blocks. Each log drops timber; the last clears the canopy. Sell and forge at the Exchange.</p><p class="controls-note">Walk out of combat to bank loot. Defeat, retreat or reload loses unbanked monster loot. Skills and gear stay yours.</p><small class="save-note">NO MOUSE CAPTURE? HOLD RMB TO LOOK.</small>
+     <p class="controls-note">Mine 20 blocks to open the Level 2 Conservatory checkpoint. Follow the service corridor beyond it. Prison Level 3 / 60 blocks opens Iron Hall; Level 4 / 120 blocks opens the Long Room. Chop all three trunk blocks. Each log drops timber; the last clears the canopy. Sell and forge at the Exchange.</p><p class="controls-note">Walk out of combat to bank loot. Defeat, retreat or reload loses unbanked monster loot. Skills and gear stay yours.</p><small class="save-note">NO MOUSE CAPTURE? HOLD RMB TO LOOK.</small>
     </div>
    </div>
   </div>
@@ -79,7 +79,7 @@ export class HUD{
  document.addEventListener('keydown',e=>{if(e.code==='Escape'&&!document.getElementById('menu').hidden){this.menuPanel('main-actions');}});document.getElementById('motion').onchange=e=>actions.motion(e.target.checked);
  document.addEventListener('keydown',e=>{if(e.code!=='Tab')return;const modal=!document.getElementById('shop').hidden?document.getElementById('shop'):!document.getElementById('menu').hidden?document.getElementById('menu'):null;if(!modal)return;const controls=[...modal.querySelectorAll('button:not(:disabled),input')].filter(el=>el.getClientRects().length);if(!controls.length)return;const first=controls[0],last=controls.at(-1);if(e.shiftKey&&(document.activeElement===first||!modal.contains(document.activeElement))){e.preventDefault();last.focus();}else if(!e.shiftKey&&(document.activeElement===last||!modal.contains(document.activeElement))){e.preventDefault();first.focus();}});
  }
- location(area,level){this.area=area;this.set('hud-rank','L'+level);this.set('hud-mine',area===7?'The Underblock':area===6?'The Long Room':area===8?'Dungeon Entrance':area===5?'The Iron Hall':area===4?'The Conservatory':area===9?'Service Passage':area===0?'The Deepwell':'Work Yard');this.set('hud-wing','Block 07 / Level '+level);}
+ location(area,level){this.area=area;this.set('hud-rank','L'+level);this.set('hud-mine',area===7?'The Underblock':area===6?'The Long Room':area===8?'Dungeon Entrance':area===5?'The Iron Hall':area===4?'The Conservatory':area===9?'Service Passage':area===10?'Containment Passage':area===11?'Armoury Passage':area===0?'The Deepwell':'Work Yard');this.set('hud-wing','Block 07 / Level '+level);}
  tool(kind,s,skills=this.combatSkills??{sword:0,bow:0}){this.combatSkills=skills;const key=kind+':'+(kind==='bow'?skills.bow:kind==='sword'?skills.sword:kind==='axe'?s.axe:s.pick)+':'+(kind==='sword'?skills.xp:0);if(this.toolKey===key)return;this.toolKey=key;document.querySelectorAll('[data-tool-slot]').forEach(el=>el.classList.toggle('selected',el.dataset.toolSlot===kind));if(kind==='bow'){this.set('pick-name',BOWS[skills.bow].name);this.set('pick-power',BOWS[skills.bow].damage+' damage / '+BOWS[skills.bow].draw+'s draw');document.querySelector('[data-tool-slot=bow] svg path').setAttribute('stroke','#'+BOWS[skills.bow].trim.toString(16));return;}if(kind==='sword'){this.set('pick-name',SWORDS[skills.sword].name);this.set('pick-power',swordDamage(skills.xp,skills.sword)+' damage / hold to strike');document.querySelector('[data-tool-slot=sword] svg path').setAttribute('fill','#'+SWORDS[skills.sword].color.toString(16));return;}const t=kind==='axe'?AXES[s.axe]:PICKS[s.pick];this.set('pick-name',t.name);this.set('pick-power',t.power.toFixed(2)+'× '+(kind==='axe'?'cutting':'mining')+' power');}
  wayfinding(text){this.set('prison-route',text);}
  set(id,value){document.getElementById(id).textContent=value;}
@@ -90,9 +90,9 @@ export class HUD{
  if(this.nextIconPick!==s.pick){document.getElementById('forge-icon').src=toolIcon(Math.min(PICKS.length-1,s.pick+1));this.nextIconPick=s.pick;}if(this.nextIconAxe!==s.axe){document.getElementById('forge-axe-icon').src=toolIcon(Math.min(AXES.length-1,s.axe+1),'axe');this.nextIconAxe=s.axe;}
  this.set('money',fmt(s.money));this.location(this.area??-1,level);this.tool(this.area===6?'bow':(this.area===5||this.area===7)?'sword':this.area===4?'axe':'pick',s);this.set('bag-count',count+' / '+cap);this.set('bag-value',fmt(bagValue(s))+' CR haul value');document.getElementById('bag-fill').style.width=count/cap*100+'%';document.querySelector('.satchel-chip').classList.toggle('full',count>=cap-9);
  const goals=[mn&&{name:'Expand the Deepwell',cost:mn.cost},level>=2&&fn&&{name:'Expand the Conservatory',cost:fn.cost},next&&!pickRequirement(s)&&{name:'Forge '+next.name,cost:next.cost},level>=2&&AXES[s.axe+1]&&{name:'Forge '+AXES[s.axe+1].name,cost:AXES[s.axe+1].cost}].filter(Boolean).sort((a,b)=>a.cost-b.cost),goal=goals[0];
- this.set('goal',level<2?'Prison Level 2 / Open the Conservatory':goal?.name??'Both plots fully grown');
- this.set('goal-detail',level<2?Math.min(s.mined,LEVEL_TWO)+' / '+LEVEL_TWO+' blocks mined':goal?fmt(s.money)+' / '+fmt(goal.cost)+' CR':'Your work. Your pace.');
- document.getElementById('rank-meter').style.width=(level<2?s.mined/LEVEL_TWO:goal?Math.min(1,s.money/goal.cost):1)*100+'%';
+ this.set('goal',level<2?'Prison Level 2 / Open the Conservatory':level<3?'Prison Level 3 / Enter Iron Hall':level<4?'Prison Level 4 / Enter the Long Room':goal?.name??'Both plots fully grown');
+ this.set('goal-detail',level<4?Math.min(s.mined,level<2?20:level<3?60:120)+' / '+(level<2?20:level<3?60:120)+' blocks mined':goal?fmt(s.money)+' / '+fmt(goal.cost)+' CR':'Your work. Your pace.');
+ document.getElementById('rank-meter').style.width=(level<4?s.mined/(level<2?20:level<3?60:120):goal?Math.min(1,s.money/goal.cost):1)*100+'%';
  this.set('start-rank','0'+level);this.set('start-mine','Your work yard');this.set('start-tool',PICKS[s.pick].name+' / '+fmt(s.money)+' credits');
  if(document.getElementById('shop').hidden)return;
  this.set('shop-balance',fmt(s.money)+' CR');this.set('haul-value',fmt(bagValue(s))+' CR');this.set('sell',count?'Sell haul +'+fmt(bagValue(s))+' CR':'Satchel empty');document.getElementById('sell').disabled=!count;

@@ -1,13 +1,14 @@
-import {arrowImpact,impactRecoil,pushDistance} from './arrow-impact.js?v=75.3';
+import {ATTACK_OFFSET} from './training-layout.js?v=76.1';
+import {arrowImpact,impactRecoil,pushDistance} from './arrow-impact.js?v=76.1';
 import * as T from '../../vendor/three.module.js';
-import {MONSTERS,swordDamage,reward,hurt,inHunt,MAX_HP} from './hunt-rules.js?v=75.3';
-import {dressWarden,animateWarden} from './warden.js?v=75.3';
-import {clearArrows,updateArrows} from './embedded-arrows.js?v=75.3';
-import {dressMonster,animateMonster} from './monster-look.js?v=75.3';
-import {CombatLoot} from './combat-loot.js?v=75.3';
+import {MONSTERS,swordDamage,reward,hurt,inHunt,MAX_HP} from './hunt-rules.js?v=76.1';
+import {dressWarden,animateWarden} from './warden.js?v=76.1';
+import {clearArrows,updateArrows} from './embedded-arrows.js?v=76.1';
+import {dressMonster,animateMonster} from './monster-look.js?v=76.1';
+import {CombatLoot} from './combat-loot.js?v=76.1';
 export class Hunt{
- constructor(scene,state,options={}){this.loot=new CombatLoot(scene);this.options=options;this.bounds=options.bounds??[-7.5,7.5,18,30];this.state=state;this.enemies=[];this.targets=[];this.inside=false;this.damageFlash=0;
-  for(const [i,x,z,type]of (options.spawns??[[0,-4,23,0],[1,4,24,0],[2,0,28,1]])){
+ constructor(scene,state,options={}){this.loot=new CombatLoot(scene);this.options=options;this.bounds=options.bounds??[-1.5,13.5,34,46];this.state=state;this.enemies=[];this.targets=[];this.inside=false;this.damageFlash=0;
+  for(const [i,x,z,type]of (options.spawns??[[0,2,39,0],[1,10,40,0],[2,6,44,1]])){
    const root=new T.Group(),m=options.statsFor?.(type,i)??MONSTERS[type],bodyMat=new T.MeshLambertMaterial({color:m.color}),eyeMat=new T.MeshBasicMaterial({color:0xf4d68c});
    const box=(w,h,d,x,y,z,mat)=>{const mesh=new T.Mesh(new T.BoxGeometry(w,h,d),mat);mesh.position.set(x,y,z);root.add(mesh);return mesh;};
    const body=box(.85,.8,.65,0,.85,0,bodyMat);const head=box(.65,.55,.55,0,1.5,0,bodyMat);for(const x of [-.18,.18]){const eye=box(.12,.10,.04,x,1.57,.3,eyeMat);head.attach(eye);}

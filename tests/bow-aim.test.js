@@ -10,13 +10,13 @@ test('uncompensated arrows fall naturally at every frame rate and require a high
   assert.ok(arrow.mesh.position.distanceTo(expected)<1e-8,'consistent ballistic drop');
   assert.ok(arrow.mesh.getWorldDirection(new T.Vector3()).dot(arrow.velocity)<0,'arrowhead leads and feathers trail');
  }
- const state=freshHunt(),scores=[],a=new Archery(new T.Scene(),state,(xp,radius)=>scores.push({xp,radius})),camera=new T.PerspectiveCamera(72,1.8,.05,180);camera.position.set(24,2.65,9);camera.lookAt(35,2.95,9);camera.updateMatrixWorld();a.fire(camera,1,free);
+ const state=freshHunt(),scores=[],a=new Archery(new T.Scene(),state,(xp,radius)=>scores.push({xp,radius})),camera=new T.PerspectiveCamera(72,1.8,.05,180);camera.position.set(36.0,2.65,27);camera.lookAt(47.0,2.95,27);camera.updateMatrixWorld();a.fire(camera,1,free);
  for(let n=0;n<60;n++)a.update(1/60,false,camera,false,free);
  assert.equal(scores.length,1);assert.equal(scores[0].xp,6,'aiming above the centre compensates gravity');
 });
 test('foreground walls catch a converging shot once and never award target XP',()=>{
- const state=freshHunt(),a=new Archery(new T.Scene(),state,()=>assert.fail('target is behind wall')),camera=new T.PerspectiveCamera(72,1.8,.05,180);camera.position.set(24,2.5,9);camera.lookAt(35,2.5,9);camera.updateMatrixWorld();
- const wall=new T.Box3(new T.Vector3(28,0,5),new T.Vector3(29,6,13)),world={obstructed:(ray,d)=>{const p=ray.intersectBox(wall,new T.Vector3());return !!p&&p.distanceTo(ray.origin)<d;}};let impacts=0;a.onWallHit=()=>impacts++;a.fire(camera,1,world);
+ const state=freshHunt(),a=new Archery(new T.Scene(),state,()=>assert.fail('target is behind wall')),camera=new T.PerspectiveCamera(72,1.8,.05,180);camera.position.set(36.0,2.5,27);camera.lookAt(47.0,2.5,27);camera.updateMatrixWorld();
+ const wall=new T.Box3(new T.Vector3(40,0,23),new T.Vector3(41,6,31)),world={obstructed:(ray,d)=>{const p=ray.intersectBox(wall,new T.Vector3());return !!p&&p.distanceTo(ray.origin)<d;}};let impacts=0;a.onWallHit=()=>impacts++;a.fire(camera,1,world);
  for(let i=0;i<100;i++)a.update(.01,false,camera,false,world);
  assert.equal(impacts,1);assert.equal(state.archeryXP,0);assert.equal(a.arrows.length,0);
 });

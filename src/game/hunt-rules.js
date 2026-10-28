@@ -1,5 +1,6 @@
-import {SHIELDS,dungeonLevel} from './shield-rules.js?v=75.3';
-import {SWORDS} from './weapons.js?v=75.3';
+import {trainingWingAt} from './training-layout.js?v=76.1';
+import {SHIELDS,dungeonLevel} from './shield-rules.js?v=76.1';
+import {SWORDS} from './weapons.js?v=76.1';
 export const MAX_HP=100;
 export const attackLevel=xp=>Math.min(10,1+Math.floor(Math.sqrt(Math.max(0,xp)/30)));
 export const swordDamage=(xp,tier=0)=>Math.round((16+attackLevel(xp)*4)*SWORDS[tier].multiplier);
@@ -10,4 +11,4 @@ export function hurt(s,amount){s.hp=Math.max(0,s.hp-Math.max(0,amount));if(s.hp=
 export function reward(s,type,skill='attack',stats=null){const m=stats??MONSTERS[type];if(!m||s.hp<=0)return false;if(skill==='archery')s.archeryXP+=m.xp;else s.xp+=m.xp;s.loot+=m.value;s.kills++;return true;}
 export function bank(s){const value=s.loot;s.loot=0;return value;}
 export function retreat(s){const lost=s.loot;s.loot=0;return lost;}
-export const inHunt=p=>Math.abs(p.x)<8.5&&p.z>16.5&&p.z<31;
+export const inHunt=p=>trainingWingAt(p)?.key==='attack';

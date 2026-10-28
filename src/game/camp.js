@@ -1,27 +1,29 @@
-import {buildConservatory} from './conservatory.js?v=75.3';
-import {FOREST_OFFSET,inConservatory,inServicePassage,inServiceFootprint,conservatoryFloor} from './conservatory-layout.js?v=75.3';
-import {ArchitectureSurfaces} from '../engine/architecture-surfaces.js?v=75.3';
-import {surfaceTexture} from '../engine/surface-textures.js?v=75.3';
-import {batchScenery} from '../engine/static-batch.js?v=75.3';
-import {buildTrainingRooms} from './training-rooms.js?v=75.3';
-import {buildSkillRooms} from './skill-rooms.js?v=75.3';
+import {buildTrainingWings,updateTrainingGates} from './training-wings.js?v=76.1';
+import {ATTACK_OFFSET,ARCHERY_OFFSET,TRAINING_WINGS,trainingFootprint,trainingWingAt,trainingPassageAt,trainingAccess} from './training-layout.js?v=76.1';
+import {buildConservatory} from './conservatory.js?v=76.1';
+import {FOREST_OFFSET,inConservatory,inServicePassage,inServiceFootprint,conservatoryFloor} from './conservatory-layout.js?v=76.1';
+import {ArchitectureSurfaces} from '../engine/architecture-surfaces.js?v=76.1';
+import {surfaceTexture} from '../engine/surface-textures.js?v=76.1';
+import {batchScenery} from '../engine/static-batch.js?v=76.1';
+import {buildTrainingRooms} from './training-rooms.js?v=76.1';
+import {buildSkillRooms} from './skill-rooms.js?v=76.1';
 import * as T from '../../vendor/three.module.js';
-import {buildUnderblockEntry} from './underblock-entry.js?v=75.3';
-import {entryFloor} from './underblock-entry-rules.js?v=75.3';
-import {World,keyOf} from './world.js?v=75.3';
-import {BLOCKS} from './rules.js?v=75.3';
-import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,WORK_OFFSET,TREE_LOGS,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=75.3';
+import {buildUnderblockEntry} from './underblock-entry.js?v=76.1';
+import {entryFloor} from './underblock-entry-rules.js?v=76.1';
+import {World,keyOf} from './world.js?v=76.1';
+import {BLOCKS} from './rules.js?v=76.1';
+import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,WORK_OFFSET,TREE_LOGS,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=76.1';
 export const TREE_SPOTS=[[7,-4],[10,-7],[7,-8],[13,-4],[13,-9],[5,-11],[16,-4],[16,-12],[10,-14],[4,-15]].map(([x,z])=>[x+FOREST_OFFSET.x,z+WORK_OFFSET+FOREST_OFFSET.z]);
-import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=75.3';
-import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=75.3';
-import {buildIronEmber} from './iron-ember.js?v=75.3';
-import {buildCell,insideCell} from './cell.js?v=75.3';
+import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=76.1';
+import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=76.1';
+import {buildIronEmber} from './iron-ember.js?v=76.1';
+import {buildCell,insideCell} from './cell.js?v=76.1';
 export class CampWorld{
  constructor(scene){
   this.architecture=new ArchitectureSurfaces();this.scene=scene;this.layout={spawn:CAMP_SPAWN};this.geometry=new T.BoxGeometry(1,1,1);this.materials=BLOCKS.map((b,i)=>new T.MeshStandardMaterial({map:World.prototype.texture.call(this,i),color:0xffffff,roughness:1}));this.paint=new Map();this.blocks=new Map();this.meshes=[];this.trees=[];this.excavated=new Set();this.blockers=[];this.mineLevel=-1;this.forestLevel=-1;this.level=1;this.time=0;this.refillIn=-1;this.elapsed=0;
   this.timberEnd=new T.MeshStandardMaterial({map:surfaceTexture('endgrain'),roughness:1});this.timberSides=[this.materials[8],this.timberEnd];this.timberGeometry=this.geometry.clone();const timberIndex=[...this.geometry.index.array];this.timberGeometry.setIndex([0,1,4,5,2,3].flatMap(face=>timberIndex.slice(face*6,face*6+6)));this.timberGeometry.clearGroups();this.timberGeometry.addGroup(0,24,0);this.timberGeometry.addGroup(24,12,1);this.leafMap=surfaceTexture('leaf');this.mineRoot=new T.Group();this.floorRoot=new T.Group();this.fenceRoot=new T.Group();this.forestRoot=new T.Group();this.mineDress=new T.Group();scene.add(this.mineRoot,this.floorRoot,this.fenceRoot,this.forestRoot,this.mineDress);
   scene.background=new T.Color(0x7f9690);scene.fog=new T.FogExp2(0x7f9690,.013);
-  this.build();buildCell(this);buildYardCharacter(this);buildWorkyardCharacter(this);buildUnderblockEntry(this);buildSkillRooms(this);buildTrainingRooms(this);buildConservatory(this);buildIronEmber(this);this.architecture.decorate(scene,this.geometry);this.renderStats=batchScenery(scene,this.geometry,[this.gate,this.mineRoot,this.floorRoot,this.fenceRoot,this.forestRoot,this.mineDress]);this.staticBlockers=[...this.blockers];
+  this.build();buildCell(this);buildYardCharacter(this);buildWorkyardCharacter(this);buildUnderblockEntry(this);buildSkillRooms(this);buildTrainingRooms(this);buildConservatory(this);buildTrainingWings(this);buildIronEmber(this);this.architecture.decorate(scene,this.geometry);this.renderStats=batchScenery(scene,this.geometry,[this.gate,...this.trainingGates.map(g=>g.bars),this.mineRoot,this.floorRoot,this.fenceRoot,this.forestRoot,this.mineDress]);this.staticBlockers=[...this.blockers];
  }
  mat(color,glow=0){color=({0x344b3b:0x303238,0x647469:0x4c4d52,0x65716a:0x535156,0x46554a:0x34363b,0x435e4c:0x41434a,0x9a9f86:0x737277,0xafa992:0x7c7976,0x8b967d:0x5b5d64,0x3f5541:0x35373d,0x8d957b:0x5f5d5b,0x4c6248:0x48423b,0x425b40:0x36383d,0x496b5c:0x914731})[color]??color;const key=color+':'+glow;if(!this.paint.has(key))this.paint.set(key,this.architecture.material(new T.MeshStandardMaterial({color,roughness:.93,emissive:glow?color:0,emissiveIntensity:glow})));return this.paint.get(key);}
  box(x,y,z,w,h,d,color,solid=false,group=this.scene){const m=new T.Mesh(this.geometry,this.mat(color));m.position.set(x,y,z);m.scale.set(w,h,d);group.add(m);if(solid)this.blockers.push(new T.Box3().setFromObject(m));return m;}
@@ -31,23 +33,23 @@ export class CampWorld{
   const tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;const m=new T.Mesh(new T.PlaneGeometry(w,h),new T.MeshBasicMaterial({map:tex}));m.position.set(x,y,z);m.rotation.y=angle;group.add(m);return m;
  }
  build(){
-  const box=(...args)=>this.box(...args),metal=0x303238,stone=0x4c4d52;
+  let offset={x:0,z:0};const box=(x,y,z,...args)=>this.box(x+offset.x,y,z+offset.z,...args),metal=0x303238,stone=0x4c4d52;
   this.floorMat=new T.MeshStandardMaterial({map:surfaceTexture('paving'),roughness:.96});
 
   this.skyLight=new T.HemisphereLight(0xdce1ef,0x57504a,2.2);this.scene.add(this.skyLight);const sun=new T.DirectionalLight(0xffe2b1,2.4);this.sun=sun;sun.position.set(-12,25,8);this.scene.add(sun);
   for(const x of [-20,20]){if(x<0)box(x,4,-9.25,1,8,29.5,stone,true);else{box(x,4,-18,1,8,12,stone,true);box(x,4,-1.25,1,8,13.5,stone,true);box(x,7,-10,1,2,4,stone,true);}box(x,4,13.25,1,8,5.5,stone,true);box(x,8.2,-4,1.7,.35,41,0x9a9f86);for(const y of [8.6,9.4])box(x+(x<0?.8:-.8),y,-4,.1,.1,41,metal);for(let z=-23;z<=15;z+=3)box(x+(x<0?.8:-.8),9,z,.1,1,.1,metal);}
-  for(const side of [-1,1]){if(side>0)box(side*29.5,.5,9,19,1,12,0x77816a);box(side*39,4,9,1,8,13,stone,true);for(const z of [3,15])box(side*29.5,4,z,20,8,1,stone,true);box(side*29.5,6.5,9,19,.3,12,0x465c49);for(const z of [5.5,10.5])box(side*20,3.5,z,.6,5,.3,metal,true);if(side<0)this.sign(['05 / THE UNDERBLOCK','CONDEMNED SERVICE STAIRS'],-19.4,5.2,8,5.2,1.4,Math.PI/2);}
-  
+  for(const side of [-1,1]){offset=side>0?ARCHERY_OFFSET:{x:0,z:0};if(side>0)box(side*29.5,.5,9,19,1,12,0x77816a);box(side*39,4,9,1,8,13,stone,true);for(const z of [3,15])box(side*29.5,4,z,20,8,1,stone,true);box(side*29.5,6.5,9,19,.3,12,0x465c49);for(const z of [5.5,10.5])box(side*20,3.5,z,.6,5,.3,metal,true);if(side<0)this.sign(['05 / THE UNDERBLOCK','CONDEMNED SERVICE STAIRS'],-19.4,5.2,8,5.2,1.4,Math.PI/2);}
+  offset={x:0,z:0};
   box(0,4,-24,41,8,1,stone,true);
   box(-11.5,4,16,18,8,1,stone,true);box(6.6,4,16,8.2,8,1,stone,true);box(17.85,4,16,5.3,8,1,stone,true);
-  for(const x of [-9,9])box(x,4,23.5,1,8,16,stone,true);box(0,4,31,19,8,1,stone,true);
-  box(0,.5,23.5,18,1,15,0x746a57);
+  offset=ATTACK_OFFSET;for(const x of [-9,9])box(x,4,23.5,1,8,16,stone,true);box(0,4,31,19,8,1,stone,true);
+  box(0,.5,23.5,18,1,15,0x746a57);offset={x:0,z:0};
   for(const x of [-2.8,2.8])box(x,3.7,16,.35,5.4,.6,metal,true);box(0,6.5,16,6,.4,1,metal);
   
 
   
-  for(const x of [-7,7]){box(x,1.35,21,1.5,.7,1.5,0x4b5140,true);box(x,3.8,28,.18,5.6,.18,metal);const light=new T.PointLight(0xf3ad69,28,17);light.position.set(x,5.9,28);this.scene.add(light);const bulb=box(x,6,28,.8,.25,.8,0xe4b16e);bulb.material=this.mat(0xe4b16e,.7);bulb.userData.prisonBulb=true;}
-  for(const x of [-17,-13,-9,9,13,17]){box(x,4.8,-23.43,2,2,.08,0x1e362d);for(let dx=-.8;dx<=.81;dx+=.4)box(x+dx,4.8,-23.34,.08,2,.12,0x9aa18b);}
+  offset=ATTACK_OFFSET;for(const x of [-7,7]){box(x,1.35,21,1.5,.7,1.5,0x4b5140,true);box(x,3.8,28,.18,5.6,.18,metal);const light=new T.PointLight(0xf3ad69,28,17);light.position.set(x+offset.x,5.9,28+offset.z);this.scene.add(light);const bulb=box(x,6,28,.8,.25,.8,0xe4b16e);bulb.material=this.mat(0xe4b16e,.7);bulb.userData.prisonBulb=true;}
+  offset={x:0,z:0};for(const x of [-17,-13,-9,9,13,17]){box(x,4.8,-23.43,2,2,.08,0x1e362d);for(let dx=-.8;dx<=.81;dx+=.4)box(x+dx,4.8,-23.34,.08,2,.12,0x9aa18b);}
   for(const x of [-14,-10,10]){box(x,3.5,15.44,2,3.7,.1,0x1b3028);for(let dx=-.8;dx<=.81;dx+=.4)box(x+dx,3.5,15.35,.08,3.8,.12,0x8d9980);}
   this.sign(['VOXEL / BLOCK 07','YOUR PLOTS. YOUR PROGRESS.'],-11,6.5,15.25,10,2,Math.PI);
   this.sign(['WORK YARD / 07','DEEPWELL  ←     CELLS / EXCHANGE  ↓'],.5,6,-23.3,11,2);
@@ -71,7 +73,7 @@ export class CampWorld{
   this.state=state;const mineChanged=this.mineLevel!==state.mineLevel,forestChanged=this.forestLevel!==state.forestLevel;
   if(mineChanged){this.mineLevel=state.mineLevel;this.generateMine(true);this.buildFloor();}
   if(forestChanged){this.forestLevel=state.forestLevel;this.growForest();dressForestPlot(this);}
-  this.level=campLevel(state);if(instant)this.gateLift=this.level>=2?4:0;
+  this.level=campLevel(state);this.syncTrainingAccess(this.huntProgress,instant);if(instant)this.gateLift=this.level>=2?4:0;
   if(mineChanged||forestChanged)this.buildFences();this.refreshBlockers();
  }
  buildFloor(){this.floorRoot.traverse(o=>{if(o.isInstancedMesh)o.dispose();});this.floorRoot.clear();const s=MINE_STAGES[this.mineLevel],cells=[];for(let x=-20;x<20;x++)for(let z=-24;z<16;z++)if(!inside(x+.5,z+.5,s.bounds))cells.push([x,z]);const floor=new T.InstancedMesh(this.geometry,this.floorMat,cells.length),matrix=new T.Matrix4();cells.forEach(([x,z],i)=>{matrix.makeTranslation(x+.5,.5,z+.5);floor.setMatrixAt(i,matrix);floor.setColorAt(i,new T.Color(x>2&&z<0?0x929579:0xd4cdc7));});floor.receiveShadow=true;this.floorRoot.add(floor);}
@@ -105,9 +107,12 @@ export class CampWorld{
   for(let y=0;y<TREE_LOGS;y++){const m=new T.Mesh(this.timberGeometry,this.timberSides);m.position.set(0,y+.5,0);m.userData={key:'tree:'+t.id+':'+y,type:8,tree:t};t.visual.add(m);t.targets.push(m);this.meshes.push(m);}
   const leaf=this.mat(t.id%3===0?0x648b48:t.id%3===1?0x79974e:0x4f7843);leaf.map=this.leafMap;leaf.needsUpdate=true;for(const [y,w]of [[3.3,3],[4.3,2.4],[5.1,1.4]]){const m=new T.Mesh(this.geometry,leaf);m.scale.set(w,1.3,w);m.position.y=y;m.userData.canopy=true;t.visual.add(m);}
  }
- refreshBlockers(){this.blockers=[...(this.staticBlockers??[])];if(this.level<2)this.blockers.push(new T.Box3(new T.Vector3(5.7,1,-5.65),new T.Vector3(10.3,5.5,-5)));}
+ syncTrainingAccess(hunt={},instant=false){this.huntProgress=hunt;for(const g of this.trainingGates??[]){g.open=trainingAccess(this.state??{mined:0},hunt,g.wing);if(instant)g.lift=g.open?5.4:0;}this.refreshBlockers();}
+ refreshBlockers(){this.blockers=[...(this.staticBlockers??[])];for(const g of this.trainingGates??[])if(g.lift<5.1){const b=g.bounds.clone();b.min.y+=g.lift;b.max.y+=g.lift;this.blockers.push(b);}if(this.level<2)this.blockers.push(new T.Box3(new T.Vector3(5.7,1,-5.65),new T.Vector3(10.3,5.5,-5)));}
  solid(x,y,z){
   if(this.dungeon&&x>45)return this.dungeon.solid(x,y,z);
+  if(insideCell(x,z))return y<1;
+  if(trainingFootprint(x,z)){const w=trainingWingAt({x,z})??trainingPassageAt({x,z});return !w||!trainingAccess(this.state??{mined:0},this.huntProgress,w)||y<1;}
   if(inServiceFootprint(x,z)){if(this.level<2||!conservatoryFloor(x,z))return true;const forest=FOREST_STAGES[this.forestLevel??0];if(inside(x,z,FOREST_STAGES[2].bounds)&&!inside(x,z,forest.bounds))return true;if(y<1)return true;return this.trees.some(t=>t.status==='ready'&&Math.abs(x-t.x)<.5&&Math.abs(z-t.z)<.5&&t.targets.some(m=>Math.abs(y-(1+m.position.y))<.5));}
   if(Math.abs(x)>19.5){if(Math.abs(x)>38.5||z<3.5||z>14.5)return true;return y<(x<0?entryFloor(x,z):1);}
   if(insideCell(x,z))return y<1;
@@ -120,7 +125,7 @@ export class CampWorld{
   if(y<1)return true;
   return this.trees.some(t=>t.status==='ready'&&Math.abs(x-t.x)<.5&&Math.abs(z-t.z)<.5&&t.targets.some(m=>Math.abs(y-(1+m.position.y))<.5));
  }
- area(p){if(inside(p.x,p.z,MINE_STAGES[this.mineLevel].bounds))return 0;if(inConservatory(p)&&this.level>=2)return 4;if(inServicePassage(p)&&this.level>=2)return 9;return -1;}
+ area(p){const training=trainingWingAt(p),passage=trainingPassageAt(p);if(training&&trainingAccess(this.state,this.huntProgress,training))return training.area;if(passage&&trainingAccess(this.state,this.huntProgress,passage))return passage.passage;if(inside(p.x,p.z,MINE_STAGES[this.mineLevel].bounds))return 0;if(inConservatory(p)&&this.level>=2)return 4;if(inServicePassage(p)&&this.level>=2)return 9;return -1;}
  obstructed(ray,distance){if(this.dungeon&&ray.origin.x>45)return this.dungeon.blocked(ray,distance);return World.prototype.obstructed.call(this,ray,distance);}
  remove(mesh){
   if(mesh.userData.tree){
@@ -133,7 +138,7 @@ export class CampWorld{
  }
  refill(){this.generateMine(false);}
  update(dt,reduced=false,position=null){
-  this.time+=reduced?0:dt;this.elapsed+=dt;this.gateLift+=(((this.level>=2?4:0)-this.gateLift))*Math.min(1,dt*3);this.gate.position.y=this.gateLift;
+  updateTrainingGates(this,dt);this.time+=reduced?0:dt;this.elapsed+=dt;this.gateLift+=(((this.level>=2?4:0)-this.gateLift))*Math.min(1,dt*3);this.gate.position.y=this.gateLift;
   for(const f of this.fences?.values()??[]){const blend=1-Math.exp(-dt*3);f.group.position.x+=(f.x-f.group.position.x)*blend;f.group.position.z+=(f.z-f.group.position.z)*blend;f.group.scale.x+=(f.w-f.group.scale.x)*blend;f.group.scale.z+=(f.d-f.group.scale.z)*blend;}
   for(const t of this.trees){if(t.status==='ready'){t.hit=Math.max(0,(t.hit??0)-dt);for(const leaf of t.visual.children)if(leaf.userData.canopy)leaf.rotation.z=reduced?0:Math.sin(t.hit*45)*t.hit*.08;continue;}if(t.status==='falling'){t.fall+=dt;if(!reduced){t.visual.scale.setScalar(Math.max(.01,1-Math.max(0,t.fall-.10)*3.6));t.visual.position.y=1-Math.min(.35,t.fall*.6);}if(t.fall>.42){t.status='regrowing';t.visual.clear();t.visual.position.y=1;t.visual.rotation.z=0;t.visual.scale.setScalar(1);const stem=new T.Mesh(this.geometry,this.mat(0x795e40));stem.scale.set(.15,.8,.15);stem.position.y=.4;t.visual.add(stem);const sprout=new T.Mesh(this.geometry,this.mat(0x709454));sprout.scale.set(.9,.7,.9);sprout.position.y=.9;t.visual.add(sprout);}}
    else{t.timer-=dt;t.visual.scale.setScalar(.35+.65*(1-t.timer/FOREST_STAGES[this.forestLevel].regrow));if(t.timer<=0){if(position&&Math.hypot(position.x-t.x,position.z-t.z)<1.8)t.timer=1;else this.makeTree(t);}}

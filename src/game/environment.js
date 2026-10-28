@@ -1,6 +1,6 @@
 import * as T from '../../vendor/three.module.js';
-import {LAYOUTS,columnTop} from './layouts.js?v=75.3';
-import {MINES} from './rules.js?v=75.3';
+import {LAYOUTS,columnTop} from './layouts.js?v=76.1';
+import {MINES} from './rules.js?v=76.1';
 export function buildEnvironment(world){
  const index=world.mine,L=LAYOUTS[index],g=new T.Group();g.name=L.id;world.scene.add(g);world.environment=g;world.blockers=[];world.ambientMotes=[];
  const materials=new Map(),cube=new T.BoxGeometry(1,1,1);

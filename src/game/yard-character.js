@@ -1,5 +1,5 @@
 import * as T from '../../vendor/three.module.js';
-import {WORK_OFFSET} from './camp-rules.js?v=75.3';
+import {WORK_OFFSET} from './camp-rules.js?v=76.1';
 
 // Decoration stays outside the working plots and the central circulation routes.
 // Repeated masonry is instanced: richer walls without a draw call per brick.
@@ -58,7 +58,7 @@ export function buildYardCharacter(world){
  b(0,6.9,15.1,6.1,.35,2.1,trim);
  for(let x=-2.8;x<3;x+=.55)b(x,7.6,14.1,.065,1.2,.1,iron);
  b(0,8.2,14.1,6,.08,.1,iron);
- sign(['CELLBLOCK / 07'],0,9.1,14.24,5.2,.85,Math.PI);
+ sign(['CONTAINMENT / 03'],0,9.1,14.24,5.2,.85,Math.PI);
  // Closed neighboring cells and a receiving hatch sit at the courtyard edge.
  for(const x of [-15,-10,-5,17]){
   b(x,2.7,14.5,2.5,3.4,.4,0x913e29,true);

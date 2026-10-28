@@ -1,3 +1,4 @@
+import {TRAINING_WINGS} from '../src/game/training-layout.js';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import * as T from '../vendor/three.module.js';
@@ -20,11 +21,11 @@ test('old permits migrate into plot stages while money, inventory and gear survi
 test('automatic seam refill warns, preserves progression, and actually restores ore',()=>{const s={...freshState(),mineLevel:0};world.configure(s);world.refill();const before=world.blocks.size;world.remove([...world.blocks.values()][0]);world.update(151);assert.ok(world.refillIn>=0);world.update(6);assert.equal(world.blocks.size,before);assert.equal(world.refillEvent,true);assert.equal(s.mineLevel,0);});
 
 test('cellblock dressing preserves access to bed, shops, combat and side rooms at every plot stage',()=>{
- const s={...freshState(),mined:20};
+ const s={...freshState(),mined:120};
  for(let stage=0;stage<3;stage++){
-  s.mineLevel=stage;s.forestLevel=stage;world.configure(s);const p=player();
+  s.mineLevel=stage;s.forestLevel=stage;world.configure(s,true);const p=player();
   for(const [a,b]of [
-   [[.5,8],[.5,13]],[[.5,13],[.5,17]],
+   [[.5,8],[.5,13]],[[.5,13],[0,18]],
    [[.5,8],[13.6,8]],[[13.6,8],[13.6,16.1]],
    [[.5,8],[-10,8]],[[.5,8],[10,8]],
    [[.5,8],[-25,8]],[[.5,8],[25,8]],
@@ -54,16 +55,16 @@ test('timber dressing preserves tree approaches through every expansion and rebu
 test('all archery lanes retain clear shots and a solid backstop beyond the target',()=>{
  const p=player();
  for(const z of [5.8,9,12.2]){
-  line(p,[21,9],[23.7,z]);line(p,[23.7,z],[34,z]);
-  const ray=new T.Ray(new T.Vector3(23.7,2.5,z),new T.Vector3(1,0,0));
+  world.configure({...freshState(),mined:120},true);line(p,[33,27],[35.7,z+18]);line(p,[35.7,z+18],[46,z+18]);
+  const ray=new T.Ray(new T.Vector3(35.7,2.5,z+18),new T.Vector3(1,0,0));
   assert.equal(world.obstructed(ray,11.2),false,'clear target face at '+z);
   assert.equal(world.obstructed(ray,15),true,'backstop catches missed arrows at '+z);
  }
 });
 
 test('condemned yard dressing leaves monster pursuit space and retreat route clear',()=>{
- const p=player();line(p,[.5,13],[.5,19]);
- for(const z of [19,22,25,28])line(p,[-5,z],[5,z]);
+ world.configure({...freshState(),mined:120},true);const p=player();for(const w of TRAINING_WINGS)for(let i=1;i<w.route.length;i++)line(p,w.route[i-1],w.route[i]);
+ for(const z of [35,38,41,44])line(p,[1,z],[11,z]);
  assert.ok(world.workyardCharacter.children.some(o=>o.isInstancedMesh),'repeated fixtures are batched');
 });
 
@@ -112,21 +113,18 @@ test('mine workroom has solid perimeter walls and ceiling with a clear portal at
  assert.ok(world.skillRooms.children.some(m=>m.isInstancedMesh),'room architecture is batched');
 });
 
-test('training halls keep their entrances, jumping clearance, pursuit floor and firing lanes connected',()=>{
- world.configure({...freshState(),mined:20,mineLevel:2,forestLevel:2});const p=player();
- line(p,[.5,8],[.5,19]);line(p,[.5,8],[24,8]);
- for(const z of [18,23,26,29])line(p,[-7.5,z],[7.5,z]);
- for(const x of [-5,0,5])line(p,[x,18],[x,29]);
- for(const [x,z]of [[0,15.8],[19.2,8],[21,8]])assert.ok(p.fits(new T.Vector3(x,3.8,z)),'jump through entrance '+[x,z]);
- for(const z of [5.8,9,12.2]){
-  line(p,[24,z],[34,z]);
-  for(const y of [1.8,2.5,3.2])assert.equal(world.obstructed(new T.Ray(new T.Vector3(24,y,z),new T.Vector3(1,0,0)),10.8),false,'unobstructed target silhouette');
- }
+test('training halls keep their corridors, jumping clearance, pursuit floor and firing lanes connected',()=>{
+ world.configure({...freshState(),mined:120,mineLevel:2,forestLevel:2},true);const p=player();
+ for(const w of TRAINING_WINGS)for(let i=1;i<w.route.length;i++)line(p,w.route[i-1],w.route[i]);
+ for(const z of [34,39,42,45])line(p,[-1.5,z],[13.5,z]);
+ for(const x of [1,6,11])line(p,[x,34],[x,45]);
+ for(const [x,z]of [[0,16],[20,8],[28,20],[6,27]])assert.ok(p.fits(new T.Vector3(x,3.8,z)),'jump through passage '+[x,z]);
+ for(const z of [23.8,27,30.2]){line(p,[36,z],[46,z]);for(const y of [1.8,2.5,3.2])assert.equal(world.obstructed(new T.Ray(new T.Vector3(36,y,z),new T.Vector3(1,0,0)),10.8),false,'unobstructed target silhouette');}
 });
 test('training rooms have solid ceilings and lit interiors without extra objects in combat space',()=>{
- const p=player();assert.equal(p.fits(new T.Vector3(4,8.2,24)),false,'Iron Hall roof is solid');
- assert.equal(world.obstructed(new T.Ray(new T.Vector3(0,4,24),new T.Vector3(0,1,0)),5),true,'rooflight stops arrows');
- assert.equal(p.fits(new T.Vector3(29,6.5,9)),false,'Long Room ceiling is solid');
+ const p=player();assert.equal(p.fits(new T.Vector3(10,8.2,40)),false,'Iron Hall roof is solid');
+ assert.equal(world.obstructed(new T.Ray(new T.Vector3(6,4,40),new T.Vector3(0,1,0)),5),true,'rooflight stops arrows');
+ assert.equal(p.fits(new T.Vector3(41,6.5,27)),false,'Long Room ceiling is solid');
  assert.ok(world.trainingRooms.children.some(m=>m.isInstancedMesh),'repeated structure is batched');
  const lamps=[];world.scene.traverse(o=>{if(o.isLight&&o.userData.workLight&&((Math.abs(o.position.x)<8&&o.position.z>17)||(o.position.x>20&&o.position.z>3)))lamps.push(o);});
  assert.ok(lamps.length>=7,'both rooms keep work lamps on during daylight');
