@@ -1,4 +1,4 @@
 import * as T from '../../vendor/three.module.js';
-import {SHIELDS} from '../game/shield-rules.js?v=74.2';
+import {SHIELDS} from '../game/shield-rules.js?v=75.3';
 export function createShield(tier=0){const root=new T.Group(),spec=SHIELDS[tier],metal=new T.MeshStandardMaterial({color:spec.color,metalness:.55,roughness:.5}),rim=new T.MeshStandardMaterial({color:0xc1a36b,metalness:.6,roughness:.4}),dark=new T.MeshLambertMaterial({color:0x382e22});
  const box=(s,p,m)=>{const o=new T.Mesh(new T.BoxGeometry(...s),m);o.position.set(...p);root.add(o);};box([.52,.48,.10],[0,0,0],metal);box([.40,.64,.10],[0,0,0],metal);for(const side of [-1,1]){box([.055,.48,.14],[side*.28,0,0],rim);box([.4,.055,.14],[0,side*.33,0],rim);for(const y of [-.2,.2])box([.045,.045,.16],[side*.19,y,-.02],rim);}box([.17,.17,.2],[0,0,.10],rim);box([.22,.10,.08],[0,0,-.1],dark);if(tier>1)box([.08,.30,.04],[0,0,.22],metal);return root;}

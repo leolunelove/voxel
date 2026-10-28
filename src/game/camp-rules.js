@@ -1,4 +1,5 @@
-import {PICKS,upgradePick} from './rules.js?v=74.2';
+import {FOREST_OFFSET} from './conservatory-layout.js?v=75.3';
+import {PICKS,upgradePick} from './rules.js?v=75.3';
 export const WORK_OFFSET=-6;
 export const LEVEL_TWO=20;
 export const campLevel=s=>s.mined>=LEVEL_TWO?2:1;
@@ -8,10 +9,10 @@ export const MINE_STAGES=[
  {name:'Deepwell works',cost:1350,bounds:[-18,-3,-22,-6],bottom:-4,ore:[[0,.15],[3,.25],[4,.25],[5,.20],[6,.12],[7,.03]],detail:'15 × 16 blocks · deep ore, gold and rare crystals'}
 ];
 export const FOREST_STAGES=[
- {name:'Seedling yard',cost:0,bounds:[5,12,-15,-6],trees:3,logs:9,regrow:24,detail:'3 trees · 9 timber per tree · 24s regrowth'},
- {name:'Timber garden',cost:220,bounds:[4,16,-18,-6],trees:6,logs:12,regrow:21,detail:'6 trees · 12 timber per tree · 21s regrowth'},
- {name:'Prison grove',cost:1100,bounds:[3,18,-22,-6],trees:10,logs:15,regrow:18,detail:'10 trees · 15 timber per tree · 18s regrowth'}
-];
+ {name:'Nursery allotment',cost:0,bounds:[5,12,-15,-6],trees:3,logs:9,regrow:24,detail:'3 trees · 9 timber per tree · 24s regrowth'},
+ {name:'Restored garden',cost:220,bounds:[4,16,-18,-6],trees:6,logs:12,regrow:21,detail:'6 trees · 12 timber per tree · 21s regrowth'},
+ {name:'Conservatory grove',cost:1100,bounds:[3,18,-22,-6],trees:10,logs:15,regrow:18,detail:'10 trees · 15 timber per tree · 18s regrowth'}
+].map(s=>({...s,bounds:[s.bounds[0]+FOREST_OFFSET.x,s.bounds[1]+FOREST_OFFSET.x,s.bounds[2]+FOREST_OFFSET.z,s.bounds[3]+FOREST_OFFSET.z]}));
 export const AXES=[{name:'Iron hatchet',power:1,cost:0},{name:'Steel axe',power:1.8,cost:85},{name:'Jade axe',power:3,cost:320},{name:'Gilded axe',power:4.8,cost:1100}];
 export const TREE_LOGS=3;
 export const TREE_TOUGHNESS=2.2;

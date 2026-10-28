@@ -1,3 +1,4 @@
+import {FOREST_OFFSET} from './conservatory-layout.js?v=75.3';
 import * as T from '../../vendor/three.module.js';
 
 // Only edge fixtures collide. Firing lanes, monster navigation and tree work
@@ -8,41 +9,6 @@ export function buildWorkyardCharacter(world){
  const b=(x,y,z,w,h,d,color,solid=false)=>{if(z<3)z-=6;rows.push({x,y,z,w,h,d,color});if(solid)world.blockers.push(new T.Box3(new T.Vector3(x-w/2,y-h/2,z-d/2),new T.Vector3(x+w/2,y+h/2,z+d/2)));};
  const sign=(lines,x,y,z,w,h=.7,angle=0,color='#d4c39a')=>world.sign(lines,x,y,z<3?z-6:z,w,h,angle,root,color);
  const lamp=(x,y,z,color,power,range)=>{if(z<3)z-=6;const bulb=world.box(x,y,z,.5,.16,.4,color,false,root);bulb.material=world.mat(color,.4);bulb.userData.prisonBulb=true;const light=new T.PointLight(color,power,range,2);light.position.set(x,y-.2,z);root.add(light);};
- // TIMBER: a salvaged nursery against the outer wall, not a wild forest.
- // All greenhouse geometry is behind the largest possible plot boundary.
- for(const x of [5,8,11,14,17]){
-  b(x,3.4,-17,.13,4.8,.18,iron);
-  b(x,5.85,-16.9,.18,.18,1.3,iron);
-  b(x,2.25,-16.9,2.8,1.6,.12,0x657e67);
-  for(let dz=0;dz<3;dz++)b(x,4.1+dz*.5,-16.9,2.8,.045,.08,0x8caa91);
- }
- b(11,5.8,-17,12.5,.18,.9,iron);b(11,1.3,-16.9,12.5,.6,.7,brick,true);
- sign(['BLOCK 07 / TREE NURSERY','GROW SOMETHING THEY CANNOT TAKE'],11,4.7,-16.7,7.6,1.05);
- // Narrow watering run follows the wall, away from trees and the entry route.
- b(18.85,1.12,-8,.36,.22,16,0x4f685b);
- b(18.85,1.245,-8,.23,.025,15.8,0x648d88);
- for(let z=-15;z<0;z+=3)b(18.85,1.31,z,.42,.1,.16,iron);
- b(18.6,2.2,-1,1,2.4,1.2,0x62765c,true);b(18.6,3.45,-1,1.12,.12,1.32,iron);
- b(18.2,1.8,-.25,.1,1.5,.12,iron);b(18.45,2.5,-.25,.6,.12,.12,iron);
- // Front-side timber shelter: readable from the yard and never across the gate.
- for(const x of [13.3,17.5])b(x,2.7,1.4,.22,3.4,.25,wood,true);
- b(15.4,4.5,1.4,4.9,.25,2.8,0x4e6754);
- for(let i=0;i<8;i++)b(13.3+i*.6,4.67,1.4,.49,.1,2.8,i%2?0x62765c:0x526b54);
- for(let row=0;row<3;row++)for(let col=0;col<4-row;col++){
-  b(14.1+col*.67+row*.33,1.35+row*.48,1.5,.55,.43,1.8,wood);
-  b(14.1+col*.67+row*.33,1.35+row*.48,2.42,.39,.29,.04,0xb49c70);
- }
- // The log pile has a single simple collision volume.
- world.blockers.push(new T.Box3(new T.Vector3(13.8,1,-5.45),new T.Vector3(16.4,2.6,-3.55)));
- sign(['TIMBER STORES','CUT · STACK · START AGAIN'],15.4,3.65,2.84,3.9,.8);
- sign(['02 / TIMBER ALLOTMENT','FOREST GATE / LEVEL 2'],8,4.4,1.35,6.1,1);
- for(let i=0;i<3;i++){
-  b(1.4,1.18,-3-i*3,1.7,.35,1.7,wood,true);
-  b(1.4,1.38,-3-i*3,1.4,.09,1.4,0x554d37);
-  for(const dx of [-.4,.35])b(1.4+dx,1.7,-3-i*3,.16,.55,.16,0x6f904f);
- }
- sign(['NURSERY / KEEP OFF THE BEDS'],1.4,2.6,-6,2.5,.55,Math.PI/2);
- lamp(15.4,4.2,2.3,0xffd9a0,10,7);
  // ARCHERY: converted covered exercise hall. Clear lanes end at timber butts.
  b(37.8,3.25,9,.4,4.5,10.9,wood,true);
  for(let z=3.8;z<14.5;z+=.48)b(37.55,3.25,z,.08,4.4,.07,0x5b503d);
@@ -109,11 +75,11 @@ export function dressForestPlot(world){
  // Later allotments get irrigation runs and benches near their rear fence.
  if(stage>0){
   const z=stage===1?-17.65:-21.65;
-  world.box(stage===1?10:10.5,1.05,z,stage===1?11:14,.1,.18,0x4e7161,false,root);
-  for(let x=5;x<16;x+=3)world.box(x,1.15,z,.18,.25,.28,0x94a78a,false,root);
+  world.box((stage===1?10:10.5)+FOREST_OFFSET.x,1.05,z+FOREST_OFFSET.z,stage===1?11:14,.1,.18,0x4e7161,false,root);
+  for(let x=5;x<16;x+=3)world.box(x+FOREST_OFFSET.x,1.15,z+FOREST_OFFSET.z,.18,.25,.28,0x94a78a,false,root);
  }
  if(stage===2){
-  world.box(16.7,1.1,-21,1.3,.2,1,0x866f49,false,root);
-  for(const x of [16.4,17])world.box(x,1.4,-21,.2,.6,.2,0x729656,false,root);
+  world.box(16.7+FOREST_OFFSET.x,1.1,-21+FOREST_OFFSET.z,1.3,.2,1,0x866f49,false,root);
+  for(const x of [16.4,17])world.box(x+FOREST_OFFSET.x,1.4,-21+FOREST_OFFSET.z,.2,.6,.2,0x729656,false,root);
  }
 }

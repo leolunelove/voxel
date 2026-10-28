@@ -1,5 +1,5 @@
 import * as T from '../../vendor/three.module.js';
-import {WORK_OFFSET} from './camp-rules.js?v=74.2';
+import {WORK_OFFSET} from './camp-rules.js?v=75.3';
 
 // Decoration stays outside the working plots and the central circulation routes.
 // Repeated masonry is instanced: richer walls without a draw call per brick.
@@ -122,10 +122,10 @@ export function buildYardCharacter(world){
   b(x,2.03,z,1.4,.08,1.15,0x9a8057);
  }
  // Forge silhouette: flue and tool rack, unlike the Exchange's timber counter.
- b(12.5,3.7,11.25,1.1,5.4,1.1,brick,true);
- b(12.5,6.55,11.25,1.4,.25,1.4,iron);
- b(10.3,2.2,11.5,2.4,2.4,.5,0x3e4146,true);
- for(let i=0;i<4;i++){b(9.55+i*.5,2.7,11.15,.1,1,.1,0xa28957);b(9.55+i*.5,3.2,11.15,.4,.12,.2,0x9aa59a);}
+ b(10.7,3.7,11.25,1.1,5.4,1.1,brick,true);
+ b(10.7,6.55,11.25,1.4,.25,1.4,iron);
+ b(8.5,2.2,11.5,2.4,2.4,.5,0x3e4146,true);
+ for(let i=0;i<4;i++){b(7.75+i*.5,2.7,11.15,.1,1,.1,0xa28957);b(7.75+i*.5,3.2,11.15,.4,.12,.2,0x9aa59a);}
  // Warm fixtures join the existing day/night lamp system.
  for(const [x,z]of [[-4.7,11.5],[13,13.7],[-10,2.2]]){
   const bulb=world.box(x,4.15,z,.48,.18,.4,0xf0cc8b,false,root);bulb.material=world.mat(0xf0cc8b,.35);bulb.userData.prisonBulb=true;

@@ -1,4 +1,4 @@
-import {impactRecoil} from './arrow-impact.js?v=74.2';
+import {impactRecoil} from './arrow-impact.js?v=75.3';
 import * as T from '../../vendor/three.module.js';
 // Presentation is independent of damage and reward rules.
 export function dressWarden(root,arms){

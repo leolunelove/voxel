@@ -29,25 +29,6 @@ export function buildSkillRooms(world){
   const bulb=world.box(-10.15,6.08,z,1.65,.08,.42,0xffc982,false,root);bulb.material=world.mat(0xffc982,.5);bulb.userData.prisonBulb=true;
   const lamp=new T.PointLight(0xffd6a1,65,13,2);lamp.position.set(-10.15,5.8,z);lamp.userData.workLight=true;root.add(lamp);
  }
- // Timber is an open-air work yard, entered through one deliberate gatehouse.
- for(const [x,w]of [[4.05,3.1],[14.65,8.9]]){
-  b(x,1.75,-5.85,w,1.5,.5,0x5c6255,true);
-  b(x,4.3,-5.85,w,.22,.35,wood);
-  for(let dx=-w/2+.25;dx<w/2;dx+=.55)b(x+dx,3.05,-5.85,.075,1.9,.12,iron);
- }
- for(const x of [5.7,10.3]){b(x,3.5,-5.3,.38,5,.55,wood,true);b(x,1.35,-5.3,.7,.7,.8,stone);}
- b(8,6,-5.3,5.6,.48,.8,wood);b(8,6.32,-5.3,6,.16,1,iron);
- world.sign(['02 / TIMBER WORKS','WOODCUTTING · OPENS AT LEVEL 2'],8,5.55,-4.84,5.1,.65,0,root);
- // A low side wall makes the nursery an enclosed allotment without a low roof.
- b(2.55,1.65,-14.4,.35,1.3,17.4,0x5c6255,true);
- for(const z of [-7.2,-12,-17,-22]){b(2.55,3.5,z,.24,4.5,.24,iron);b(2.55,5.8,z,.42,.12,.42,trim);}
- b(2.55,5.2,-14.4,.12,.12,17.5,iron);
- // Small work lamps illuminate bark and cutting lanes after dark.
- for(const z of [-7.2,-12,-17]){
-  const bulb=world.box(2.82,5.65,z,.38,.15,.38,0xffc982,false,root);bulb.material=world.mat(0xffc982,.5);bulb.userData.prisonBulb=true;
-  const lamp=new T.PointLight(0xffcf94,48,13,2);lamp.position.set(3.05,5.35,z);lamp.userData.workLight=true;root.add(lamp);
- }
-
  // The combat and training skills already occupy separate wings; finish their thresholds.
  for(const side of [-1,1]){
   for(const z of [5.2,10.8])b(side*19.3,3.1,z,.5,4.2,.45,trim,true);

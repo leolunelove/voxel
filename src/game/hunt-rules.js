@@ -1,5 +1,5 @@
-import {SHIELDS,dungeonLevel} from './shield-rules.js?v=74.2';
-import {SWORDS} from './weapons.js?v=74.2';
+import {SHIELDS,dungeonLevel} from './shield-rules.js?v=75.3';
+import {SWORDS} from './weapons.js?v=75.3';
 export const MAX_HP=100;
 export const attackLevel=xp=>Math.min(10,1+Math.floor(Math.sqrt(Math.max(0,xp)/30)));
 export const swordDamage=(xp,tier=0)=>Math.round((16+attackLevel(xp)*4)*SWORDS[tier].multiplier);
