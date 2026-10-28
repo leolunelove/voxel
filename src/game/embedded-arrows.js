@@ -1,5 +1,5 @@
 import * as T from '../../vendor/three.module.js';
-import {arrowImpact} from './arrow-impact.js?v=73.2';
+import {arrowImpact} from './arrow-impact.js?v=74.2';
 export function clearArrows(enemy){while(enemy.embeddedArrows?.length)removeOldest(enemy);enemy.embeddedArrows=[];}
 function removeOldest(enemy){const a=enemy.embeddedArrows.shift();if(!a)return;a.root.removeFromParent();a.root.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});}
 export function embedArrow(enemy,host,point,velocity,charge=1){

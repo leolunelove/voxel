@@ -1,4 +1,4 @@
-import {PICKS,upgradePick} from './rules.js?v=73.2';
+import {PICKS,upgradePick} from './rules.js?v=74.2';
 export const WORK_OFFSET=-6;
 export const LEVEL_TWO=20;
 export const campLevel=s=>s.mined>=LEVEL_TWO?2:1;

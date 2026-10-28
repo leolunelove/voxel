@@ -15,9 +15,9 @@ export function buildCell(world){
  b(14.25,2.65,15.25,.12,3.3,1.6,0x913e29,true);
  for(let z=14.7;z<15.9;z+=.25)b(14.17,3.1,z,.06,.7,.055,iron);
  b(14.1,1.35,17.75,1.25,.6,2.4,iron,true);
- b(14.1,1.76,17.75,1.2,.22,2.3,0xa9a18d);
- b(14.1,1.94,17,1.1,.15,.55,0xdbcfaf);
- b(14.1,1.92,18.3,1.25,.12,1.2,0x914731);
+ b(14.1,1.76,17.75,1.2,.22,2.3,0xa9a18d).material=new T.MeshStandardMaterial({color:0xa9a18d,roughness:1});
+ b(14.1,1.94,17,1.1,.15,.55,0xdbcfaf).material=new T.MeshStandardMaterial({color:0xdbcfaf,roughness:1});
+ b(14.1,1.92,18.3,1.25,.12,1.2,0x914731).material=new T.MeshStandardMaterial({color:0x914731,roughness:1});
  b(11.25,1.65,18.1,.65,1.3,.9,0x72543b,true);
  b(11.25,2.32,18.1,.43,.05,.45,0xd5bd8d);
  b(13,3.2,19.34,1.5,1,.07,0x20252a);
@@ -25,5 +25,5 @@ export function buildCell(world){
  const light=new T.PointLight(0xffbc70,15,7);light.userData.alwaysOn=true;light.position.set(12.6,3.85,16.5);world.scene.add(light);
  const bulb=b(12.6,4.2,16.5,.5,.12,.5,0xffba55);bulb.material=new T.MeshBasicMaterial({color:0xffba55,toneMapped:false});
  world.sign(['CELL 07','YOUR CELL / E BY THE BED'],13,3.95,14.30,2.6,.65,Math.PI);
- world.sign(['YOUR SHIFT. YOUR PACE.'],12.8,3.6,19.3,2.8,.5,Math.PI);
+ world.sign(['YOUR SHIFT. YOUR PACE.'],12.8,4,19.3,2.8,.5,Math.PI);
 }

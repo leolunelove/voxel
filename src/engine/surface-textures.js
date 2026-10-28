@@ -1,5 +1,5 @@
 import * as T from '../../vendor/three.module.js';
-import {BLOCKS} from '../game/rules.js?v=73.2';
+import {BLOCKS} from '../game/rules.js?v=74.2';
 const rgb=(v)=>'#'+v.toString(16).padStart(6,'0');
 export function surfaceTexture(kind,type=0){
  const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');let seed=719+type*53;const rand=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};

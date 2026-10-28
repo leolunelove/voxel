@@ -1,26 +1,27 @@
-import {surfaceTexture} from '../engine/surface-textures.js?v=73.2';
-import {batchScenery} from '../engine/static-batch.js?v=73.2';
-import {buildTrainingRooms} from './training-rooms.js?v=73.2';
-import {buildSkillRooms} from './skill-rooms.js?v=73.2';
+import {ArchitectureSurfaces} from '../engine/architecture-surfaces.js?v=74.2';
+import {surfaceTexture} from '../engine/surface-textures.js?v=74.2';
+import {batchScenery} from '../engine/static-batch.js?v=74.2';
+import {buildTrainingRooms} from './training-rooms.js?v=74.2';
+import {buildSkillRooms} from './skill-rooms.js?v=74.2';
 import * as T from '../../vendor/three.module.js';
-import {buildUnderblockEntry} from './underblock-entry.js?v=73.2';
-import {entryFloor} from './underblock-entry-rules.js?v=73.2';
-import {World,keyOf} from './world.js?v=73.2';
-import {BLOCKS} from './rules.js?v=73.2';
-import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,WORK_OFFSET,TREE_LOGS,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=73.2';
+import {buildUnderblockEntry} from './underblock-entry.js?v=74.2';
+import {entryFloor} from './underblock-entry-rules.js?v=74.2';
+import {World,keyOf} from './world.js?v=74.2';
+import {BLOCKS} from './rules.js?v=74.2';
+import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,WORK_OFFSET,TREE_LOGS,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=74.2';
 export const TREE_SPOTS=[[7,-4],[10,-7],[7,-8],[13,-4],[13,-9],[5,-11],[16,-4],[16,-12],[10,-14],[4,-15]].map(([x,z])=>[x,z+WORK_OFFSET]);
-import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=73.2';
-import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=73.2';
-import {buildIronEmber} from './iron-ember.js?v=73.2';
-import {buildCell,insideCell} from './cell.js?v=73.2';
+import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=74.2';
+import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=74.2';
+import {buildIronEmber} from './iron-ember.js?v=74.2';
+import {buildCell,insideCell} from './cell.js?v=74.2';
 export class CampWorld{
  constructor(scene){
-  this.scene=scene;this.layout={spawn:CAMP_SPAWN};this.geometry=new T.BoxGeometry(1,1,1);this.materials=BLOCKS.map((b,i)=>new T.MeshStandardMaterial({map:World.prototype.texture.call(this,i),color:0xffffff,roughness:1}));this.paint=new Map();this.blocks=new Map();this.meshes=[];this.trees=[];this.excavated=new Set();this.blockers=[];this.mineLevel=-1;this.forestLevel=-1;this.level=1;this.time=0;this.refillIn=-1;this.elapsed=0;
+  this.architecture=new ArchitectureSurfaces();this.scene=scene;this.layout={spawn:CAMP_SPAWN};this.geometry=new T.BoxGeometry(1,1,1);this.materials=BLOCKS.map((b,i)=>new T.MeshStandardMaterial({map:World.prototype.texture.call(this,i),color:0xffffff,roughness:1}));this.paint=new Map();this.blocks=new Map();this.meshes=[];this.trees=[];this.excavated=new Set();this.blockers=[];this.mineLevel=-1;this.forestLevel=-1;this.level=1;this.time=0;this.refillIn=-1;this.elapsed=0;
   this.timberEnd=new T.MeshStandardMaterial({map:surfaceTexture('endgrain'),roughness:1});this.timberSides=[this.materials[8],this.materials[8],this.timberEnd,this.timberEnd,this.materials[8],this.materials[8]];this.leafMap=surfaceTexture('leaf');this.mineRoot=new T.Group();this.floorRoot=new T.Group();this.fenceRoot=new T.Group();this.forestRoot=new T.Group();this.mineDress=new T.Group();scene.add(this.mineRoot,this.floorRoot,this.fenceRoot,this.forestRoot,this.mineDress);
   scene.background=new T.Color(0x7f9690);scene.fog=new T.FogExp2(0x7f9690,.013);
-  this.build();buildCell(this);buildYardCharacter(this);buildWorkyardCharacter(this);buildUnderblockEntry(this);buildSkillRooms(this);buildTrainingRooms(this);buildIronEmber(this);this.renderStats=batchScenery(scene,this.geometry,[this.gate,this.mineRoot,this.floorRoot,this.fenceRoot,this.forestRoot,this.mineDress]);this.staticBlockers=[...this.blockers];
+  this.build();buildCell(this);buildYardCharacter(this);buildWorkyardCharacter(this);buildUnderblockEntry(this);buildSkillRooms(this);buildTrainingRooms(this);buildIronEmber(this);this.architecture.decorate(scene,this.geometry);this.renderStats=batchScenery(scene,this.geometry,[this.gate,this.mineRoot,this.floorRoot,this.fenceRoot,this.forestRoot,this.mineDress]);this.staticBlockers=[...this.blockers];
  }
- mat(color,glow=0){color=({0x344b3b:0x303238,0x647469:0x4c4d52,0x65716a:0x535156,0x46554a:0x34363b,0x435e4c:0x41434a,0x9a9f86:0x737277,0xafa992:0x7c7976,0x8b967d:0x5b5d64,0x3f5541:0x35373d,0x8d957b:0x5f5d5b,0x4c6248:0x48423b,0x425b40:0x36383d,0x496b5c:0x914731})[color]??color;const key=color+':'+glow;if(!this.paint.has(key))this.paint.set(key,new T.MeshStandardMaterial({color,roughness:.93,emissive:glow?color:0,emissiveIntensity:glow}));return this.paint.get(key);}
+ mat(color,glow=0){color=({0x344b3b:0x303238,0x647469:0x4c4d52,0x65716a:0x535156,0x46554a:0x34363b,0x435e4c:0x41434a,0x9a9f86:0x737277,0xafa992:0x7c7976,0x8b967d:0x5b5d64,0x3f5541:0x35373d,0x8d957b:0x5f5d5b,0x4c6248:0x48423b,0x425b40:0x36383d,0x496b5c:0x914731})[color]??color;const key=color+':'+glow;if(!this.paint.has(key))this.paint.set(key,this.architecture.material(new T.MeshStandardMaterial({color,roughness:.93,emissive:glow?color:0,emissiveIntensity:glow})));return this.paint.get(key);}
  box(x,y,z,w,h,d,color,solid=false,group=this.scene){const m=new T.Mesh(this.geometry,this.mat(color));m.position.set(x,y,z);m.scale.set(w,h,d);group.add(m);if(solid)this.blockers.push(new T.Box3().setFromObject(m));return m;}
  sign(lines,x,y,z,w=6,h=1.4,angle=0,group=this.scene,color='#efb55e'){
   const c=document.createElement('canvas');c.width=1024;c.height=256;const ctx=c.getContext('2d');ctx.fillStyle='#292a2f';ctx.fillRect(0,0,1024,256);ctx.fillStyle=color;ctx.fillRect(0,0,12,256);

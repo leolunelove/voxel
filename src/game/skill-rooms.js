@@ -22,7 +22,7 @@ export function buildSkillRooms(world){
  }
  for(const x of [-18.75,-1.55]){b(x,5.75,-14.5,.12,.12,16.7,0x8b8172);for(const z of [-9,-14,-20])b(x,5.75,z,.22,.28,.28,iron);}
  b(-10.15,7.4,-5.28,18.8,.3,.5,trim);
- world.sign(['01 / THE DEEPWELL','MINING WORKROOM · FOLLOW THE AMBER LINE'],-10,5.9,-5.52,6.3,.75,0,root);
+ world.sign(['01 / THE DEEPWELL','MINING WORKROOM · FOLLOW THE AMBER LINE'],-18.88,4.2,-12,5.8,.8,Math.PI/2,root);
  world.sign(['EXCAVATION / 07','EXPAND YOUR SEAM AT THE EXCHANGE'],-10,4.5,-22.84,8,1.1,0,root);
  for(const z of [-9.5,-16,-21]){
   b(-10.15,6.2,z,2.1,.16,.7,iron);
