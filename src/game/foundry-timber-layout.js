@@ -1,0 +1,10 @@
+export const TIMBER_GATE=[18,10];
+const box=(p,b)=>p.x>=b[0]&&p.x<b[1]&&p.z>=b[2]&&p.z<b[3];
+export const TIMBER_FLOORS=[[17,22,8,12],[20,32,6,16],[21,26,-26,8],[21,64,-30,-18],[28,60,-18,4]];
+export const TIMBER_PLOTS=[[28,44,-14,4],[28,44,-18,4],[28,60,-18,4]];
+export const TIMBER_SPOTS=[[33,-9],[40,-9],[33,-2],[40,-2],[33,-16],[40,-16],[48,-9],[55,-9],[48,-2],[55,-2]];
+export const timberInside=p=>TIMBER_FLOORS.some(b=>box(p,b));
+export const timberPlot=p=>box(p,[28,60,-18,4]);
+export const timberAllocated=(p,stage)=>box(p,TIMBER_PLOTS[stage])||box(p,[41,46,-18,4]);
+export const timberGateNear=p=>Math.abs(p.x-18)<2.6&&Math.abs(p.z-10)<2.6;
+export const TIMBER_ROUTE=[[15,10],[23.5,10],[23.5,-24],[42,-24],[42,-12],[36,-12],[36,-9]];

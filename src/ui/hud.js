@@ -1,8 +1,8 @@
-import {swordDamage} from '../game/hunt-rules.js?v=81.3';
-import {SWORDS,BOWS} from '../game/weapons.js?v=81.3';
-import {toolIcon} from '../engine/pickaxe.js?v=81.3';
-import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=81.3';
-import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=81.3';
+import {swordDamage} from '../game/hunt-rules.js?v=82.3';
+import {SWORDS,BOWS} from '../game/weapons.js?v=82.3';
+import {toolIcon} from '../engine/pickaxe.js?v=82.3';
+import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=82.3';
+import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=82.3';
 
 const fmt=n=>n.toLocaleString();
 const swatch=b=>'<i class="ore-gem" style="--ore:#'+b.color.toString(16).padStart(6,'0')+'"></i>';
@@ -89,7 +89,7 @@ export class HUD{
  if(this.iconPick!==s.pick){document.getElementById('slot-pick').src=toolIcon(s.pick);this.iconPick=s.pick;}if(this.iconAxe!==s.axe){document.getElementById('slot-axe').src=toolIcon(s.axe,'axe');this.iconAxe=s.axe;}this.set('bag-mini',count);
  if(this.nextIconPick!==s.pick){document.getElementById('forge-icon').src=toolIcon(Math.min(PICKS.length-1,s.pick+1));this.nextIconPick=s.pick;}if(this.nextIconAxe!==s.axe){document.getElementById('forge-axe-icon').src=toolIcon(Math.min(AXES.length-1,s.axe+1),'axe');this.nextIconAxe=s.axe;}
  this.set('money',fmt(s.money));this.location(this.area??-1,level);this.tool(this.area===6?'bow':(this.area===5||this.area===7)?'sword':this.area===4?'axe':'pick',s);this.set('bag-count',count+' / '+cap);this.set('bag-value',fmt(bagValue(s))+' CR haul value');document.getElementById('bag-fill').style.width=count/cap*100+'%';document.querySelector('.satchel-chip').classList.toggle('full',count>=cap-9);
- const goals=[mn&&{name:'Open the next Deepwell bench',cost:mn.cost},next&&!pickRequirement(s)&&{name:'Forge '+next.name,cost:next.cost}].filter(Boolean).sort((a,b)=>a.cost-b.cost),goal=goals[0];
+ const goals=[level>=2&&fn&&{name:'Expand the logging allocation',cost:fn.cost},level>=2&&AXES[s.axe+1]&&{name:'Forge '+AXES[s.axe+1].name,cost:AXES[s.axe+1].cost},mn&&{name:'Open the next Deepwell bench',cost:mn.cost},next&&!pickRequirement(s)&&{name:'Forge '+next.name,cost:next.cost}].filter(Boolean).sort((a,b)=>a.cost-b.cost),goal=goals[0];
  this.set('goal',goal?.name??'Deepwell fully equipped');this.set('goal-detail',goal?fmt(s.money)+' / '+fmt(goal.cost)+' CR':'Report. Work. Return.');document.getElementById('rank-meter').style.width=(goal?Math.min(1,s.money/goal.cost):1)*100+'%';
  this.set('start-rank','0'+level);this.set('start-mine','Block 07 / duty roster');this.set('start-tool',PICKS[s.pick].name+' / '+fmt(s.money)+' credits');
  if(document.getElementById('shop').hidden)return;

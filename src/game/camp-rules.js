@@ -1,9 +1,9 @@
-import {FOREST_OFFSET} from './conservatory-layout.js?v=81.3';
-import {PICKS,upgradePick} from './rules.js?v=81.3';
+import {FOREST_OFFSET} from './conservatory-layout.js?v=82.3';
+import {PICKS,upgradePick} from './rules.js?v=82.3';
 export const WORK_OFFSET=-6;
 export const LEVEL_TWO=20;
-export {trainingLevel as campLevel} from './training-layout.js?v=81.3';
-import {trainingLevel as campLevel} from './training-layout.js?v=81.3';
+export {trainingLevel as campLevel} from './training-layout.js?v=82.3';
+import {trainingLevel as campLevel} from './training-layout.js?v=82.3';
 export const MINE_STAGES=[
  {name:'Starter seam',cost:0,bounds:[-13,-7,-14,-6],bottom:-2,ore:[[0,.72],[1,.25],[2,.03]],detail:'6 × 8 blocks · stone, copper and a little jade'},
  {name:'Expanded excavation',cost:260,bounds:[-16,-5,-18,-6],bottom:-3,ore:[[0,.35],[1,.25],[2,.1],[3,.25],[4,.05]],detail:'11 × 12 blocks · iron and silver seams'},

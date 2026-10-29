@@ -1,4 +1,4 @@
-import {requestCharacterReset} from '../game/character-reset.js?v=81.3';
+import {requestCharacterReset} from '../game/character-reset.js?v=82.3';
 export function mountCharacterReset(parent){
  const button=document.createElement('button');button.id='reset-character';button.className='menu-link';button.innerHTML='<span><b>Reset character</b><small>Fresh prisoner · restart intake</small></span><span>↺</span>';parent.append(button);
  const dialog=document.createElement('dialog');dialog.setAttribute('aria-labelledby','reset-character-title');dialog.style.cssText='max-width:420px;width:calc(100% - 48px);box-sizing:border-box;background:#242326;color:#f1d2a1;border:2px solid #b18b53;padding:28px;font-family:inherit;text-align:center';

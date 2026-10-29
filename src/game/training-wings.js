@@ -1,5 +1,5 @@
 import * as T from '../../vendor/three.module.js';
-import {TRAINING_WINGS,withinTraining} from './training-layout.js?v=81.3';
+import {TRAINING_WINGS,withinTraining} from './training-layout.js?v=82.3';
 // Corridors have real walls and roofs; only their portcullises animate.
 export function buildTrainingWings(world){
  const root=new T.Group();root.name='Prison / containment and armoury checkpoints';world.scene.add(root);world.trainingWings=root;world.trainingGates=[];
