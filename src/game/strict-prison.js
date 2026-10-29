@@ -1,10 +1,11 @@
-import {buildTimberDetail} from './timber-detail.js?v=79.1';
+import {buildContainmentDetail} from './containment-detail.js?v=81.3';
+import {buildTimberDetail} from './timber-detail.js?v=81.3';
 import * as T from '../../vendor/three.module.js';
-import {surfaceTexture} from '../engine/surface-textures.js?v=79.1';
-import {createPickaxe} from '../engine/pickaxe.js?v=79.1';
-import {buildCell} from './cell.js?v=79.1';
-import {buildUnderblockEntry} from './underblock-entry.js?v=79.1';
-import {LABOUR_WINGS,inBox,yardFloor,intakeFloor} from './strict-layout.js?v=79.1';
+import {surfaceTexture} from '../engine/surface-textures.js?v=81.3';
+import {createPickaxe} from '../engine/pickaxe.js?v=81.3';
+import {buildCell} from './cell.js?v=81.3';
+import {buildUnderblockEntry} from './underblock-entry.js?v=81.3';
+import {LABOUR_WINGS,inBox,yardFloor,intakeFloor} from './strict-layout.js?v=81.3';
 function relocate(world,build,position,angle=0){const previous=new Set(world.scene.children),first=world.blockers.length;build(world);const matrix=new T.Matrix4().makeRotationY(angle);matrix.setPosition(...position);for(const o of world.scene.children)if(!previous.has(o))o.applyMatrix4(matrix);for(const b of world.blockers.slice(first))b.applyMatrix4(matrix);}
 export function buildStrictPrison(world){
  const root=new T.Group();root.name='Block 07 / approved southern intake campus';world.scene.add(root);const rows=[],stone=0x4b4b50,iron=0x303238,trim=0x7d7770,rust=0x8a4734,wood=0x7c5a3e;
@@ -88,8 +89,7 @@ export function buildStrictPrison(world){
  world.trainingGates=[];const gate=(wing)=>{const [x,z]=wing.gate,axis=wing.axis,bars=new T.Group();bars.position.set(x,0,z);world.scene.add(bars);for(let n=-1.8;n<=1.81;n+=.45){const m=new T.Mesh(world.geometry,world.mat(iron));m.position.set(axis==='x'?0:n,3,axis==='x'?n:0);m.scale.set(axis==='x'?.18:.08,4,axis==='x'?.08:.18);bars.add(m);}const bounds=new T.Box3(new T.Vector3(x-(axis==='x'?.25:2),1,z-(axis==='x'?2:.25)),new T.Vector3(x+(axis==='x'?.25:2),5.2,z+(axis==='x'?2:.25)));const beacon=world.box(x+(axis==='x'?-Math.sign(x)*.4:1.8),4.4,z+(axis==='x'?1.7:0),.2,.3,.2,0xe4a065,false,root);beacon.material=world.mat(0xe4a065,.4).clone();world.trainingGates.push({wing,bars,bounds,beacon,lift:0,open:false});};
  for(const wing of LABOUR_WINGS){corridor(wing);gate(wing);const [x,z]=wing.gate;sign([wing.name,'CLEARANCE '+wing.level+' / CONTROLLED WEAPON ISSUE'],x-Math.sign(x)*.45,6.5,z,7,1,x<0?Math.PI/2:-Math.PI/2);}
  // West containment court and east outward-facing bow range remain functional.
- b(-40,.5,12,18,1,16,0x73695e);for(const x of [-49,-31]){b(x,5,12,.6,8,16.5,stone,true);b(x,8.8,12,2,.3,17,iron,true);}b(-40,5,20,18.6,8,.6,stone,true);for(const [x,w]of [[-45.5,7],[-34.5,7]])b(x,4.5,4.75,w,7,.5,stone,true);
- for(const x of [-46,-40,-34]){b(x,3,19.6,4.6,4,.16,rust);for(let dx=-1.8;dx<=1.8;dx+=.45)b(x+dx,3.5,19.42,.08,2.4,.1,iron);lamp(x,7,18,42,13);}sign(['CONTAINMENT DETAIL','HAZARD CLEARANCE / REGISTER LOOT ON EXIT'],-40,7.4,19.65,14,1,Math.PI);
+ buildContainmentDetail(world,{root,b,sign,lamp,guard,stone,iron,trim,rust});
  b(41,.5,10.5,19,1,12,0x85745f);for(const z of [4.75,16.25]){b(41,4,z,19.5,6,.5,stone,true);b(41,2.4,z+(z<10?.3:-.3),18,2.6,.08,wood);b(41,6.1,z,19.5,1.1,.15,0x82918e);}b(50.5,4,10.5,.6,6,12,stone,true);for(const [z,d]of [[6.5,3],[14.5,3]])b(31.75,4,z,.5,6,d,stone,true);b(41,7.2,10.5,20,.3,12,iron,true);
  for(const z of [7.3,10.5,13.7]){b(48.5,3,z,.3,4,2.7,wood,true);b(46.7,1.6,z,.5,1.2,.5,wood);b(46.7,2.5,z,.15,2.3,2.4,wood);b(41.5,1.035,z,10,.025,2.4,0x9b896b);for(const dz of [-1.25,1.25])b(41.5,1.05,z+dz,10,.02,.07,0xc2a571);}for(const x of [35,40,46])lamp(x,6.6,10.5,80,15);sign(['BOW QUALIFICATION','SUPERVISED ISSUE / RETURN EVERY WEAPON'],41,5.5,15.95,11,1,Math.PI);
  // North watch / sealed service stair replaces the old western dungeon door.

@@ -1,4 +1,4 @@
-import {entryFloor,entryDepth,atUnderblockSeal} from './underblock-entry-rules.js?v=79.1';
+import {entryFloor,entryDepth,atUnderblockSeal} from './underblock-entry-rules.js?v=81.3';
 export const PRISON_SPAWN=[0,2.65,9];
 export const CELL_WAKE=[-15.6,2.65,27.2];
 export const CELL_OFFSET={x:-28,z:11};
@@ -15,7 +15,8 @@ export const inRange=p=>inBox(p.x,p.z,LABOUR_WINGS[1].bounds);
 export const dutyWing=p=>LABOUR_WINGS.find(w=>inBox(p.x,p.z,w.bounds));
 export const dutyPassage=p=>LABOUR_WINGS.find(w=>w.passages.some(b=>inBox(p.x,p.z,b)));
 export const trainingGateNear=p=>LABOUR_WINGS.find(w=>Math.abs(p.x-w.gate[0])<3&&Math.abs(p.z-w.gate[1])<2.5);
-export const HUNT_OPTIONS={bounds:[-47.5,-32.5,6.5,18.5],spawns:[[0,-44,11.5,0],[1,-36,12.5,0],[2,-40,16.5,1]],active:inHunt};
+export const HOLDING_PENS=[[-47.45,-43.55,13.3,18.1],[-41.95,-38.05,13.3,18.1],[-36.45,-32.55,13.3,18.1]];
+export const HUNT_OPTIONS={bounds:[-47.5,-32.5,6.5,18.5],spawns:[[0,-45.5,16.5,0],[1,-40,16.5,0],[2,-34.5,16.5,1]],boundsFor:e=>HOLDING_PENS[e.penIndex??0],active:inHunt};
 export const RANGE_OFFSET={x:11.5,z:1.5};
 export const intakeFloor=(x,z)=>inBox(x,z,[-7,7,37,65])||inBox(x,z,[-4,4,63,69])||inBox(x,z,[-3,3,15.5,38]);
 export const inIntake=p=>intakeFloor(p.x,p.z);

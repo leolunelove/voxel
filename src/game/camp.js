@@ -1,32 +1,33 @@
-import {buildStrictPrison} from './strict-prison.js?v=79.1';
-import {buildCampus,buildCampusTraining} from './campus.js?v=79.1';
-import {intakeFloor,campusYard} from './intake-rules.js?v=79.1';
-import {buildTrainingWings,updateTrainingGates} from './training-wings.js?v=79.1';
-import {ATTACK_OFFSET,ARCHERY_OFFSET,TRAINING_WINGS,trainingFootprint,trainingWingAt,trainingPassageAt,trainingAccess} from './training-layout.js?v=79.1';
-import {buildConservatory} from './conservatory.js?v=79.1';
-import {FOREST_OFFSET,inConservatory,inServicePassage,inServiceFootprint,conservatoryFloor} from './conservatory-layout.js?v=79.1';
-import {ArchitectureSurfaces} from '../engine/architecture-surfaces.js?v=79.1';
-import {surfaceTexture} from '../engine/surface-textures.js?v=79.1';
-import {batchScenery} from '../engine/static-batch.js?v=79.1';
-import {buildTrainingRooms} from './training-rooms.js?v=79.1';
-import {buildSkillRooms} from './skill-rooms.js?v=79.1';
+import {buildFoundryPrison} from './foundry-prison.js?v=81.3';
+import {buildStrictPrison} from './strict-prison.js?v=81.3';
+import {buildCampus,buildCampusTraining} from './campus.js?v=81.3';
+import {intakeFloor,campusYard} from './intake-rules.js?v=81.3';
+import {buildTrainingWings,updateTrainingGates} from './training-wings.js?v=81.3';
+import {ATTACK_OFFSET,ARCHERY_OFFSET,TRAINING_WINGS,trainingFootprint,trainingWingAt,trainingPassageAt,trainingAccess} from './training-layout.js?v=81.3';
+import {buildConservatory} from './conservatory.js?v=81.3';
+import {FOREST_OFFSET,inConservatory,inServicePassage,inServiceFootprint,conservatoryFloor} from './conservatory-layout.js?v=81.3';
+import {ArchitectureSurfaces} from '../engine/architecture-surfaces.js?v=81.3';
+import {surfaceTexture} from '../engine/surface-textures.js?v=81.3';
+import {batchScenery} from '../engine/static-batch.js?v=81.3';
+import {buildTrainingRooms} from './training-rooms.js?v=81.3';
+import {buildSkillRooms} from './skill-rooms.js?v=81.3';
 import * as T from '../../vendor/three.module.js';
-import {buildUnderblockEntry} from './underblock-entry.js?v=79.1';
-import {entryFloor} from './underblock-entry-rules.js?v=79.1';
-import {World,keyOf} from './world.js?v=79.1';
-import {BLOCKS} from './rules.js?v=79.1';
-import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,WORK_OFFSET,TREE_LOGS,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=79.1';
+import {buildUnderblockEntry} from './underblock-entry.js?v=81.3';
+import {entryFloor} from './underblock-entry-rules.js?v=81.3';
+import {World,keyOf} from './world.js?v=81.3';
+import {BLOCKS} from './rules.js?v=81.3';
+import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,WORK_OFFSET,TREE_LOGS,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=81.3';
 export const TREE_SPOTS=[[7,-4],[10,-7],[7,-8],[13,-4],[13,-9],[5,-11],[16,-4],[16,-12],[10,-14],[4,-15]].map(([x,z])=>[x+FOREST_OFFSET.x,z+WORK_OFFSET+FOREST_OFFSET.z]);
-import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=79.1';
-import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=79.1';
-import {buildIronEmber} from './iron-ember.js?v=79.1';
-import {buildCell,insideCell} from './cell.js?v=79.1';
+import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=81.3';
+import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=81.3';
+import {buildIronEmber} from './iron-ember.js?v=81.3';
+import {buildCell,insideCell} from './cell.js?v=81.3';
 export class CampWorld{
  constructor(scene,{campus=false}={}){this.campus=campus;
   this.architecture=new ArchitectureSurfaces();this.scene=scene;this.layout={spawn:CAMP_SPAWN};this.geometry=new T.BoxGeometry(1,1,1);this.materials=BLOCKS.map((b,i)=>new T.MeshStandardMaterial({map:World.prototype.texture.call(this,i),color:0xffffff,roughness:1}));this.paint=new Map();this.blocks=new Map();this.meshes=[];this.trees=[];this.excavated=new Set();this.blockers=[];this.mineLevel=-1;this.forestLevel=-1;this.level=1;this.time=0;this.refillIn=-1;this.elapsed=0;
   this.timberEnd=new T.MeshStandardMaterial({map:surfaceTexture('endgrain'),roughness:1});this.timberSides=[this.materials[8],this.timberEnd];this.timberGeometry=this.geometry.clone();const timberIndex=[...this.geometry.index.array];this.timberGeometry.setIndex([0,1,4,5,2,3].flatMap(face=>timberIndex.slice(face*6,face*6+6)));this.timberGeometry.clearGroups();this.timberGeometry.addGroup(0,24,0);this.timberGeometry.addGroup(24,12,1);this.leafMap=surfaceTexture('leaf');this.mineRoot=new T.Group();this.floorRoot=new T.Group();this.fenceRoot=new T.Group();this.forestRoot=new T.Group();this.mineDress=new T.Group();scene.add(this.mineRoot,this.floorRoot,this.fenceRoot,this.forestRoot,this.mineDress);
   scene.background=new T.Color(0x7f9690);scene.fog=new T.FogExp2(0x7f9690,.013);
-  if(campus==='strict'){buildStrictPrison(this);}else if(campus){buildCampus(this);buildCell(this);buildUnderblockEntry(this);buildConservatory(this);buildTrainingWings(this);buildCampusTraining(this);this.gate=new T.Group();this.gate.position.set(8,0,-5.3);this.scene.add(this.gate);for(let x=-2;x<=2;x+=.5){const m=new T.Mesh(this.geometry,this.mat(0x303238));m.position.set(x,3,0);m.scale.set(.1,4,.16);this.gate.add(m);}this.gateLift=0;this.motes=new T.InstancedMesh(new T.BoxGeometry(.023,.023,.023),new T.MeshBasicMaterial({color:0xf3dab0,transparent:true,opacity:.4}),32);this.scene.add(this.motes);this.matrix=new T.Matrix4();}else{this.build();buildCell(this);buildYardCharacter(this);buildWorkyardCharacter(this);buildUnderblockEntry(this);buildSkillRooms(this);buildTrainingRooms(this);buildConservatory(this);buildTrainingWings(this);buildIronEmber(this);}this.architecture.decorate(scene,this.geometry);this.renderStats=batchScenery(scene,this.geometry,[this.gate,...(this.intakeGates??[]).map(g=>g.bars),this.issuedPick,...this.trainingGates.map(g=>g.bars),this.mineRoot,this.floorRoot,this.fenceRoot,this.forestRoot,this.mineDress]);this.staticBlockers=[...this.blockers];
+  if(campus==='foundry'){buildFoundryPrison(this);}else if(campus==='strict'){buildStrictPrison(this);}else if(campus){buildCampus(this);buildCell(this);buildUnderblockEntry(this);buildConservatory(this);buildTrainingWings(this);buildCampusTraining(this);this.gate=new T.Group();this.gate.position.set(8,0,-5.3);this.scene.add(this.gate);for(let x=-2;x<=2;x+=.5){const m=new T.Mesh(this.geometry,this.mat(0x303238));m.position.set(x,3,0);m.scale.set(.1,4,.16);this.gate.add(m);}this.gateLift=0;this.motes=new T.InstancedMesh(new T.BoxGeometry(.023,.023,.023),new T.MeshBasicMaterial({color:0xf3dab0,transparent:true,opacity:.4}),32);this.scene.add(this.motes);this.matrix=new T.Matrix4();}else{this.build();buildCell(this);buildYardCharacter(this);buildWorkyardCharacter(this);buildUnderblockEntry(this);buildSkillRooms(this);buildTrainingRooms(this);buildConservatory(this);buildTrainingWings(this);buildIronEmber(this);}this.architecture.decorate(scene,this.geometry);this.renderStats=batchScenery(scene,this.geometry,[this.gate,...(this.intakeGates??[]).map(g=>g.bars),this.issuedPick,...this.trainingGates.map(g=>g.bars),this.mineRoot,this.floorRoot,this.fenceRoot,this.forestRoot,this.mineDress]);this.staticBlockers=[...this.blockers];
  }
  mat(color,glow=0){color=({0x344b3b:0x303238,0x647469:0x4c4d52,0x65716a:0x535156,0x46554a:0x34363b,0x435e4c:0x41434a,0x9a9f86:0x737277,0xafa992:0x7c7976,0x8b967d:0x5b5d64,0x3f5541:0x35373d,0x8d957b:0x5f5d5b,0x4c6248:0x48423b,0x425b40:0x36383d,0x496b5c:0x914731})[color]??color;const key=color+':'+glow;if(!this.paint.has(key))this.paint.set(key,this.architecture.material(new T.MeshStandardMaterial({color,roughness:.93,emissive:glow?color:0,emissiveIntensity:glow})));return this.paint.get(key);}
  box(x,y,z,w,h,d,color,solid=false,group=this.scene){const m=new T.Mesh(this.geometry,this.mat(color));m.position.set(x,y,z);m.scale.set(w,h,d);group.add(m);if(solid)this.blockers.push(new T.Box3().setFromObject(m));return m;}

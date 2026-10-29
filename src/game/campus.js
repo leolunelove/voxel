@@ -1,6 +1,6 @@
-import {surfaceTexture} from '../engine/surface-textures.js?v=79.1';
+import {surfaceTexture} from '../engine/surface-textures.js?v=81.3';
 import * as T from '../../vendor/three.module.js';
-import {createPickaxe} from '../engine/pickaxe.js?v=79.1';
+import {createPickaxe} from '../engine/pickaxe.js?v=81.3';
 // A replacement campus, not the old test-yard facade. Working seams retain
 // their coordinates so saved gear and plot stages need no migration.
 function kit(world,name){const root=new T.Group();root.name=name;world.scene.add(root);const rows=[];

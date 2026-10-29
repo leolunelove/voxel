@@ -1,11 +1,11 @@
-import {bowMoveSpeed} from './bow-rules.js?v=79.1';
+import {bowMoveSpeed} from './bow-rules.js?v=81.3';
 import * as T from '../../vendor/three.module.js';
 export class Player{
  constructor(camera,input,world){this.camera=camera;this.input=input;this.world=world;this.position=new T.Vector3(.5,2.65,2);this.previous=this.position.clone();this.horizontal=new T.Vector3();this.velocity=0;this.grounded=false;this.coyote=0;this.buffer=0;this.jumpHeld=false;this.landing=0;}
  fits(p){const feet=p.y-1.65;for(const x of [p.x-.28,p.x+.28])for(const z of [p.z-.28,p.z+.28])for(const y of [feet+.002,feet+.85,p.y+.12])if(this.world.solid(x,y,z))return false;
  return !(this.world.blockers??[]).some(b=>p.x+.28>b.min.x&&p.x-.28<b.max.x&&p.z+.28>b.min.z&&p.z-.28<b.max.z&&p.y+.12>b.min.y&&feet+.002<b.max.y);
  }
- move(axis,amount){const count=Math.max(1,Math.ceil(Math.abs(amount)/.055));let hit=false;for(let n=0;n<count;n++){const p=this.position.clone();p[axis]+=amount/count;if(this.fits(p))this.position.copy(p);else if(axis!=='y'&&this.grounded&&this.fits(p.clone().add(new T.Vector3(0,.51,0)))){p.y+=.51;this.position.copy(p);}else{hit=true;break;}}return hit;}
+ move(axis,amount){const count=Math.max(1,Math.ceil(Math.abs(amount)/.055));let hit=false;for(let n=0;n<count;n++){const p=this.position.clone();p[axis]+=amount/count;if(this.fits(p))this.position.copy(p);else if(axis!=='y'&&this.grounded){const floor=this.world.stepHeight?.(p.x,p.z),rise=floor===undefined?.51:floor+1.65+.001-p.y;const stepped=p.clone().add(new T.Vector3(0,Math.max(0,rise),0));if(rise<=.51&&this.fits(stepped))this.position.copy(stepped);else{hit=true;break;}}else{hit=true;break;}}return hit;}
  step(dt){
  this.previous.copy(this.position);
  if(this.input.keys.has('ArrowLeft'))this.input.yaw+=dt*1.8;if(this.input.keys.has('ArrowRight'))this.input.yaw-=dt*1.8;
@@ -20,6 +20,8 @@ export class Player{
  if(this.move('x',this.horizontal.x*dt))this.horizontal.x=0;if(this.move('z',this.horizontal.z*dt))this.horizontal.z=0;
  this.velocity-=20*dt;const falling=this.velocity;this.grounded=false;
  if(this.move('y',this.velocity*dt)){if(this.velocity<0){this.grounded=true;if(falling< -5)this.landing=Math.min(.065,-falling*.004);}this.velocity=0;}
+ // Keep contact on shallow steps despite the collision skin's tiny resting gap.
+ if(!this.grounded&&this.velocity<=0&&!this.fits(this.position.clone().add(new T.Vector3(0,-.025,0)))){this.grounded=true;this.velocity=0;}
  this.landing*=Math.exp(-14*dt);if(this.position.y< -10)this.home();this.sync();
  }
  sync(){this.camera.position.copy(this.position);this.camera.position.y-=this.landing;this.camera.rotation.set(this.input.pitch,this.input.yaw,0,'YXZ');}

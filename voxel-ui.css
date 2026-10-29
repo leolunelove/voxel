@@ -99,3 +99,5 @@ body.combat-contact::after{content:'×';position:fixed;left:50%;top:50%;transfor
 .unissued .voxel-hotbar,.unissued .tool-chip,.unissued .satchel-chip,.unissued .next-order{visibility:hidden}
 @media(max-width:650px){#intake-objective{left:14px;right:14px;bottom:135px;max-width:none;padding:12px}}
 #menu-main-actions .menu-link small{display:block;color:#b8b0a0;font-size:9px;letter-spacing:1px;margin-top:5px}
+
+.new-prison .forest-card,.new-prison .axe-workshop,.new-prison #weapon-forge,.new-prison [data-tool-slot=axe],.new-prison [data-tool-slot=sword],.new-prison [data-tool-slot=bow]{display:none!important}

@@ -1,11 +1,11 @@
-import {ATTACK_OFFSET} from './training-layout.js?v=79.1';
-import {arrowImpact,impactRecoil,pushDistance} from './arrow-impact.js?v=79.1';
+import {ATTACK_OFFSET} from './training-layout.js?v=81.3';
+import {arrowImpact,impactRecoil,pushDistance} from './arrow-impact.js?v=81.3';
 import * as T from '../../vendor/three.module.js';
-import {MONSTERS,swordDamage,reward,hurt,inHunt,MAX_HP} from './hunt-rules.js?v=79.1';
-import {dressWarden,animateWarden} from './warden.js?v=79.1';
-import {clearArrows,updateArrows} from './embedded-arrows.js?v=79.1';
-import {dressMonster,animateMonster} from './monster-look.js?v=79.1';
-import {CombatLoot} from './combat-loot.js?v=79.1';
+import {MONSTERS,swordDamage,reward,hurt,inHunt,MAX_HP} from './hunt-rules.js?v=81.3';
+import {dressWarden,animateWarden} from './warden.js?v=81.3';
+import {clearArrows,updateArrows} from './embedded-arrows.js?v=81.3';
+import {dressMonster,animateMonster} from './monster-look.js?v=81.3';
+import {CombatLoot} from './combat-loot.js?v=81.3';
 export class Hunt{
  constructor(scene,state,options={}){this.loot=new CombatLoot(scene);this.options=options;this.bounds=options.bounds??[-1.5,13.5,34,46];this.state=state;this.enemies=[];this.targets=[];this.inside=false;this.damageFlash=0;
   for(const [i,x,z,type]of (options.spawns??[[0,2,39,0],[1,10,40,0],[2,6,44,1]])){
@@ -15,7 +15,7 @@ export class Hunt{
    const legs=[box(.22,.5,.28,-.25,.3,0,bodyMat),box(.22,.5,.28,.25,.3,0,bodyMat)],arms=[box(.22,.65,.25,-.55,.85,0,bodyMat),box(.22,.65,.25,.55,.85,0,bodyMat)];
    const warden=m.boss?dressWarden(root,arms):null,look=m.boss?null:dressMonster(root,body,head,arms,type);
    const tell=new T.Mesh(new T.RingGeometry(.62,.70,24),new T.MeshBasicMaterial({color:0xffbd62,side:T.DoubleSide,transparent:true,opacity:.85,depthWrite:false}));tell.rotation.x=-Math.PI/2;tell.position.y=.025;tell.visible=false;root.add(tell);
-   const enemy={root,body,legs,arms,tell,warden,look,type,stats:m,maxHp:m.hp,hp:m.hp,x,z,timer:0,windup:0,cooldown:1.1,hit:0,stagger:0,lunge:0,death:0,push:new T.Vector2(),dead:false,respawn:0};root.position.set(x,1,z);root.traverse(o=>{if(o.isMesh&&o!==tell&&!o.userData.effect){o.userData.enemy=enemy;this.targets.push(o);}});if(m.boss)root.children.filter(o=>o!==tell&&!o.userData.effect).forEach(o=>{o.position.multiplyScalar(1.22);o.scale.multiplyScalar(1.22);});scene.add(root);this.enemies.push(enemy);
+   const enemy={penIndex:i,root,body,legs,arms,tell,warden,look,type,stats:m,maxHp:m.hp,hp:m.hp,x,z,timer:0,windup:0,cooldown:1.1,hit:0,stagger:0,lunge:0,death:0,push:new T.Vector2(),dead:false,respawn:0};root.position.set(x,1,z);root.traverse(o=>{if(o.isMesh&&o!==tell&&!o.userData.effect){o.userData.enemy=enemy;this.targets.push(o);}});if(m.boss)root.children.filter(o=>o!==tell&&!o.userData.effect).forEach(o=>{o.position.multiplyScalar(1.22);o.scale.multiplyScalar(1.22);});scene.add(root);this.enemies.push(enemy);
   }
  }
  dispose(){this.loot.dispose();const geometries=new Set(),materials=new Set();for(const e of this.enemies){clearArrows(e);e.root.removeFromParent();e.root.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material)materials.add(o.material);});}geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());this.targets=[];}
