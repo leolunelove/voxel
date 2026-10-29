@@ -1,4 +1,4 @@
-import {impactSound} from './impact-sound.js?v=78.3';
+import {impactSound} from './impact-sound.js?v=79.1';
 export class Audio{
  constructor(){this.context=null;this.muted=false;this.noise=null;this.variant=0;}
  unlock(){this.context??=new(window.AudioContext||window.webkitAudioContext)();this.context.resume();if(!this.master){this.master=this.context.createGain();this.master.gain.value=this.volume??.75;this.master.connect(this.context.destination);}if(!this.noise){const c=this.context;this.noise=c.createBuffer(1,c.sampleRate,c.sampleRate);const d=this.noise.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;}}

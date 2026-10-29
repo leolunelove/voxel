@@ -1,6 +1,6 @@
-import {trainingWingAt} from './training-layout.js?v=78.3';
+import {trainingWingAt} from './training-layout.js?v=79.1';
 export const inRange=p=>trainingWingAt(p)?.key==='archery';
-import {atUnderblockSeal} from './underblock-entry-rules.js?v=78.3';
+import {atUnderblockSeal} from './underblock-entry-rules.js?v=79.1';
 export const atDungeonGate=atUnderblockSeal;
 export const skillLevel=xp=>Math.min(20,1+Math.floor(Math.sqrt(Math.max(0,xp)/30)));
 export const shotXP=(charge,radius)=>charge<.18?0:radius<.22?6:radius<.5?4:2;

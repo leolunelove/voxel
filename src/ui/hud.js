@@ -1,8 +1,8 @@
-import {swordDamage} from '../game/hunt-rules.js?v=78.3';
-import {SWORDS,BOWS} from '../game/weapons.js?v=78.3';
-import {toolIcon} from '../engine/pickaxe.js?v=78.3';
-import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=78.3';
-import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=78.3';
+import {swordDamage} from '../game/hunt-rules.js?v=79.1';
+import {SWORDS,BOWS} from '../game/weapons.js?v=79.1';
+import {toolIcon} from '../engine/pickaxe.js?v=79.1';
+import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=79.1';
+import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=79.1';
 
 const fmt=n=>n.toLocaleString();
 const swatch=b=>'<i class="ore-gem" style="--ore:#'+b.color.toString(16).padStart(6,'0')+'"></i>';

@@ -1,41 +1,41 @@
-import {SEARCH} from './game/arrival-rules.js?v=78.3';
-import {CELL_WAKE,atBed,atPayOffice,inIntake,HUNT_OPTIONS,RANGE_OFFSET,inHunt,inRange,atDungeonGate,prisonDepth as entryDepth,trainingGateNear,LABOUR_WINGS as TRAINING_WINGS} from './game/strict-layout.js?v=78.3';
-import {loadIntake,advanceIntake,intakeNear,intakeInstruction,INTAKE_SPAWNS,CHECKIN,TOOL_ISSUE} from './game/arrival-rules.js?v=78.3';
-import {trainingAccess} from './game/training-layout.js?v=78.3';
-import {atConservatoryGate} from './game/conservatory-layout.js?v=78.3';
-import {LightBudget,RenderQuality} from './engine/render-quality.js?v=78.3';
+import {SEARCH} from './game/arrival-rules.js?v=79.1';
+import {CELL_WAKE,atBed,atPayOffice,inIntake,HUNT_OPTIONS,RANGE_OFFSET,inHunt,inRange,atDungeonGate,prisonDepth as entryDepth,trainingGateNear,LABOUR_WINGS as TRAINING_WINGS} from './game/strict-layout.js?v=79.1';
+import {loadIntake,advanceIntake,intakeNear,intakeInstruction,INTAKE_SPAWNS,CHECKIN,TOOL_ISSUE} from './game/arrival-rules.js?v=79.1';
+import {trainingAccess} from './game/training-layout.js?v=79.1';
+import {atConservatoryGate} from './game/conservatory-layout.js?v=79.1';
+import {LightBudget,RenderQuality} from './engine/render-quality.js?v=79.1';
 import * as T from '../vendor/three.module.js';
 
 const entryFogColor=new T.Color(0x263e38);
-import {Input} from './engine/input.js?v=78.3';
-import {Audio} from './engine/audio.js?v=78.3';
-import {Feedback} from './engine/feedback.js?v=78.3';
-import {StrictPrisonWorld as CampWorld} from './game/strict-world.js?v=78.3';
-import {campLevel,LEVEL_TWO,AXES,treeYield,treeLogYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=78.3';
-import {Player} from './game/player.js?v=78.3';
-import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=78.3';
-import {Pickups} from './game/pickups.js?v=78.3';
-import {HUD} from './ui/hud.js?v=78.3';
+import {Input} from './engine/input.js?v=79.1';
+import {Audio} from './engine/audio.js?v=79.1';
+import {Feedback} from './engine/feedback.js?v=79.1';
+import {StrictPrisonWorld as CampWorld} from './game/strict-world.js?v=79.1';
+import {campLevel,LEVEL_TWO,AXES,treeYield,treeLogYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=79.1';
+import {Player} from './game/player.js?v=79.1';
+import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=79.1';
+import {Pickups} from './game/pickups.js?v=79.1';
+import {HUD} from './ui/hud.js?v=79.1';
 
-import {Hunt} from './game/hunt.js?v=78.3';
-import {freshHunt,loadHunt,bank,retreat,attackLevel,swordDamage,MONSTERS,MAX_HP,hurt} from './game/hunt-rules.js?v=78.3';
+import {Hunt} from './game/hunt.js?v=79.1';
+import {freshHunt,loadHunt,bank,retreat,attackLevel,swordDamage,MONSTERS,MAX_HP,hurt} from './game/hunt-rules.js?v=79.1';
 
-import {Archery} from './game/archery.js?v=78.3';
-import {Dungeon} from './game/dungeon.js?v=78.3';
-import {skillLevel,finishDungeon,DIFFICULTIES} from './game/dungeon-rules.js?v=78.3';
+import {Archery} from './game/archery.js?v=79.1';
+import {Dungeon} from './game/dungeon.js?v=79.1';
+import {skillLevel,finishDungeon,DIFFICULTIES} from './game/dungeon-rules.js?v=79.1';
 
-import {SkillBook} from './ui/skills.js?v=78.3';
+import {SkillBook} from './ui/skills.js?v=79.1';
 
-import {SWORDS,BOWS,forgeWeapon,weaponReason} from './game/weapons.js?v=78.3';
+import {SWORDS,BOWS,forgeWeapon,weaponReason} from './game/weapons.js?v=79.1';
 
-import {SHIELDS,freshGuard,tickGuard,defend,forgeShield,shieldReason} from './game/shield-rules.js?v=78.3';
-import {skillLedger} from './game/skills.js?v=78.3';
-import {freshShift,loadShift,tickShift,fatigue,shiftClock,closeShift,loadSummary} from './game/shift-rules.js?v=78.3';
+import {SHIELDS,freshGuard,tickGuard,defend,forgeShield,shieldReason} from './game/shield-rules.js?v=79.1';
+import {skillLedger} from './game/skills.js?v=79.1';
+import {freshShift,loadShift,tickShift,fatigue,shiftClock,closeShift,loadSummary} from './game/shift-rules.js?v=79.1';
 
-import {ShiftUI} from './ui/shift.js?v=78.3';
-import {RestFlow} from './game/rest-flow.js?v=78.3';
-import {Daylight} from './engine/daylight.js?v=78.3';
-import {updateHTML} from './ui/dom.js?v=78.3';
+import {ShiftUI} from './ui/shift.js?v=79.1';
+import {RestFlow} from './game/rest-flow.js?v=79.1';
+import {Daylight} from './engine/daylight.js?v=79.1';
+import {updateHTML} from './ui/dom.js?v=79.1';
 const canvas=document.getElementById('game');
 const scene=new T.Scene();scene.background=new T.Color(0x1d302a);scene.fog=new T.FogExp2(0x1d302a,.024);
 let renderer;try{renderer=new T.WebGLRenderer({canvas,antialias:true});}catch(error){document.querySelector('#interface').textContent='This prototype needs WebGL. Please open it in a desktop browser with hardware acceleration enabled.';throw error;}
@@ -106,7 +106,7 @@ function frame(now){requestAnimationFrame(frame);const dt=Math.min((now-last)/10
   const area=dungeon?7:inRange(player.position)?6:atDungeonGate(player.position)?8:inHunt(player.position)?5:world.area(player.position);if(area!==currentArea){currentArea=area;hud.location(area,campLevel(state));if(arrivals[area]&&!seenRegions.has(area)){seenRegions.add(area);const a=arrivals[area];regionArrival.innerHTML='<small>'+a[0]+'</small><strong>'+a[1]+'</strong><span>'+a[2]+'</span>';regionArrivalUntil=now+3500;}}
   if(campLevel(state)>lastLevel){lastLevel=campLevel(state);audio.play('upgrade');hud.toast(lastLevel===2?'PRISON LEVEL 2 / TIMBER DETAIL ACCESS GRANTED. Follow the green route.':'PRISON LEVEL '+lastLevel+' / '+(lastLevel===3?'IRON HALL':'LONG ROOM')+' ACCESS GRANTED. Follow the '+(lastLevel===3?'rust-red':'brass')+' route.');hud.location(area,lastLevel);}
   if(world.refillIn>=0){hud.wayfinding('FRESH SEAM IN '+Math.ceil(world.refillIn)+'s / The mine will refill safely.');}
-  else if(area===7)hud.wayfinding('RIGHT CLICK / GUARD · Q / SWORD OR BOW · E / FINAL SEAL');else if(area===6)hud.wayfinding('BOW RANGE / HOLD TO DRAW · RELEASE TO FIRE · AIM FOR THE CENTRE');else if(area===8)hud.wayfinding('F / DIFFICULTY · E / ENTER A NEW RANDOM DUNGEON · COMPLETE FOR DUNGEONEERING XP');else if(area===5)hud.wayfinding('CONTAINMENT DETAIL / Q / SWORD OR BOW · DODGE WINDUPS · WALK OUT TO BANK');else if(trainingGateNear(player.position)){const w=trainingGateNear(player.position);hud.wayfinding(w.name+' CHECKPOINT / '+(trainingAccess(state,huntState,w)?'OPEN · Follow the '+(w.key==='attack'?'rust-red':'brass')+' line':'PRISON LEVEL '+w.level+' · '+Math.min(state.mined,w.blocks)+' / '+w.blocks+' blocks'));}else if(area===10)hud.wayfinding('CONTAINMENT PASSAGE / Follow the rust-red line · Iron Hall ahead');else if(area===11)hud.wayfinding('ARMOURY PASSAGE / Follow the brass line · Long Room at the far turn');else if(atConservatoryGate(player.position))hud.wayfinding(campLevel(state)<2?'TIMBER DETAIL CHECKPOINT / PRISON LEVEL 2 · '+Math.min(20,state.mined)+' / 20 blocks mined':'TIMBER DETAIL CHECKPOINT / OPEN · Walk through and follow the green line');else if(atBed(player.position))hud.wayfinding(state.mined===0?'FIRST SHIFT / Leave Cell 07 · follow the amber route to Deepwell':'YOUR CELL / E TO REST · L / LAST SHIFT REPORT');else hud.wayfinding(campLevel(state)<2?'FIRST SHIFT / '+Math.min(state.mined,20)+' / 20 blocks · Open the Timber Detail checkpoint':area===4?'THE TIMBER DETAIL / Chop all three logs · Grow your allotment at the Exchange':area===9?'SERVICE PASSAGE / Follow the green line · Timber Detail at the far turn':area===0?'THE DEEPWELL / '+MINE_STAGES[state.mineLevel].name+' · E / upgrades':'BLOCK 07 / DEEPWELL ←   CELLBLOCK A / SOUTHWEST · PAY OFFICE / SOUTHEAST');
+  else if(area===7)hud.wayfinding('RIGHT CLICK / GUARD · Q / SWORD OR BOW · E / FINAL SEAL');else if(area===6)hud.wayfinding('BOW RANGE / HOLD TO DRAW · RELEASE TO FIRE · AIM FOR THE CENTRE');else if(area===8)hud.wayfinding('F / DIFFICULTY · E / ENTER A NEW RANDOM DUNGEON · COMPLETE FOR DUNGEONEERING XP');else if(area===5)hud.wayfinding('CONTAINMENT DETAIL / Q / SWORD OR BOW · DODGE WINDUPS · WALK OUT TO BANK');else if(trainingGateNear(player.position)){const w=trainingGateNear(player.position);hud.wayfinding(w.name+' CHECKPOINT / '+(trainingAccess(state,huntState,w)?'OPEN · Follow the '+(w.key==='attack'?'rust-red':'brass')+' line':'PRISON LEVEL '+w.level+' · '+Math.min(state.mined,w.blocks)+' / '+w.blocks+' blocks'));}else if(area===10)hud.wayfinding('CONTAINMENT PASSAGE / Follow the rust-red line · Iron Hall ahead');else if(area===11)hud.wayfinding('ARMOURY PASSAGE / Follow the brass line · Long Room at the far turn');else if(atConservatoryGate(player.position))hud.wayfinding(campLevel(state)<2?'TIMBER DETAIL CHECKPOINT / PRISON LEVEL 2 · '+Math.min(20,state.mined)+' / 20 blocks mined':'TIMBER DETAIL CHECKPOINT / OPEN · Walk through and follow the amber duty line');else if(atBed(player.position))hud.wayfinding(state.mined===0?'FIRST SHIFT / Leave Cell 07 · follow the amber route to Deepwell':'YOUR CELL / E TO REST · L / LAST SHIFT REPORT');else hud.wayfinding(campLevel(state)<2?'FIRST SHIFT / '+Math.min(state.mined,20)+' / 20 blocks · Open the Timber Detail checkpoint':area===4?'TIMBER DETAIL / Chop all three logs · Expand your allocation at the Pay Office':area===9?'SERVICE PASSAGE / Follow the amber duty line · Timber Detail at the far turn':area===0?'THE DEEPWELL / '+MINE_STAGES[state.mineLevel].name+' · E / upgrades':'BLOCK 07 / DEEPWELL ←   CELLBLOCK A / SOUTHWEST · PAY OFFICE / SOUTHEAST');
   if(intake.stage<4)hud.wayfinding(intakeInstruction(intake));
   input.bowMode=(inRange(player.position)&&!dungeon)||(inCombat()&&combatWeapon==='bow');player.drawingBow=input.bowMode&&(input.held||input.bowHeld);
   accumulator+=dt;while(accumulator>=1/120){player.step(1/120);accumulator-=1/120;}player.render(accumulator*120);

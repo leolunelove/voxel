@@ -1,16 +1,17 @@
+import {buildTimberDetail} from './timber-detail.js?v=79.1';
 import * as T from '../../vendor/three.module.js';
-import {surfaceTexture} from '../engine/surface-textures.js?v=78.3';
-import {createPickaxe} from '../engine/pickaxe.js?v=78.3';
-import {buildCell} from './cell.js?v=78.3';
-import {buildUnderblockEntry} from './underblock-entry.js?v=78.3';
-import {LABOUR_WINGS,inBox,yardFloor,intakeFloor} from './strict-layout.js?v=78.3';
+import {surfaceTexture} from '../engine/surface-textures.js?v=79.1';
+import {createPickaxe} from '../engine/pickaxe.js?v=79.1';
+import {buildCell} from './cell.js?v=79.1';
+import {buildUnderblockEntry} from './underblock-entry.js?v=79.1';
+import {LABOUR_WINGS,inBox,yardFloor,intakeFloor} from './strict-layout.js?v=79.1';
 function relocate(world,build,position,angle=0){const previous=new Set(world.scene.children),first=world.blockers.length;build(world);const matrix=new T.Matrix4().makeRotationY(angle);matrix.setPosition(...position);for(const o of world.scene.children)if(!previous.has(o))o.applyMatrix4(matrix);for(const b of world.blockers.slice(first))b.applyMatrix4(matrix);}
 export function buildStrictPrison(world){
  const root=new T.Group();root.name='Block 07 / approved southern intake campus';world.scene.add(root);const rows=[],stone=0x4b4b50,iron=0x303238,trim=0x7d7770,rust=0x8a4734,wood=0x7c5a3e;
  const b=(x,y,z,w,h,d,c,solid=false)=>{rows.push({x,y,z,w,h,d,c});if(solid)world.blockers.push(new T.Box3(new T.Vector3(x-w/2,y-h/2,z-d/2),new T.Vector3(x+w/2,y+h/2,z+d/2)));};
  const sign=(lines,x,y,z,w=5,h=.8,a=0,color='#e7b575')=>world.sign(lines,x,y,z,w,h,a,root,color);
  const lamp=(x,y,z,power=35,reach=11,c=0xffc18a)=>{b(x,y+.1,z,.7,.2,.55,iron);const bulb=world.box(x,y,z,.44,.1,.32,c,false,root);bulb.material=new T.MeshBasicMaterial({color:c,toneMapped:false});bulb.userData.prisonBulb=true;const light=new T.PointLight(c,power,reach,2);light.position.set(x,y-.2,z);light.userData.workLight=true;root.add(light);};
- const guard=(x,z,angle=0)=>{const g=new T.Group();const cube=(w,h,d,y,c)=>{const m=new T.Mesh(world.geometry,world.mat(c));m.position.y=y;m.scale.set(w,h,d);g.add(m);};cube(.65,.95,.5,1.8,0x5d6967);cube(.48,.5,.48,2.54,0xb99573);cube(.65,.14,.6,2.86,iron);for(const dx of [-.13,.13]){const eye=new T.Mesh(world.geometry,world.mat(0x22262b));eye.scale.set(.055,.055,.025);eye.position.set(dx,2.58,.25);g.add(eye);}g.position.set(x,1,z);g.rotation.y=angle;root.add(g);};
+ const guard=(x,z,angle=0)=>{const g=new T.Group();const cube=(w,h,d,y,c)=>{const m=new T.Mesh(world.geometry,world.mat(c));m.position.y=y;m.scale.set(w,h,d);g.add(m);};cube(.65,.95,.5,1.8,0x5d6967);cube(.48,.5,.48,2.54,0xb99573);cube(.65,.14,.6,2.86,iron);for(const dx of [-.13,.13]){const eye=new T.Mesh(world.geometry,world.mat(0x22262b));eye.scale.set(.055,.055,.025);eye.position.set(dx,2.58,.25);g.add(eye);}g.position.set(x,1,z);g.rotation.y=angle;root.add(g);return g;};
  world.floorMat=new T.MeshStandardMaterial({map:surfaceTexture('paving'),roughness:.97});world.skyLight=new T.HemisphereLight(0xc9d5e5,0x57504b,1.8);world.sun=new T.DirectionalLight(0xffdfaf,2);world.sun.position.set(-15,30,10);world.sun.castShadow=true;world.sun.shadow.autoUpdate=false;world.sun.shadow.needsUpdate=true;world.sun.shadow.mapSize.set(1024,1024);Object.assign(world.sun.shadow.camera,{left:-40,right:40,top:45,bottom:-35,near:1,far:100});world.sun.shadow.bias=-.001;world.sun.shadow.normalBias=.035;world.yardFill=new T.HemisphereLight(0xe8d3af,0x534b44,.4);world.scene.add(world.skyLight,world.sun,world.yardFill);
  // Continuous foundations and perimeter prevent the campus reading as floating test rooms.
  b(0,-.45,8,116,.9,126,0x5a5751);for(const x of [-55,55])b(x,6.5,8,1.2,13,124,stone,true);for(const z of [-54,70])b(0,6.5,z,111,13,1.2,stone,true);for(const x of [-54,54])for(const z of [-53,69]){b(x,8,z,4,16,4,stone);b(x,16.3,z,6,.5,6,iron);b(x,17.6,z,4,2.2,4,0x303238);b(x,18.9,z,6,.3,6,trim);}
@@ -78,17 +79,8 @@ export function buildStrictPrison(world){
  const wheel=new T.Mesh(new T.TorusGeometry(1,.15,4,12),world.mat(iron));wheel.position.set(-10,14.4,-8);root.add(wheel);
  sign(['PAY OFFICE / SOUTHEAST','HAUL IS WEIGHED BEFORE PAYMENT'],-16,3.7,-5.22,5,.8);
  b(-10,1.035,1,.12,.025,12,0xc99b5f);b(-5,1.035,7,10,.025,.12,0xc99b5f);
- // NORTHEAST / screened Timber Detail. No gardening language or greenhouse.
- const tfloor=[[6,10,-12,-5],[6,30,-12,-8],[21,40,-33,-12]];for(const r of tfloor)b((r[0]+r[1])/2,.5,(r[2]+r[3])/2,r[1]-r[0],1,r[3]-r[2],0x736b5c);
- b(4.4,4,-5.6,2.9,6,.6,stone,true);b(15,4,-5.6,10,6,.6,stone,true);b(8,6.2,-5.6,4.3,1.6,.6,iron,true);
- b(5.75,3.4,-8.5,.5,4.8,7.5,stone,true);b(10.25,3.4,-6.5,.5,4.8,3,stone,true);b(20.1,3.4,-7.75,20.2,4.8,.5,stone,true);b(13.5,3.4,-12.25,15.5,4.8,.5,stone,true);b(30.25,3.4,-10,.5,4.8,4.5,stone,true);b(8,5.9,-8.7,4.5,.3,7.1,iron,true);b(18,5.9,-10,24,.3,4.5,iron,true);
- for(const [x,z]of [[8,-7],[14,-10],[22,-10],[28,-13]])lamp(x,5.3,z,28,9);
- sign(['TIMBER DETAIL / CLEARANCE 2','COMPULSORY LABOUR · TOOL CAGE BEYOND'],8,6,-5.2,6,.8);sign(['TIMBER DETAIL  →','FOLLOW THE ISSUE ROUTE'],8,3.6,-11.95,3.4,.8);sign(['←  CUTTING YARD','RETURN ALL TOOLS'],29.95,3.6,-10,3,.8,-Math.PI/2);
- for(const x of [20.75,40.25])b(x,5,-22.5,.5,8,21.5,stone,true);b(30.5,5,-33.25,20,8,.5,stone,true);
- b(21.7,6.5,-22.5,1.3,.3,21,iron,true);for(const z of [-15,-21,-27,-32]){b(22.4,7.1,z,.06,1.2,.06,iron);lamp(21.7,8,z,28,10);}b(22.4,7.7,-22.5,.06,.06,21,iron);
- for(const z of [-18,-23,-28]){b(39.1,1.5,z,.8,1,3,wood,true);for(const dz of [-.8,0,.8])b(39.1,2.1,z+dz,.65,.3,.65,wood);}
- sign(['FELLING PLOTS / 02','TIMBER FOR MINE SUPPORTS AND PRISON REPAIRS'],31,6.8,-32.94,13,1);
- world.gate=new T.Group();world.gate.position.set(8,0,-5.3);world.scene.add(world.gate);for(let x=-2;x<=2;x+=.5){const m=new T.Mesh(world.geometry,world.mat(iron));m.position.set(x,3,0);m.scale.set(.1,4,.16);world.gate.add(m);}world.gateLift=0;
+ // NORTHEAST / Timber Detail: controlled issue, a blind transfer passage, then daylight.
+ buildTimberDetail(world,{root,b,sign,lamp,guard,stone,iron,trim,wood});
  // Secured side wings use independent floorplans and share no combat space with the yard.
  const corridor=(wing)=>{const floor=(x,z)=>wing.passages.some(r=>inBox(x,z,r)),edges=new Map();for(const r of wing.passages){b((r[0]+r[1])/2,.5,(r[2]+r[3])/2,r[1]-r[0],1,r[3]-r[2],0x756e65);b((r[0]+r[1])/2,6.2,(r[2]+r[3])/2,r[1]-r[0],.3,r[3]-r[2],iron,true);}
  for(let x=-50;x<52;x+=.5)for(let z=0;z<21;z+=.5)if(floor(x+.25,z+.25))for(const [dx,dz]of [[.5,0],[-.5,0],[0,.5],[0,-.5]]){const nx=x+.25+dx,nz=z+.25+dz;if(floor(nx,nz)||inBox(nx,nz,wing.bounds)||yardFloor(nx,nz))continue;const ex=x+.25+dx/2,ez=z+.25+dz/2,k=(dx?'x:':'z:')+(dx?ex:ez);if(!edges.has(k))edges.set(k,[]);edges.get(k).push(dx?ez:ex);}

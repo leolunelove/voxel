@@ -1,4 +1,4 @@
-import {entryFloor,entryDepth,atUnderblockSeal} from './underblock-entry-rules.js?v=78.3';
+import {entryFloor,entryDepth,atUnderblockSeal} from './underblock-entry-rules.js?v=79.1';
 export const PRISON_SPAWN=[0,2.65,9];
 export const CELL_WAKE=[-15.6,2.65,27.2];
 export const CELL_OFFSET={x:-28,z:11};
