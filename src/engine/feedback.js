@@ -1,9 +1,9 @@
-import {BlockFracture} from './block-fracture.js?v=76.1';
+import {BlockFracture} from './block-fracture.js?v=78.3';
 import * as T from '../../vendor/three.module.js';
-import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=76.1';
-import {PICKS} from '../game/rules.js?v=76.1';
-import {bowRig,applyBowRig} from './bow-motion.js?v=76.1';
-import {createShield} from './shield.js?v=76.1';
+import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=78.3';
+import {PICKS} from '../game/rules.js?v=78.3';
+import {bowRig,applyBowRig} from './bow-motion.js?v=78.3';
+import {createShield} from './shield.js?v=78.3';
 export class Feedback{
  constructor(scene){
  this.scene=scene;this.particles=[];this.geometry=new T.BoxGeometry(1,1,1);this.materials=new Map();this.reduced=false;this.phase=0;this.swinging=false;this.time=0;this.kick=0;this.equip=0;this.tier=-1;
@@ -24,7 +24,7 @@ export class Feedback{
  this.fracture.target(progress>0?mesh:null);
  }
  blockImpact(mesh,point,normal,color,progress,broken=false){
- if(!broken)this.fracture.hit(mesh,point,normal,progress);
+ if(!broken)this.fracture.hit(mesh,point,normal,progress,{tier:this.tier,exposure:mesh.userData.exposure??0});
  const n=normal.clone().normalize(),tangent=new T.Vector3().crossVectors(n,Math.abs(n.y)<.9?new T.Vector3(0,1,0):new T.Vector3(1,0,0)).normalize(),bitangent=new T.Vector3().crossVectors(n,tangent);
  const count=this.reduced?(broken?6:2):(broken?22:5),wood=mesh.userData.type===8;
  for(let i=0;i<count&&this.particles.length<160;i++){

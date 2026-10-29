@@ -1,4 +1,4 @@
-import {ATTACK_OFFSET,ARCHERY_OFFSET} from './training-layout.js?v=76.1';
+import {ATTACK_OFFSET,ARCHERY_OFFSET} from './training-layout.js?v=78.3';
 import * as T from '../../vendor/three.module.js';
 
 // Architecture stays outside the pursuit bounds and all three firing lanes.
@@ -22,7 +22,7 @@ export function buildTrainingRooms(world){
   const mesh=new T.Mesh(new T.BoxGeometry(w,.08,d),new T.MeshStandardMaterial({color:0xa1b9bf,transparent:true,opacity:.25,roughness:.6,depthWrite:false}));
   mesh.position.set(x+offset.x,y,z+offset.z);mesh.castShadow=false;root.add(mesh);
  };
- // 03 / THE IRON HALL. A condemned exercise block, still used for the hunt.
+ // 03 / CONTAINMENT DETAIL. A condemned exercise block, still used for the hunt.
  // Existing side/rear walls are retained; a high roof completes the enclosure.
  for(const x of [-4.9,4.9])b(x,8.15,23.5,7.8,.35,15.8,stone,true);
  glass(0,8.16,23.5,2,15.6);
@@ -55,7 +55,7 @@ export function buildTrainingRooms(world){
   b(x+.85,2,30.17,.16,.4,.12,trim);
   sign(['HOLD 0'+(1+(x+5)/5)],x,4.4,29.96,1.9,.35,Math.PI);
  }
- sign(['THE IRON HALL','CONTAINMENT / 03'],0,6.55,30.15,7.4,1,Math.PI);
+ sign(['CONTAINMENT DETAIL','CONTAINMENT / 03'],0,6.55,30.15,7.4,1,Math.PI);
  // Gatehouse: the entire original opening remains walkable, including retreat.
  b(0,6.75,15.8,7.4,1.3,.72,stone,true);
  b(0,7.52,15.8,7.8,.22,1,trim);
@@ -64,7 +64,7 @@ export function buildTrainingRooms(world){
   for(const y of [1.5,5.7])b(x,y,15.52,.5,.18,.28,iron);
  }
  b(0,6.2,14.03,6.15,.9,.18,iron);
- sign(['03 / THE IRON HALL','ATTACK · WALK OUT TO BANK YOUR LOOT'],0,6.2,13.92,6,.8,Math.PI,'#efb18a');
+ sign(['03 / CONTAINMENT DETAIL','ATTACK · WALK OUT TO BANK YOUR LOOT'],0,6.2,13.92,6,.8,Math.PI,'#efb18a');
  sign(['SAFE PASSAGE','CROSS THE AMBER LINE TO BANK'],0,5.5,16.5,5.4,.72,0);
  for(let x=-2.3;x<2.4;x+=.55)b(x,1.035,16.45,.32,.035,.62,brass);
  for(const x of [-1.8,1.8])for(let z=12.8;z<15.4;z+=.8)b(x,1.035,z,.1,.025,.42,rust);
@@ -73,7 +73,7 @@ export function buildTrainingRooms(world){
  world.scene.traverse(o=>{if(o.isPointLight&&Math.abs(o.position.x-6)===7&&o.position.z===44){o.userData.workLight=true;o.intensity=42;}});
 
  offset=ARCHERY_OFFSET;
- // 04 / THE LONG ROOM. Warm wooden butts and orderly brass lane markings.
+ // 04 / BOW RANGE. Warm wooden butts and orderly brass lane markings.
  // Existing shell is complete but green and undetailed; add a proper interior.
  for(const z of [3.54,14.46]){
   b(29.3,2.05,z,17.6,2.05,.055,timber);
@@ -110,7 +110,7 @@ export function buildTrainingRooms(world){
   b(19.05,5.8,z,.95,.22,.72,iron);
  }
  b(19.15,6.25,8,.8,.8,6.1,timber,true);
- sign(['04 / THE LONG ROOM','ARCHERY · DRAW / RELEASE'],18.7,6.25,8,5.6,.7,-Math.PI/2,'#f1d296');
+ sign(['04 / BOW RANGE','ARCHERY · DRAW / RELEASE'],18.7,6.25,8,5.6,.7,-Math.PI/2,'#f1d296');
  sign(['ARMOURY PASSAGE','EXCHANGE · CELLBLOCK'],20.7,5.25,8,4.3,.65,Math.PI/2);
  lamp(21.1,5.5,8,0xffd9a0,32,8);
  for(const z of [6.1,9.9])b(20.2,1.04,z,2.2,.03,.1,brass);

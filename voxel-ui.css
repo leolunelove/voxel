@@ -92,3 +92,10 @@ body.combat-contact::after{content:'×';position:fixed;left:50%;top:50%;transfor
 /* An arrival title marks a new prison wing without interrupting movement. */
 #region-arrival{position:fixed;top:19%;left:50%;transform:translateX(-50%);width:min(650px,90vw);text-align:center;pointer-events:none;color:#e8dcbd;text-shadow:0 2px 5px #10191a;z-index:15;padding:18px;background:linear-gradient(90deg,transparent,#17221bc9,transparent);border-block:1px solid #91a67b80}
 #region-arrival small{display:block;color:#aac091;font-size:12px;letter-spacing:3px;margin-bottom:10px}#region-arrival strong{display:block;font-size:clamp(21px,3.3vw,40px);letter-spacing:3px}#region-arrival span{display:block;font-size:13px;margin-top:10px;color:#d3c9ac}
+
+/* Diegetic first-shift guidance stays small and leaves the view clear. */
+#intake-objective{position:fixed;left:28px;bottom:150px;max-width:330px;padding:17px 20px;background:linear-gradient(120deg,#202329ed,#181b20de);border:1px solid #ad8755;border-left:4px solid #e9b267;color:#e6d7ba;pointer-events:none;box-shadow:0 8px 30px #0005}
+#intake-objective[hidden]{display:none}#intake-objective small{display:block;font-size:10px;letter-spacing:1.5px;color:#e0af6c}#intake-objective strong{display:block;margin-top:12px;font-size:18px;color:#f5dba5}#intake-objective p{font-size:12px;line-height:1.7;margin:12px 0}#intake-objective span{font-size:10px;color:#c0b8a9}
+.unissued .voxel-hotbar,.unissued .tool-chip,.unissued .satchel-chip,.unissued .next-order{visibility:hidden}
+@media(max-width:650px){#intake-objective{left:14px;right:14px;bottom:135px;max-width:none;padding:12px}}
+#menu-main-actions .menu-link small{display:block;color:#b8b0a0;font-size:9px;letter-spacing:1px;margin-top:5px}

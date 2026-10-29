@@ -1,4 +1,4 @@
-import {bowMoveSpeed} from './bow-rules.js?v=76.1';
+import {bowMoveSpeed} from './bow-rules.js?v=78.3';
 import * as T from '../../vendor/three.module.js';
 export class Player{
  constructor(camera,input,world){this.camera=camera;this.input=input;this.world=world;this.position=new T.Vector3(.5,2.65,2);this.previous=this.position.clone();this.horizontal=new T.Vector3();this.velocity=0;this.grounded=false;this.coyote=0;this.buffer=0;this.jumpHeld=false;this.landing=0;}

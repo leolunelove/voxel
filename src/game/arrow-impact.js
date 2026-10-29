@@ -1,4 +1,4 @@
-import {bowPower} from './bow-rules.js?v=76.1';
+import {bowPower} from './bow-rules.js?v=78.3';
 // Charge controls the weight of contact, independently of gear damage and rewards.
 export function arrowImpact(charge=1,heavy=false,boss=false){
  const power=bowPower(charge),full=charge>=.999;

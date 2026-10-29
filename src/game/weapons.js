@@ -1,4 +1,4 @@
-import {bowPower} from './bow-rules.js?v=76.1';
+import {bowPower} from './bow-rules.js?v=78.3';
 export const SWORDS=[
  {name:'Yard sword',level:1,cost:0,multiplier:1,color:0xb9c8c4,trim:0xc8ad70},
  {name:'Tempered blade',level:2,cost:90,multiplier:1.4,color:0xe1e8df,trim:0x74939a},

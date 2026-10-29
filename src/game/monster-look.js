@@ -1,4 +1,4 @@
-import {impactRecoil} from './arrow-impact.js?v=76.1';
+import {impactRecoil} from './arrow-impact.js?v=78.3';
 import * as T from '../../vendor/three.module.js';
 export function dressMonster(root,body,head,arms,type){
  const armor=new T.MeshStandardMaterial({color:type===1?0x515c66:0x3c533a,roughness:.8,metalness:type===1?.4:.05}),bone=new T.MeshLambertMaterial({color:0xc9be95}),dark=new T.MeshLambertMaterial({color:0x242d2a});

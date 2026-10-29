@@ -24,8 +24,8 @@ export function buildCell(world){
  for(let x=12.4;x<13.7;x+=.3)b(x,3.2,19.25,.06,1,.1,iron);
  const light=new T.PointLight(0xffbc70,15,7);light.userData.alwaysOn=true;light.position.set(12.6,3.85,16.5);world.scene.add(light);
  const bulb=b(12.6,4.2,16.5,.5,.12,.5,0xffba55);bulb.material=new T.MeshBasicMaterial({color:0xffba55,toneMapped:false});
- world.sign(['FIRST SHIFT / DEEPWELL ←','FOLLOW THE AMBER LINE'],13,3.25,14.72,2.6,.5,0);
- world.sign(['CELL 07','YOUR CELL / E BY THE BED'],13,3.95,14.30,2.6,.65,Math.PI);
- world.sign(['FIRST SHIFT / DEEPWELL','MINE 20 BLOCKS · OPEN THE CONSERVATORY'],15.01,3.1,17.1,2.7,.65,-Math.PI/2);
- world.sign(['YOUR SHIFT. YOUR PACE.'],12.8,4,19.3,2.8,.5,Math.PI);
+ world.sign(['DUTY / DEEPWELL NORTH','REPORT TO ROLL CALL'],13,3.25,14.72,2.6,.5,0);
+ world.sign(['CELL 07','ASSIGNED CELL / E TO REST'],13,3.95,14.30,2.6,.65,Math.PI);
+ world.sign(['ASSIGNED LABOUR / DEEPWELL','CLEARANCE 2 / TIMBER DETAIL AT 20 BLOCKS'],15.01,3.1,17.1,2.7,.65,-Math.PI/2);
+ world.sign(['ASSIGNED CELL / REPORT AT THE BELL'],12.8,4,19.3,2.8,.5,Math.PI);
 }

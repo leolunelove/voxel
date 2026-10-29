@@ -1,5 +1,5 @@
 import * as T from '../../vendor/three.module.js';
-import {TRAINING_WINGS,withinTraining} from './training-layout.js?v=76.1';
+import {TRAINING_WINGS,withinTraining} from './training-layout.js?v=78.3';
 // Corridors have real walls and roofs; only their portcullises animate.
 export function buildTrainingWings(world){
  const root=new T.Group();root.name='Prison / containment and armoury checkpoints';world.scene.add(root);world.trainingWings=root;world.trainingGates=[];
@@ -44,7 +44,7 @@ export function buildTrainingWings(world){
  sign(['IRON HALL  →','KEEP THE RETURN PASSAGE CLEAR'],7.82,3.7,22,3.3,.85,-Math.PI/2,'#e9a480');
  sign(['←  BLOCK 07','SAFE PASSAGE / LOOT BANKED'],6,3.8,32.42,3.6,.8,0,'#e9a480');
  sign(['LONG ROOM  →','FOLLOW THE BRASS LINE'],29.82,3.7,8,3.3,.85,-Math.PI/2,'#efd296');
- sign(['←  THE LONG ROOM','ARMOURY / THREE FIRING LANES'],28,3.7,27.82,3.3,.85,Math.PI,'#efd296');
+ sign(['←  BOW RANGE','ARMOURY / THREE FIRING LANES'],28,3.7,27.82,3.3,.85,Math.PI,'#efd296');
  sign(['BLOCK 07  →','EXCHANGE / CELLBLOCK'],32.55,4.7,26,3.6,.75,Math.PI/2,'#efd296');
  sign(['←  BLOCK 07','EXCHANGE / CELLS'],6,3.7,20.18,3.2,.8,0,'#e9a480');
  sign(['BLOCK 07  →','RETURN VIA THE ARMOURY PASSAGE'],26.18,3.7,26,3.2,.8,Math.PI/2,'#efd296');
