@@ -145,3 +145,7 @@ body:has(#menu:not([hidden])) .intake-caption{display:none}
 .arrival-menu .title-screen .menu-play{display:flex;width:230px;min-height:48px!important;background:#e4d9bf!important;color:#253c35;border:1px solid #eee5d2;box-shadow:none;font:500 13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;padding:15px 20px!important}
 .arrival-menu .menu-link{display:inline-flex;width:auto;gap:15px;margin:0 20px 0 0;padding:7px 0;background:none;box-shadow:none;border:0;color:#dadfd0}
 .arrival-menu .menu-link b{font:12px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+/* Override the established pause-menu placement only for the first arrival. */
+.arrival-menu .title-screen .start-shell{position:absolute!important;left:7vw!important;right:auto!important;top:auto!important;bottom:11vh!important;transform:none!important;margin:0!important;padding:0!important;text-align:left!important}
+.arrival-menu .title-screen .start-actions,.arrival-menu #menu-main-actions{align-items:flex-start!important;justify-content:flex-start!important;text-align:left!important;min-height:0!important}
+.arrival-menu .title-screen #start-title,.arrival-menu .title-screen #start-summary{text-align:left!important}
