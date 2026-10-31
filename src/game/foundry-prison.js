@@ -9,7 +9,7 @@ export function buildFoundryPrison(w){
  w.skyLight=new T.HemisphereLight(0xdde3e4,0x706553,1.45);w.sun=new T.DirectionalLight(0xffdfae,3.1);w.sun.position.set(-22,32,18);w.sun.castShadow=true;w.sun.shadow.autoUpdate=false;w.sun.shadow.needsUpdate=true;w.sun.shadow.mapSize.set(2048,2048);Object.assign(w.sun.shadow.camera,{left:-75,right:75,top:100,bottom:-80,near:1,far:220});w.sun.shadow.bias=-.0003;w.sun.shadow.normalBias=.025;w.yardFill=new T.HemisphereLight(0xe8d3af,0x534b44,.35);w.scene.add(w.skyLight,w.sun,w.yardFill);
  buildArrivalCampus(w);const a=w.arrival,start=a.blockers.length;
  const box=(x,y,z,width,height,depth,color=0xc6c5b7,solid=false)=>a.box(x,y,z,width,height,depth,color,({[0xc6c5b7]:'brick',[0x435751]:'metal',[0x88553d]:'metal',[0x8c6745]:'wood',[0xb2a385]:'stone',[0x797060]:'ground'})[color]??'',solid);
- const wall=(x,z,width,depth,h=4.5)=>a.surface(x,1+h/2,z,width,h,depth,0xc6c5b7,'brick',true);
+ const wall=(x,z,width,depth,h=4.5)=>a.surface(x,1+(h+.15)/2,z,width,h+.15,depth,0xc6c5b7,'brick',true);
  const roof=(x,z,width,depth,y=5.65)=>a.surface(x,y,z,width,.24,depth,0x65716a,'stone',true);
  const lamp=(x,y,z,power=28)=>{const l=a.lamp(x,y,z,power,10);l.userData.workLight=true;return l;};
  const guard=(x,z,angle=0)=>{const p=arrivalLocal(x,z),g=a.officer(p.x,p.z,angle);g.scale.set(1/ARRIVAL_SCALE,1/ARRIVAL_Y,1/ARRIVAL_SCALE);a.contact(x,z,1.1,.8,.25,1.015);return g;};

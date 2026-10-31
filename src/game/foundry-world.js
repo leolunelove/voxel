@@ -2,7 +2,7 @@ import {insideArrival,arrivalFloor,arrivalLocal} from './arrival-campus.js?v=84'
 import {TIMBER_FLOORS,TIMBER_PLOTS,TIMBER_SPOTS,timberInside,timberPlot,timberAllocated} from './foundry-timber-layout.js?v=84';
 import {FOREST_STAGES} from './camp-rules.js?v=84';
 import * as T from '../../vendor/three.module.js';
-import {CampWorld} from './camp.js?v=84';
+import {CampWorld} from './camp.js?v=84.1';
 import {keyOf} from './world.js?v=84';
 import {mineOre,campLevel} from './camp-rules.js?v=84';
 import {PRISON_SPAWN,CAMPUS_FLOORS,PIT,MINE_OFFSET,inBox,terraceFloor} from './foundry-layout.js?v=84';

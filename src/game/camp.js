@@ -1,4 +1,4 @@
-import {buildFoundryPrison} from './foundry-prison.js?v=84';
+import {buildFoundryPrison} from './foundry-prison.js?v=84.1';
 import {buildStrictPrison} from './strict-prison.js?v=84';
 import {buildCampus,buildCampusTraining} from './campus.js?v=84';
 import {intakeFloor,campusYard} from './intake-rules.js?v=84';
