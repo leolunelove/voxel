@@ -1,9 +1,9 @@
-import {buildArrivalCampus,buildCompactCells} from './arrival-campus.js?v=83';
-import {buildFoundryTimber} from './foundry-timber.js?v=83';
+import {buildArrivalCampus,buildCompactCells} from './arrival-campus.js?v=83.2';
+import {buildFoundryTimber} from './foundry-timber.js?v=83.2';
 import * as T from '../../vendor/three.module.js';
-import {surfaceTexture} from '../engine/surface-textures.js?v=83';
-import {createPickaxe} from '../engine/pickaxe.js?v=83';
-import {CAMPUS_FLOORS,PIT,inBox,terraceFloor} from './foundry-layout.js?v=83';
+import {surfaceTexture} from '../engine/surface-textures.js?v=83.2';
+import {createPickaxe} from '../engine/pickaxe.js?v=83.2';
+import {CAMPUS_FLOORS,PIT,inBox,terraceFloor} from './foundry-layout.js?v=83.2';
 export function buildFoundryPrison(w){
  const root=new T.Group();root.name='NEW BLOCK 07 / intake, H-cellblock, terraced Deepwell';w.scene.add(root);w.foundry=root;const stone=0x535258,iron=0x30343b,rust=0x884633,trim=0x9a8b77,wood=0x745239;
  const box=(x,y,z,a,b,c,color=stone,solid=false)=>w.box(x,y,z,a,b,c,color,solid,root);

@@ -1,6 +1,6 @@
 import * as T from '../../vendor/three.module.js';
-import {batchScenery} from '../engine/static-batch.js?v=83';
-import {SPAWN,groundHeight,inPreview,inBus} from './arrival-layout.js?v=83';
+import {batchScenery} from '../engine/static-batch.js?v=83.2';
+import {SPAWN,groundHeight,inPreview,inBus} from './arrival-layout.js?v=83.2';
 function texture(kind){const c=document.createElement('canvas');c.width=c.height=256;const ctx=c.getContext('2d');let seed=317;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
  const bg={brick:'#77736d',stone:'#b0a89a',ground:'#a19a89',metal:'#5a6262',wood:'#8c6745'}[kind];ctx.fillStyle=bg;ctx.fillRect(0,0,256,256);
  if(kind==='brick'){ctx.fillStyle='#5f5c56';for(let row=0;row<8;row++){ctx.fillRect(0,row*32,256,2);for(let col=-1;col<5;col++)ctx.fillRect(col*64+(row%2)*32,row*32,2,32);}for(let i=0;i<72;i++){const x=Math.floor(random()*4)*64,y=Math.floor(random()*8)*32;ctx.fillStyle=random()>.5?'#8a8073':'#6c6b66';ctx.globalAlpha=.35;ctx.fillRect(x+3,y+3,58,26);}ctx.globalAlpha=1;}

@@ -1,46 +1,46 @@
-import {createIntakeExperience} from './ui/intake-experience.js?v=83';
-import {toolIcon} from './engine/pickaxe.js?v=83';
-import {consumeCharacterReset} from './game/character-reset.js?v=83';
-import {mountCharacterReset} from './ui/character-reset.js?v=83';
+import {createIntakeExperience} from './ui/intake-experience.js?v=83.2';
+import {toolIcon} from './engine/pickaxe.js?v=83.2';
+import {consumeCharacterReset} from './game/character-reset.js?v=83.2';
+import {mountCharacterReset} from './ui/character-reset.js?v=83.2';
 try{consumeCharacterReset(localStorage);}catch{}
-import {SEARCH,CELL_CHECK} from './game/foundry-arrival.js?v=83';
-import {CELL_WAKE,atBed,atPayOffice,inIntake,HUNT_OPTIONS,RANGE_OFFSET,inHunt,inRange,atDungeonGate,prisonDepth as entryDepth,trainingGateNear,LABOUR_WINGS as TRAINING_WINGS} from './game/foundry-layout.js?v=83';
-import {loadIntake,advanceIntake,intakeNear,intakeInstruction,INTAKE_SPAWNS,CHECKIN,TOOL_ISSUE} from './game/foundry-arrival.js?v=83';
-import {trainingAccess} from './game/training-layout.js?v=83';
-import {timberGateNear as atConservatoryGate} from './game/foundry-timber-layout.js?v=83';
-import {LightBudget,RenderQuality} from './engine/render-quality.js?v=83';
+import {SEARCH,CELL_CHECK} from './game/foundry-arrival.js?v=83.2';
+import {CELL_WAKE,atBed,atPayOffice,inIntake,HUNT_OPTIONS,RANGE_OFFSET,inHunt,inRange,atDungeonGate,prisonDepth as entryDepth,trainingGateNear,LABOUR_WINGS as TRAINING_WINGS} from './game/foundry-layout.js?v=83.2';
+import {loadIntake,advanceIntake,intakeNear,intakeInstruction,INTAKE_SPAWNS,CHECKIN,TOOL_ISSUE} from './game/foundry-arrival.js?v=83.2';
+import {trainingAccess} from './game/training-layout.js?v=83.2';
+import {timberGateNear as atConservatoryGate} from './game/foundry-timber-layout.js?v=83.2';
+import {LightBudget,RenderQuality} from './engine/render-quality.js?v=83.2';
 import * as T from '../vendor/three.module.js';
 
 const entryFogColor=new T.Color(0x263e38);
-import {Input} from './engine/input.js?v=83';
-import {Audio} from './engine/audio.js?v=83';
-import {Feedback} from './engine/feedback.js?v=83';
-import {FoundryWorld as CampWorld} from './game/foundry-world.js?v=83';
-import {campLevel,LEVEL_TWO,AXES,treeYield,treeLogYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=83';
-import {Player} from './game/player.js?v=83';
-import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=83';
-import {Pickups} from './game/pickups.js?v=83';
-import {HUD} from './ui/hud.js?v=83';
+import {Input} from './engine/input.js?v=83.2';
+import {Audio} from './engine/audio.js?v=83.2';
+import {Feedback} from './engine/feedback.js?v=83.2';
+import {FoundryWorld as CampWorld} from './game/foundry-world.js?v=83.2';
+import {campLevel,LEVEL_TWO,AXES,treeYield,treeLogYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=83.2';
+import {Player} from './game/player.js?v=83.2';
+import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=83.2';
+import {Pickups} from './game/pickups.js?v=83.2';
+import {HUD} from './ui/hud.js?v=83.2';
 
-import {Hunt} from './game/hunt.js?v=83';
-import {freshHunt,loadHunt,bank,retreat,attackLevel,swordDamage,MONSTERS,MAX_HP,hurt} from './game/hunt-rules.js?v=83';
+import {Hunt} from './game/hunt.js?v=83.2';
+import {freshHunt,loadHunt,bank,retreat,attackLevel,swordDamage,MONSTERS,MAX_HP,hurt} from './game/hunt-rules.js?v=83.2';
 
-import {Archery} from './game/archery.js?v=83';
-import {Dungeon} from './game/dungeon.js?v=83';
-import {skillLevel,finishDungeon,DIFFICULTIES} from './game/dungeon-rules.js?v=83';
+import {Archery} from './game/archery.js?v=83.2';
+import {Dungeon} from './game/dungeon.js?v=83.2';
+import {skillLevel,finishDungeon,DIFFICULTIES} from './game/dungeon-rules.js?v=83.2';
 
-import {SkillBook} from './ui/skills.js?v=83';
+import {SkillBook} from './ui/skills.js?v=83.2';
 
-import {SWORDS,BOWS,forgeWeapon,weaponReason} from './game/weapons.js?v=83';
+import {SWORDS,BOWS,forgeWeapon,weaponReason} from './game/weapons.js?v=83.2';
 
-import {SHIELDS,freshGuard,tickGuard,defend,forgeShield,shieldReason} from './game/shield-rules.js?v=83';
-import {skillLedger} from './game/skills.js?v=83';
-import {freshShift,loadShift,tickShift,fatigue,shiftClock,closeShift,loadSummary} from './game/shift-rules.js?v=83';
+import {SHIELDS,freshGuard,tickGuard,defend,forgeShield,shieldReason} from './game/shield-rules.js?v=83.2';
+import {skillLedger} from './game/skills.js?v=83.2';
+import {freshShift,loadShift,tickShift,fatigue,shiftClock,closeShift,loadSummary} from './game/shift-rules.js?v=83.2';
 
-import {ShiftUI} from './ui/shift.js?v=83';
-import {RestFlow} from './game/rest-flow.js?v=83';
-import {Daylight} from './engine/daylight.js?v=83';
-import {updateHTML} from './ui/dom.js?v=83';
+import {ShiftUI} from './ui/shift.js?v=83.2';
+import {RestFlow} from './game/rest-flow.js?v=83.2';
+import {Daylight} from './engine/daylight.js?v=83.2';
+import {updateHTML} from './ui/dom.js?v=83.2';
 document.body.classList.add('new-prison','timber-commissioned');
 const qaPosition=new URLSearchParams(location.search).has('qa')?document.body.appendChild(document.createElement('output')):null;if(qaPosition){qaPosition.style.cssText='position:fixed;top:0;left:40%;z-index:200;background:#222;color:#fff;padding:6px';}
 const canvas=document.getElementById('game');

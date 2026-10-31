@@ -149,3 +149,4 @@ body:has(#menu:not([hidden])) .intake-caption{display:none}
 .arrival-menu .title-screen .start-shell{position:absolute!important;left:7vw!important;right:auto!important;top:auto!important;bottom:11vh!important;transform:none!important;margin:0!important;padding:0!important;text-align:left!important}
 .arrival-menu .title-screen .start-actions,.arrival-menu #menu-main-actions{align-items:flex-start!important;justify-content:flex-start!important;text-align:left!important;min-height:0!important}
 .arrival-menu .title-screen #start-title,.arrival-menu .title-screen #start-summary{text-align:left!important}
+.arrival-menu #reset-character{display:inline-flex!important;width:auto;opacity:.7}.arrival-menu #reset-character small,.arrival-menu #reset-character>span:last-child{display:none}

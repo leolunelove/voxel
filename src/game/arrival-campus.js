@@ -1,9 +1,9 @@
 import * as T from '../../vendor/three.module.js';
-import {ArrivalWorld} from './prison-arrival.js?v=83';
-import {groundHeight,inPreview} from './arrival-layout.js?v=83';
-import {ARRIVAL_SCALE as S,ARRIVAL_Y as Y,ARRIVAL_Z as Z} from './foundry-layout.js?v=83';
-import {batchScenery} from '../engine/static-batch.js?v=83';
-import {createPickaxe} from '../engine/pickaxe.js?v=83';
+import {ArrivalWorld} from './prison-arrival.js?v=83.2';
+import {groundHeight,inPreview} from './arrival-layout.js?v=83.2';
+import {ARRIVAL_SCALE as S,ARRIVAL_Y as Y,ARRIVAL_Z as Z} from './foundry-layout.js?v=83.2';
+import {batchScenery} from '../engine/static-batch.js?v=83.2';
+import {createPickaxe} from '../engine/pickaxe.js?v=83.2';
 export const arrivalLocal=(x,z)=>({x:x/S,z:(z-Z)/S});
 export const insideArrival=(x,z)=>{const p=arrivalLocal(x,z);return inPreview(p.x,p.z);};
 export const arrivalFloor=(x,z)=>{const p=arrivalLocal(x,z);return 1+Y*groundHeight(p.x,p.z);};
@@ -27,6 +27,8 @@ export function buildArrivalCampus(w){
  const issueDoor=new T.Group();issueDoor.position.set(9.36,0,50.65);w.scene.add(issueDoor);
  B(0,2.1,0,2.32,2.2,.14,0x88553d,'metal',false,issueDoor);B(0,2.5,.085,1.1,.45,.03,0x2b4440,'',false,issueDoor);
  const exitDoor=new T.Group();exitDoor.position.set(9.36,0,42);w.scene.add(exitDoor);B(0,1.45,0,2.7,.9,.14,0x495e57,'metal',false,exitDoor);for(let x=-1.2;x<=1.2;x+=.3)B(x,2.55,0,.065,1.3,.1,0x4a5e55,'metal',false,exitDoor);B(0,3.2,0,2.7,.12,.14,0x4a5e55,'metal',false,exitDoor);
+ // Shutters retract into a housing above the lintel, never float above the roof.
+ F(9.36,4.7,42,3.15,2.1,.5,0x526159,'metal');
  w.intakeGates=[{bars:issueDoor,stage:2,bounds:new T.Box3(new T.Vector3(8.16,1,50.4),new T.Vector3(10.56,3.4,50.9))},{bars:exitDoor,stage:3,bounds:new T.Box3(new T.Vector3(7.9,1,41.8),new T.Vector3(10.85,3.4,42.2))}];
  // The waist-height cage counter is to the left of a clear walk-through lane.
  F(8.2,1.5,46.4,.85,1,2.1,0x526159,'metal',true);F(8.2,2.07,46.4,1,.14,2.2,0xb2a385,'wood',true);
