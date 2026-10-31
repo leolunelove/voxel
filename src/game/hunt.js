@@ -1,11 +1,11 @@
-import {ATTACK_OFFSET} from './training-layout.js?v=83.2';
-import {arrowImpact,impactRecoil,pushDistance} from './arrow-impact.js?v=83.2';
+import {ATTACK_OFFSET} from './training-layout.js?v=84';
+import {arrowImpact,impactRecoil,pushDistance} from './arrow-impact.js?v=84';
 import * as T from '../../vendor/three.module.js';
-import {MONSTERS,swordDamage,reward,hurt,inHunt,MAX_HP} from './hunt-rules.js?v=83.2';
-import {dressWarden,animateWarden} from './warden.js?v=83.2';
-import {clearArrows,updateArrows} from './embedded-arrows.js?v=83.2';
-import {dressMonster,animateMonster} from './monster-look.js?v=83.2';
-import {CombatLoot} from './combat-loot.js?v=83.2';
+import {MONSTERS,swordDamage,reward,hurt,inHunt,MAX_HP} from './hunt-rules.js?v=84';
+import {dressWarden,animateWarden} from './warden.js?v=84';
+import {clearArrows,updateArrows} from './embedded-arrows.js?v=84';
+import {dressMonster,animateMonster} from './monster-look.js?v=84';
+import {CombatLoot} from './combat-loot.js?v=84';
 export class Hunt{
  constructor(scene,state,options={}){this.loot=new CombatLoot(scene);this.options=options;this.bounds=options.bounds??[-1.5,13.5,34,46];this.state=state;this.enemies=[];this.targets=[];this.inside=false;this.damageFlash=0;
   for(const [i,x,z,type]of (options.spawns??[[0,2,39,0],[1,10,40,0],[2,6,44,1]])){

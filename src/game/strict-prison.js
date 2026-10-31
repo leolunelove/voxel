@@ -1,11 +1,11 @@
-import {buildContainmentDetail} from './containment-detail.js?v=83.2';
-import {buildTimberDetail} from './timber-detail.js?v=83.2';
+import {buildContainmentDetail} from './containment-detail.js?v=84';
+import {buildTimberDetail} from './timber-detail.js?v=84';
 import * as T from '../../vendor/three.module.js';
-import {surfaceTexture} from '../engine/surface-textures.js?v=83.2';
-import {createPickaxe} from '../engine/pickaxe.js?v=83.2';
-import {buildCell} from './cell.js?v=83.2';
-import {buildUnderblockEntry} from './underblock-entry.js?v=83.2';
-import {LABOUR_WINGS,inBox,yardFloor,intakeFloor} from './strict-layout.js?v=83.2';
+import {surfaceTexture} from '../engine/surface-textures.js?v=84';
+import {createPickaxe} from '../engine/pickaxe.js?v=84';
+import {buildCell} from './cell.js?v=84';
+import {buildUnderblockEntry} from './underblock-entry.js?v=84';
+import {LABOUR_WINGS,inBox,yardFloor,intakeFloor} from './strict-layout.js?v=84';
 function relocate(world,build,position,angle=0){const previous=new Set(world.scene.children),first=world.blockers.length;build(world);const matrix=new T.Matrix4().makeRotationY(angle);matrix.setPosition(...position);for(const o of world.scene.children)if(!previous.has(o))o.applyMatrix4(matrix);for(const b of world.blockers.slice(first))b.applyMatrix4(matrix);}
 export function buildStrictPrison(world){
  const root=new T.Group();root.name='Block 07 / approved southern intake campus';world.scene.add(root);const rows=[],stone=0x4b4b50,iron=0x303238,trim=0x7d7770,rust=0x8a4734,wood=0x7c5a3e;

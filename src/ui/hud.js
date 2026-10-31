@@ -1,8 +1,8 @@
-import {swordDamage} from '../game/hunt-rules.js?v=83.2';
-import {SWORDS,BOWS} from '../game/weapons.js?v=83.2';
-import {toolIcon} from '../engine/pickaxe.js?v=83.2';
-import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=83.2';
-import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=83.2';
+import {swordDamage} from '../game/hunt-rules.js?v=84';
+import {SWORDS,BOWS} from '../game/weapons.js?v=84';
+import {toolIcon} from '../engine/pickaxe.js?v=84';
+import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=84';
+import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=84';
 
 const fmt=n=>n.toLocaleString();
 const swatch=b=>'<i class="ore-gem" style="--ore:#'+b.color.toString(16).padStart(6,'0')+'"></i>';
@@ -38,15 +38,15 @@ export class HUD{
      <div class="shift-card"><span id="start-rank">A</span><div><small>LOCAL SAVE</small><b id="start-mine"></b><em id="start-tool"></em></div><i class="save-check" aria-label="Progress stored locally">✓</i></div>
      <small class="save-note">PROGRESS SAVES AUTOMATICALLY</small><p id="lock-error" role="alert"></p>
     </div>
-    <div id="menu-settings" hidden><button data-menu-back class="menu-back">← Main menu</button><small class="eyebrow">MAKE IT YOURS</small><h2>Settings</h2><p class="setting-intro">A comfortable shift is a good shift.</p>
+    <div id="menu-settings" hidden><button data-menu-back class="menu-back">← Main menu</button><h2>Settings</h2>
      <div class="setting-range"><label for="volume">Master volume <output id="volume-value">75%</output></label><input id="volume" type="range" min="0" max="100" value="75"></div>
      <label class="setting-toggle"><span><b>Mute sound</b><small>Quiet tools and surroundings.</small></span><input id="mute" type="checkbox"></label>
      <label class="setting-toggle"><span><b>Reduced motion</b><small>Less tool movement and fewer particles.</small></span><input id="motion" type="checkbox"></label>
      <div class="setting-range"><label for="sensitivity">Mouse sensitivity <output id="sensitivity-value">100%</output></label><input id="sensitivity" type="range" min="40" max="180" step="5" value="100"></div><small class="save-note">YOUR SETTINGS SAVE BETWEEN SHIFTS.</small>
     </div>
     <div id="menu-controls" hidden><button data-menu-back class="menu-back">← Main menu</button><h2>Controls</h2>
-     <div class="control-list"><span>Move <kbd>W A S D</kbd></span><span>Look <kbd>MOUSE / ARROWS</kbd></span><span>Mine / strike <kbd>HOLD LMB</kbd></span><span>Bow <kbd>HOLD / RELEASE LMB</kbd></span><span>Jump <kbd>SPACE</kbd></span><span>Sprint <kbd>SHIFT</kbd></span><span>Interact / rest <kbd>E</kbd></span><span>Swap weapon <kbd>Q</kbd></span><span>Dungeon guard <kbd>RMB / SWORD</kbd></span><span>Skills <kbd>TAB</kbd></span><span>Return to yard <kbd>R</kbd></span><span>Pause <kbd>ESC</kbd></span></div>
-     <p class="controls-note">Mine 20 blocks to open the Level 2 Timber Detail checkpoint. Follow the service corridor beyond it. Prison Level 3 / 60 blocks opens Iron Hall; Level 4 / 120 blocks opens the Long Room. Chop all three trunk blocks. Each log drops timber; the last clears the canopy. Sell and forge at the Exchange.</p><p class="controls-note">Walk out of combat to bank loot. Defeat, retreat or reload loses unbanked monster loot. Skills and gear stay yours.</p><small class="save-note">NO MOUSE CAPTURE? HOLD RMB TO LOOK.</small>
+     <div class="control-list"><span>Move <kbd>W A S D</kbd></span><span>Look <kbd>MOUSE / ARROWS</kbd></span><span>Mine / cut <kbd>HOLD LMB</kbd></span><span>Jump <kbd>SPACE</kbd></span><span>Sprint <kbd>SHIFT</kbd></span><span>Interact / rest <kbd>E</kbd></span><span>Skills <kbd>TAB</kbd></span><span>Return to yard <kbd>R</kbd></span><span>Pause <kbd>ESC</kbd></span></div>
+     <p class="controls-note">Amber line: Deepwell across the yard. Pale line: Cell 07 through the west passage. Sell and forge at the east Pay Office. Mine 20 blocks to unlock Timber Detail, then cut each trunk block. E at your bed ends the shift.</p><small class="save-note">NO MOUSE CAPTURE? HOLD RMB TO LOOK.</small>
     </div>
    </div>
   </div>

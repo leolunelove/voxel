@@ -1,9 +1,9 @@
 import * as T from '../../vendor/three.module.js';
-import {ArrivalWorld} from './prison-arrival.js?v=83.2';
-import {groundHeight,inPreview} from './arrival-layout.js?v=83.2';
-import {ARRIVAL_SCALE as S,ARRIVAL_Y as Y,ARRIVAL_Z as Z} from './foundry-layout.js?v=83.2';
-import {batchScenery} from '../engine/static-batch.js?v=83.2';
-import {createPickaxe} from '../engine/pickaxe.js?v=83.2';
+import {ArrivalWorld} from './prison-arrival.js?v=84';
+import {groundHeight,inPreview} from './arrival-layout.js?v=84';
+import {ARRIVAL_SCALE as S,ARRIVAL_Y as Y,ARRIVAL_Z as Z} from './foundry-layout.js?v=84';
+import {batchScenery} from '../engine/static-batch.js?v=84';
+import {createPickaxe} from '../engine/pickaxe.js?v=84';
 export const arrivalLocal=(x,z)=>({x:x/S,z:(z-Z)/S});
 export const insideArrival=(x,z)=>{const p=arrivalLocal(x,z);return inPreview(p.x,p.z);};
 export const arrivalFloor=(x,z)=>{const p=arrivalLocal(x,z);return 1+Y*groundHeight(p.x,p.z);};
@@ -58,7 +58,7 @@ export function buildCompactCells(w){
  // One storey of believable occupied cells around a four-metre inspection aisle.
  F(-26,.952,14.5,13,.12,19,0xc9c1ab,'ground');
  wall(-32.5,14.5,.3,19);wall(-19.5,8.5,.3,7);wall(-19.5,20,.3,8);B(-19.5,4.2,14,.3,.6,4,0x8d9789,'stone',true);
- wall(-26,24,13,.3);wall(-30.3,5,4.4,.3);wall(-21.7,5,4.4,.3);F(-26,4.18,5,4,.65,.4,0x8d9789,'stone',true);
+ wall(-26,24,13,.3);wall(-30.3,5,4.4,.3);wall(-26,5,4,.3);wall(-21.7,5,4.4,.3);F(-26,4.18,5,4,.65,.4,0x8d9789,'stone',true);
  F(-26,4.58,14.5,13.6,.24,19.6,0x65716a,'stone',true);B(-26,4.78,14.5,13.8,.12,19.8,steel,'metal');
  a.sign(['CELLBLOCK A'], -26,3.65,4.8,3.3,.42,Math.PI);
  a.sign(['07 / WEST ROW'], -25,2.7,7.3,1.3,.22,Math.PI);
@@ -83,7 +83,7 @@ export function buildCompactCells(w){
   const l=a.lamp(-26,4.25,z,24,7,0xffd4a0);l.userData.alwaysOn=true;
  }
  // Direct supervised passage from roll call, replacing the long detour around the block.
- F(-13.6,.932,14,11.8,.16,4,0xc9c1ab,'ground');
+ F(-13.75,.932,14,11.5,.16,4,0xc9c1ab,'ground');
  for(const z of [11.85,16.15]){wall(-13.6,z,11.8,.22,2.7);B(-13.6,3.9,z,11.8,.14,.35,steel,'metal');}
  F(-13.6,4.05,14,11.8,.2,4.5,0x8d9789,'stone',true);
  for(const x of [-11,-17]){const l=a.lamp(x,3.8,14,22,6);l.userData.alwaysOn=true;}

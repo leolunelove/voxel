@@ -135,18 +135,43 @@ body:has(#menu:not([hidden])) .intake-caption{display:none}
 .quiet-intake .control-strip kbd{font:9px monospace;background:#24342d55;border:1px solid #c9c6ae55;box-shadow:none}
 .quiet-room .next-order,.quiet-room .mine-badge,.quiet-room .tool-chip,.quiet-room .satchel-chip,.quiet-room .prison-route,.quiet-room #skill-shortcut{display:none!important}
 .quiet-room .voxel-mark{background:none;border:0;padding:0;box-shadow:none}.quiet-room .voxel-mark small,.quiet-room .brand-cube{display:none}.quiet-room .voxel-mark b{font-size:20px;color:#e4d6b2}
-.arrival-menu .title-screen{background:linear-gradient(90deg,#132b2688,transparent 85%),linear-gradient(0deg,#1229229c,transparent 70%);backdrop-filter:none}
-.arrival-menu .title-screen:before{content:'VOXEL';position:fixed;top:35px;left:36px;color:#e9e2cb;font:23px VoxelPixel,monospace;letter-spacing:2px}
-.arrival-menu .title-topline,.arrival-menu .start-identity,.arrival-menu .title-footer,.arrival-menu .shift-card,.arrival-menu .save-note,.arrival-menu #start-exchange,.arrival-menu #reset-character{display:none!important}
-.arrival-menu .title-screen .start-shell{position:absolute;left:7vw;bottom:11vh;top:auto;right:auto;transform:none;display:block;width:min(500px,86vw);max-width:none;margin:0;padding:0;text-align:left}
-.arrival-menu .title-screen .start-actions{padding:0;background:none;border:0;box-shadow:none;text-align:left;width:100%}
-.arrival-menu .title-screen #start-title{font:500 clamp(38px,5.5vw,66px)/1.1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-2px;text-shadow:none;color:#f1ede0;margin:0 0 17px}
-.arrival-menu .title-screen #start-summary{font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#e5e6d8;margin:0 0 28px}
-.arrival-menu .title-screen .menu-play{display:flex;width:230px;min-height:48px!important;background:#e4d9bf!important;color:#253c35;border:1px solid #eee5d2;box-shadow:none;font:500 13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;padding:15px 20px!important}
-.arrival-menu .menu-link{display:inline-flex;width:auto;gap:15px;margin:0 20px 0 0;padding:7px 0;background:none;box-shadow:none;border:0;color:#dadfd0}
-.arrival-menu .menu-link b{font:12px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-/* Override the established pause-menu placement only for the first arrival. */
-.arrival-menu .title-screen .start-shell{position:absolute!important;left:7vw!important;right:auto!important;top:auto!important;bottom:11vh!important;transform:none!important;margin:0!important;padding:0!important;text-align:left!important}
-.arrival-menu .title-screen .start-actions,.arrival-menu #menu-main-actions{align-items:flex-start!important;justify-content:flex-start!important;text-align:left!important;min-height:0!important}
-.arrival-menu .title-screen #start-title,.arrival-menu .title-screen #start-summary{text-align:left!important}
-.arrival-menu #reset-character{display:inline-flex!important;width:auto;opacity:.7}.arrival-menu #reset-character small,.arrival-menu #reset-character>span:last-child{display:none}
+/* Iron & Ember menu: one clear action over the actual player view. */
+#menu{background:linear-gradient(90deg,#15221ce8 0%,#15221cb3 32%,#14201935 67%,transparent 100%)!important;backdrop-filter:none!important;opacity:1;transition:opacity .55s ease;overflow:auto}
+#menu:before{content:none!important}
+#menu .start-shell{position:absolute!important;left:6vw!important;right:auto!important;top:12vh!important;bottom:13vh!important;transform:none!important;margin:0!important;padding:0!important;width:min(370px,calc(100vw - 60px))!important;max-width:none!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:space-between!important;gap:32px!important;text-align:left!important}
+#menu .start-identity{display:block!important;text-align:left!important;margin:0!important;padding:0!important}
+#menu h1{font:400 clamp(42px,5.1vw,68px)/1.1 VoxelPixel,monospace!important;letter-spacing:0!important;text-shadow:0 3px 0 #101a1422!important;color:#ede4cc!important;margin:0!important}
+#menu .wordmark-sub{display:block!important;margin:8px 0 0!important;text-align:left!important}#menu .wordmark-sub b{font:500 10px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;letter-spacing:9px!important;color:#c8b98e!important}
+#menu .start-actions{width:100%!important;padding:0!important;margin:0!important;background:none!important;border:0!important;box-shadow:none!important;position:static!important;display:block!important;min-height:0!important;text-align:left!important}
+#menu #menu-main-actions{width:100%;text-align:left!important}
+#menu #start-title{font:500 21px/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;letter-spacing:-.5px!important;color:#eee8d7!important;text-shadow:none!important;text-align:left!important;margin:0 0 8px!important}
+#menu #start-summary{font:400 13px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;color:#bbbfae!important;letter-spacing:0!important;text-align:left!important;margin:0 0 24px!important}
+#menu .menu-play{display:flex!important;align-items:center!important;justify-content:space-between!important;width:100%!important;padding:17px 20px!important;min-height:54px!important;margin:0 0 15px!important;background:#e2d5b5!important;color:#23352b!important;border:1px solid #f1e5c9!important;border-radius:2px!important;box-shadow:0 4px 18px #0002!important;font:600 14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;text-align:left!important;transition:background .16s ease,transform .16s ease!important}
+#menu .menu-play:hover{background:#f1e5c9!important;transform:translateY(-1px)}#menu .menu-play>span{font:21px sans-serif!important;color:#4f624e}
+#menu .menu-link{display:flex!important;align-items:center;justify-content:space-between;width:100%!important;min-height:34px;padding:8px 0!important;margin:0!important;background:none!important;border:0!important;border-bottom:1px solid #b9ba9b22!important;box-shadow:none!important;color:#d6d9c9!important;border-radius:0!important}
+#menu .menu-link b{font:400 12px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important}#menu .menu-link small{font:10px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;color:#aab39c!important;margin-top:3px!important}#menu .menu-link>span:last-child{font:16px sans-serif!important;color:#9ca88e}
+#menu .shift-card,#menu .save-note,#menu #start-exchange{display:none!important}
+#menu .title-topline{display:flex!important;position:absolute;top:32px;left:auto;right:34px;gap:16px;padding:0!important;font:500 9px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;letter-spacing:2px;color:#c9c9ae!important;opacity:.7}
+#menu .title-topline .title-status{font:inherit!important;border:0!important;padding:0!important;background:none!important}
+#menu .title-footer{display:block!important;position:absolute;bottom:25px;right:34px;left:auto;font:9px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;color:#b1b99d!important;letter-spacing:1px!important;text-align:right}
+#menu #reset-character.menu-reset-anchor{display:flex!important;position:absolute;left:6vw;bottom:24px;width:auto!important;min-height:26px;margin:0!important;padding:0!important;border:0!important;color:#9faa92!important;opacity:.7}
+#menu #reset-character small,#menu #reset-character>span:last-child{display:none!important}#menu #reset-character b{font-size:10px!important}
+#menu .setting-intro,#menu .setting-toggle b,#menu .setting-range label,#menu .control-list span{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;line-height:1.5!important}
+.entering-game #menu{opacity:0!important;pointer-events:none!important}.entering-game #menu *{pointer-events:none!important}
+.fallback-look.quiet-intake .control-strip:after{content:'RMB  Look';white-space:nowrap}
+@media(max-width:650px){#menu .start-shell{top:14vh!important;bottom:17vh!important;left:7vw!important;width:86vw!important;gap:25px!important}#menu h1{font-size:46px!important}#menu .title-topline{top:22px;right:7vw;font-size:8px!important}#menu .title-footer{font-size:8px!important;bottom:20px;right:7vw}#menu #reset-character.menu-reset-anchor{bottom:45px;left:7vw}#menu #start-title{font-size:19px!important}}
+@media(prefers-reduced-motion:reduce){#menu{transition-duration:.1s!important}}
+#menu [hidden]{display:none!important}
+#menu h1{text-align:left!important}
+#menu .title-topline{top:32px!important;left:auto!important;right:34px!important;width:auto!important;max-width:none!important;transform:none!important;justify-content:flex-end!important}
+.first-shift .next-order,.first-shift .tool-chip{display:none!important}
+#menu .start-shell{height:75vh!important;align-self:auto!important}
+#menu:has(#menu-settings:not([hidden])) .start-shell,#menu:has(#menu-controls:not([hidden])) .start-shell{gap:18px!important;justify-content:flex-start!important}
+#menu:has(#menu-settings:not([hidden])) h1,#menu:has(#menu-controls:not([hidden])) h1{font-size:36px!important}
+#menu #menu-settings,#menu #menu-controls{max-height:calc(75vh - 100px);overflow:auto;padding-right:8px}
+#menu .start-actions h2{font:500 22px/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;text-align:left!important;letter-spacing:-.4px!important;margin:12px 0!important}
+#menu .menu-back{margin:0 0 18px!important;text-align:left;font:11px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;color:#c9c9ae}
+#menu .setting-range,#menu .setting-toggle{padding:11px 0!important;border-bottom:1px solid #b9ba9b22!important}#menu .setting-toggle small{font:11px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;color:#aab39c!important}
+#menu .setting-intro,#menu #menu-settings>.eyebrow,#menu #menu-controls>.eyebrow{display:none!important}
+#menu #menu-settings,#menu #menu-controls{scrollbar-width:thin;scrollbar-color:#85957c transparent;overscroll-behavior:contain}
+#menu #menu-settings::-webkit-scrollbar,#menu #menu-controls::-webkit-scrollbar{width:4px}#menu #menu-settings::-webkit-scrollbar-thumb,#menu #menu-controls::-webkit-scrollbar-thumb{background:#85957c;border-radius:3px}
