@@ -103,3 +103,45 @@ body.combat-contact::after{content:'×';position:fixed;left:50%;top:50%;transfor
 .new-prison .forest-card,.new-prison .axe-workshop,.new-prison #weapon-forge,.new-prison [data-tool-slot=axe],.new-prison [data-tool-slot=sword],.new-prison [data-tool-slot=bow]{display:none!important}
 
 .new-prison.timber-commissioned .forest-card,.new-prison.timber-commissioned .axe-workshop{display:block!important}.new-prison.timber-commissioned [data-tool-slot=axe]{display:flex!important}
+
+/* Arrival: quiet signage and contextual dialogue, at the player's scale. */
+#intake-objective{position:fixed;left:50%;top:25px;right:auto;bottom:auto;transform:translateX(-50%);width:max-content;max-width:calc(100vw - 300px);padding:0;text-align:center;background:none;border:0;box-shadow:none;color:#f0e8d5;text-shadow:0 2px 12px #0009;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;pointer-events:none}
+#intake-objective small{display:block;margin:0 0 7px;font:500 9px/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:2.5px;color:#dfcfab}
+#intake-objective strong{display:block;font:500 15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.2px}
+#intake-objective span{display:block;margin:12px 0 0;font:12px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#e7ddc5}
+#intake-objective span:empty{display:none}
+#intake-objective kbd{padding:3px 6px;margin-right:6px;background:#ddd5bf;color:#2c3735;text-shadow:none;border:0;border-radius:2px;font:600 11px sans-serif}
+.intake-caption{position:fixed;z-index:15;bottom:100px;left:50%;transform:translateX(-50%);max-width:560px;width:calc(100% - 64px);box-sizing:border-box;padding:13px 20px 14px;background:#222d29eb;border:1px solid #aa9a7045;border-radius:3px;text-align:center;pointer-events:none;box-shadow:0 8px 30px #0002;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.intake-caption[hidden],#intake-objective[hidden]{display:none!important}
+.intake-caption small{font:500 9px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:2px;color:#d2bd8c}
+.intake-caption p{font:400 14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#ece6d4;margin:5px 0 0}
+body:has(#menu:not([hidden])) .intake-caption{display:none}
+.quiet-intake .next-order,.quiet-intake .mine-badge,.quiet-intake .credit-chip,.quiet-intake .tool-chip,.quiet-intake .satchel-chip,.quiet-intake #shift-clock,.quiet-intake .prison-route,.quiet-intake .control-strip{display:none!important}
+.quiet-intake .voxel-mark{background:none;border:0;padding:0;box-shadow:none}
+.quiet-intake .voxel-mark small,.quiet-intake .brand-cube{display:none}
+.quiet-intake .voxel-mark b{font-size:20px;color:#e4d6b2}
+.quiet-intake .hud-top{top:25px;left:28px}
+.quiet-intake .voxel-hotbar .hotbar-slot:not([data-tool-slot=pick]){display:none}
+.quiet-intake .voxel-hotbar{background:none;box-shadow:none;border:0}
+.quiet-intake .hotbar-slot{width:48px;height:48px;opacity:.85;background:#25312ce0;border:1px solid #b5a37d60;box-shadow:none}
+.quiet-intake .hotbar-slot img{width:34px;height:34px}
+.quiet-intake .hotbar-slot small{display:none}
+@media(max-width:700px){#intake-objective{top:22px;max-width:calc(100vw - 160px);left:calc(50% + 45px)}#intake-objective strong{font-size:12px}.quiet-intake .voxel-mark b{font-size:15px}.intake-caption{bottom:82px;font-size:12px}}
+#intake-objective{padding:11px 20px 12px;background:#21322be0;border:1px solid #d7cda526;border-radius:3px;box-shadow:0 4px 22px #0001;text-shadow:none}
+.quiet-intake #skill-shortcut{display:none!important}
+.quiet-intake .control-strip{display:flex!important;gap:18px;background:none;border:0;padding:0;color:#ece6d0b3;font:10px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.quiet-intake .control-strip span:nth-child(3),.quiet-intake .control-strip span:nth-child(4){display:none}
+.quiet-intake .control-strip:before{content:'WASD  Move';white-space:nowrap}
+.quiet-intake .control-strip kbd{font:9px monospace;background:#24342d55;border:1px solid #c9c6ae55;box-shadow:none}
+.quiet-room .next-order,.quiet-room .mine-badge,.quiet-room .tool-chip,.quiet-room .satchel-chip,.quiet-room .prison-route,.quiet-room #skill-shortcut{display:none!important}
+.quiet-room .voxel-mark{background:none;border:0;padding:0;box-shadow:none}.quiet-room .voxel-mark small,.quiet-room .brand-cube{display:none}.quiet-room .voxel-mark b{font-size:20px;color:#e4d6b2}
+.arrival-menu .title-screen{background:linear-gradient(90deg,#132b2688,transparent 85%),linear-gradient(0deg,#1229229c,transparent 70%);backdrop-filter:none}
+.arrival-menu .title-screen:before{content:'VOXEL';position:fixed;top:35px;left:36px;color:#e9e2cb;font:23px VoxelPixel,monospace;letter-spacing:2px}
+.arrival-menu .title-topline,.arrival-menu .start-identity,.arrival-menu .title-footer,.arrival-menu .shift-card,.arrival-menu .save-note,.arrival-menu #start-exchange,.arrival-menu #reset-character{display:none!important}
+.arrival-menu .title-screen .start-shell{position:absolute;left:7vw;bottom:11vh;top:auto;right:auto;transform:none;display:block;width:min(500px,86vw);max-width:none;margin:0;padding:0;text-align:left}
+.arrival-menu .title-screen .start-actions{padding:0;background:none;border:0;box-shadow:none;text-align:left;width:100%}
+.arrival-menu .title-screen #start-title{font:500 clamp(38px,5.5vw,66px)/1.1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-2px;text-shadow:none;color:#f1ede0;margin:0 0 17px}
+.arrival-menu .title-screen #start-summary{font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#e5e6d8;margin:0 0 28px}
+.arrival-menu .title-screen .menu-play{display:flex;width:230px;min-height:48px!important;background:#e4d9bf!important;color:#253c35;border:1px solid #eee5d2;box-shadow:none;font:500 13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;padding:15px 20px!important}
+.arrival-menu .menu-link{display:inline-flex;width:auto;gap:15px;margin:0 20px 0 0;padding:7px 0;background:none;box-shadow:none;border:0;color:#dadfd0}
+.arrival-menu .menu-link b{font:12px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}

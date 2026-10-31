@@ -1,5 +1,5 @@
 import * as T from '../../vendor/three.module.js';
-import {TIMBER_FLOORS} from './foundry-timber-layout.js?v=82.3';
+import {TIMBER_FLOORS} from './foundry-timber-layout.js?v=83';
 export function buildFoundryTimber(w,{root,box,wall,roof,sign,lamp,guard,stone,iron,rust,wood,trim}){
  box(42,-3.5,-7,48,9,50,0x625e59);
  // The L: a long east-west saw works caps a north-south outdoor felling arm.
