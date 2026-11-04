@@ -1,9 +1,10 @@
-import {BlockFracture} from './block-fracture.js?v=86';
+import {swordCadence} from '../game/melee-impact.js?v=87';
+import {BlockFracture} from './block-fracture.js?v=87';
 import * as T from '../../vendor/three.module.js';
-import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=86';
-import {PICKS,miningCadence,choppingCadence} from '../game/rules.js?v=86';
-import {bowRig,applyBowRig} from './bow-motion.js?v=86';
-import {createShield} from './shield.js?v=86';
+import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=87';
+import {MELEE,PICKS,miningCadence,choppingCadence} from '../game/rules.js?v=87';
+import {bowRig,applyBowRig} from './bow-motion.js?v=87';
+import {createShield} from './shield.js?v=87';
 export class Feedback{
  constructor(scene){
  this.scene=scene;this.particles=[];this.geometry=new T.BoxGeometry(1,1,1);this.materials=new Map();this.reduced=false;this.phase=0;this.swinging=false;this.time=0;this.kick=0;this.equip=0;this.tier=-1;
@@ -14,7 +15,7 @@ export class Feedback{
  this.fracture=new BlockFracture(scene);
  }
 
- setTier(tier,kind='pick'){if(tier===this.tier&&kind===this.kind)return;if(this.tool){this.pivot.remove(this.tool);const mats=new Set();this.tool.traverse(o=>{o.geometry?.dispose();if(o.material)mats.add(o.material);});mats.forEach(m=>m.dispose());}this.tier=tier;this.kind=kind;this.tool=kind==='bow'?createBow(tier):kind==='sword'?createSword(tier):kind==='axe'?createAxe(tier):createPickaxe(tier);this.tool.scale.setScalar(kind==='bow'?BOW_SCALE:TOOL_SCALE);this.pivot.add(this.tool);this.equip=1;}
+ setTier(tier,kind='pick'){if(tier===this.tier&&kind===this.kind)return;if(this.tool){this.pivot.remove(this.tool);const mats=new Set();this.tool.traverse(o=>{o.geometry?.dispose();if(o.material)mats.add(o.material);});mats.forEach(m=>m.dispose());}if(kind!==this.kind){this.phase=0;this.swinging=false;this.contactStop=0;this.kick=0;}this.tier=tier;this.kind=kind;this.tool=kind==='bow'?createBow(tier):kind==='sword'?createSword(tier):kind==='axe'?createAxe(tier):createPickaxe(tier);this.tool.scale.setScalar(kind==='bow'?BOW_SCALE:TOOL_SCALE);this.pivot.add(this.tool);this.equip=1;}
  updateShield(dt,enabled,guard,tier=0){
  if(this.shieldTier!==tier){if(this.shield){this.shield.removeFromParent();const mats=new Set();this.shield.traverse(o=>{o.geometry?.dispose();if(o.material)mats.add(o.material);});mats.forEach(m=>m.dispose());}this.shield=createShield(tier);this.shield.scale.setScalar(.60);this.view.add(this.shield);this.shieldTier=tier;}
  this.shield.visible=enabled;if(!enabled)return;this.shieldRaise=(this.shieldRaise??0)+(Number(guard.held)-(this.shieldRaise??0))*(1-Math.exp(-dt*18));const up=this.shieldRaise,kick=this.reduced?0:Math.sin(Math.min(1,guard.flash/.24)*Math.PI)*.09;
@@ -55,6 +56,17 @@ export class Feedback{
   this.particles.push({m,v,life,maxLife:life,initial:m.scale.clone(),spin:new T.Vector3(6,9,3)});
  }
  }
+ meleeContact(point,source,tier=0,killed=false,armored=false){
+ const out=source.clone().sub(point).normalize(),side=new T.Vector3(-out.z,0,out.x),color=armored?0xffd48a:0xe2ddd0;
+ let mat=this.materials.get(color);if(!mat){mat=new T.MeshStandardMaterial({color,roughness:.5,emissive:color,emissiveIntensity:.45});this.materials.set(color,mat);}
+ const count=this.reduced?2:killed?16:9;
+ for(let i=0;i<count&&this.particles.length<160;i++){
+  const m=new T.Mesh(this.geometry,mat),size=.015+Math.random()*.018,life=this.reduced?.10:.12+Math.random()*.13;
+  m.scale.set(size, size*(armored?3:1.6),size);m.position.copy(point).addScaledVector(out,.025);m.rotation.set(i*.7,i*.4,.7);this.scene.add(m);
+  const v=out.clone().multiplyScalar(.9+Math.random()).addScaledVector(side,(Math.random()-.5)*(killed?5:3));v.y=.7+Math.random()*2.8;
+  this.particles.push({m,v,life,maxLife:life,initial:m.scale.clone(),spin:new T.Vector3(5,9,3)});
+ }
+ }
  treeBreak(tree){
  tree.visual.updateWorldMatrix(true,false);
  const leaves=tree.visual.children.filter(m=>m.userData.canopy),count=this.reduced?3:26;
@@ -65,21 +77,21 @@ export class Feedback{
  }
  }
  releaseBow(charge=1){this.bowRecoil=charge;this.bowReleaseAge=0;this.releasedCharge=charge;this.nockDelay=.24;}
- confirmHit(){this.contactStop=this.reduced?0:.035;this.kick=this.reduced?0:.65;}
+ confirmHit(killed=false){this.contactStop=this.reduced?0:killed?MELEE.killPause:MELEE.hitPause;this.kick=this.reduced?0:killed?.95:.70;this.impactFlash=killed?.18:.10;}
  update(dt,active,tier,moving=false,aim=null,kind='pick',power=PICKS[tier]?.power??1){
- this.setTier(tier,kind);this.bowReleaseAge=(this.bowReleaseAge??Infinity)+dt;this.bowRecoil=Math.max(0,(this.bowRecoil??0)-dt*8);this.nockDelay=Math.max(0,(this.nockDelay??0)-dt);this.time+=dt;this.impactFlash=Math.max(0,(this.impactFlash??0)-dt);this.equip=Math.max(0,this.equip-dt*2.8);this.kick=Math.max(0,this.kick-dt*9);let impact=false;
+ this.setTier(tier,kind);this.bowReleaseAge=(this.bowReleaseAge??Infinity)+dt;this.bowRecoil=Math.max(0,(this.bowRecoil??0)-dt*8);this.nockDelay=Math.max(0,(this.nockDelay??0)-dt);this.time+=dt;this.impactFlash=Math.max(0,(this.impactFlash??0)-dt);this.equip=Math.max(0,this.equip-dt*2.8);this.kick=Math.max(0,this.kick-dt*9);let impact=false;const contactHeld=(this.contactStop??0)>0;
  if(active&&!this.swinging){this.swinging=true;this.phase=0;}
- if(this.swinging){const before=this.phase;const step=this.contactStop>0?0:dt;this.contactStop=Math.max(0,(this.contactStop??0)-dt);this.phase+=step/(kind==='sword'?.50:kind==='pick'?miningCadence(power):kind==='axe'?choppingCadence(power):.42);impact=(before<.30&&this.phase>=.30)||this.phase>=1.30;if(this.phase>=1){this.phase=active?this.phase%1:0;this.swinging=active;}}
+ if(this.swinging){const before=this.phase;const step=this.contactStop>0?0:dt;this.contactStop=Math.max(0,(this.contactStop??0)-dt);this.phase+=step/(kind==='sword'?swordCadence(tier):kind==='pick'?miningCadence(power):kind==='axe'?choppingCadence(power):.42);impact=(before<.30&&this.phase>=.30)||this.phase>=1.30;if(this.phase>=1){this.phase=active?this.phase%1:0;this.swinging=active;}}
  const rig=kind==='bow'?bowRig(this.bowDraw??0,this.bowReleaseAge,this.releasedCharge,this.reduced):null;
- const renderPhase=impact?.30:this.phase,motion=this.reduced?.13:1,pose=heldPose(renderPhase,this.camera.aspect,motion,kind,rig?.stance??this.bowDraw??0,this.reduced?0:this.bowRecoil),bob=moving&&!this.reduced?Math.sin(this.time*10)*.004:0;
- this.pivot.position.fromArray(pose.position);this.pivot.position.y+=(kind==='bow'?bob*(1-(this.bowDraw??0)):bob)-(kind==='bow'?0:this.equip*.22);this.pivot.position.z+=this.kick*(kind==='pick'?.065:kind==='axe'?.075:.012);if(kind==='pick'||kind==='axe'){this.pivot.position.y+=this.kick*.016;}
+ const renderPhase=(impact||contactHeld)?.30:this.phase,motion=this.reduced?.13:1,pose=heldPose(renderPhase,this.camera.aspect,motion,kind,rig?.stance??this.bowDraw??0,this.reduced?0:this.bowRecoil),bob=moving&&!this.reduced?Math.sin(this.time*10)*.004:0;
+ this.pivot.position.fromArray(pose.position);this.pivot.position.y+=(kind==='bow'?bob*(1-(this.bowDraw??0)):bob)-(kind==='bow'?0:this.equip*.22);this.pivot.position.z+=this.kick*(kind==='pick'?.065:kind==='axe'?.075:kind==='sword'?.065:.012);if(kind==='pick'||kind==='axe'){this.pivot.position.y+=this.kick*.016;}
  if(kind==='bow'){applyBowRig(this.tool,rig);this.pivot.position.z+=rig.follow;if(!this.reduced&&this.bowDraw>=.999)this.pivot.position.y+=Math.sin(this.time*32)*.002;}
- this.pivot.rotation.fromArray([...pose.rotation,'XYZ']);if(kind==='pick'||kind==='axe')this.pivot.rotation.x-=this.kick*(kind==='axe'?.1:.08);if(kind!=='bow')this.pivot.rotation.z-=this.equip*.04;
+ this.pivot.rotation.fromArray([...pose.rotation,'XYZ']);if(kind==='pick'||kind==='axe'||kind==='sword')this.pivot.rotation.x-=this.kick*(kind==='axe'?.1:.08);if(kind!=='bow')this.pivot.rotation.z-=this.equip*.04;
  if(aim?.point&&this.swinging){
  const smooth=(a,b,x)=>{let t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t);};
  const contact=smooth(.16,.30,renderPhase)*(1-smooth(.34,.48,renderPhase));
  const solved=contactPivot(aim.point,aim.camera,this.camera,this.pivot.rotation,TOOL_SCALE,kind==='sword'?SWORD_TIP:kind==='axe'?AXE_TIP:CONTACT_TIP);
- const correction=solved.sub(this.pivot.position);correction.z=0;correction.clampLength(0,.055);
+ const correction=solved.sub(this.pivot.position);correction.z=0;correction.clampLength(0,kind==='sword'?.24:.055);
  this.pivot.position.addScaledVector(correction,contact*(this.reduced?.13:1));
  }
  // Gentle viewmodel lag only; locomotion and the camera never wait for a swing.

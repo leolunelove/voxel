@@ -1,4 +1,4 @@
-import {impactSound} from './impact-sound.js?v=86';
+import {impactSound} from './impact-sound.js?v=87';
 export class Audio{
  constructor(){this.context=null;this.muted=false;this.noise=null;this.variant=0;}
  unlock(){this.context??=new(window.AudioContext||window.webkitAudioContext)();this.context.resume();if(!this.master){this.master=this.context.createGain();this.master.gain.value=this.volume??.75;this.master.connect(this.context.destination);}if(!this.noise){const c=this.context;this.noise=c.createBuffer(1,c.sampleRate,c.sampleRate);const d=this.noise.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;}}
@@ -20,6 +20,7 @@ export class Audio{
  if(kind==='arrow-wall'){this.tone(t,145,.09,.025+type*.025,'triangle',58);this.grit(t,.055,.03+type*.03,850);return;}
  if(kind==='arrow-hit'||kind==='bullseye'){this.grit(t,.06,.09,650);this.tone(t,kind==='bullseye'?1046:740,.16,.045,'sine',kind==='bullseye'?1568:900);return;}
  if(kind==='bow-release'){this.tone(t,290,.045,.035+type*.035,'triangle',65);this.grit(t,.055,.045+type*.05,2600+type*700);this.tone(t+.012,440,.14,.012+type*.012,'sine',130);return;}
+ if(kind==='sword-hit'||kind==='sword-armor-hit'){const metal=kind==='sword-armor-hit',pitch=1+(this.variant++%3-1)*.035;this.grit(t,.018,.065,metal?3900:2500,'highpass',.001);this.tone(t,(metal?150:115)*pitch,.105,.07,'triangle',metal?58:42,.001);this.grit(t+.008,.07,.045,metal?1350:580);if(metal)this.tone(t+.003,1820*pitch,.12,.03,'sine',930,.001);return;}
  if(kind==='swoosh'){this.grit(t,.075,.035,1800);return;}
  if(kind==='strike'){this.tone(t,145,.09,.065,'triangle',65);this.grit(t,.055,.09,750);this.tone(t+.004,1260,.09,.018,'sine',820);return;}
  if(kind==='hurt'){this.tone(t,88,.14,.06,'triangle',42);this.grit(t,.1,.055,340);return;}

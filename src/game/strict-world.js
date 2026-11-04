@@ -1,10 +1,10 @@
 import * as T from '../../vendor/three.module.js';
-import {CampWorld} from './camp.js?v=86';
-import {MINE_STAGES,FOREST_STAGES,inside,stairTop} from './camp-rules.js?v=86';
-import {keyOf} from './world.js?v=86';
-import {conservatoryFloor,inServiceFootprint,inConservatory,inServicePassage} from './conservatory-layout.js?v=86';
-import {trainingAccess} from './training-layout.js?v=86';
-import {PRISON_SPAWN,intakeFloor,yardFloor,lowerFloor,lowerFootprint,lowerPassage,dutyWing,dutyPassage,inCells} from './strict-layout.js?v=86';
+import {CampWorld} from './camp.js?v=87';
+import {MINE_STAGES,FOREST_STAGES,inside,stairTop} from './camp-rules.js?v=87';
+import {keyOf} from './world.js?v=87';
+import {conservatoryFloor,inServiceFootprint,inConservatory,inServicePassage} from './conservatory-layout.js?v=87';
+import {trainingAccess} from './training-layout.js?v=87';
+import {PRISON_SPAWN,intakeFloor,yardFloor,lowerFloor,lowerFootprint,lowerPassage,dutyWing,dutyPassage,inCells} from './strict-layout.js?v=87';
 export class StrictPrisonWorld extends CampWorld{
  constructor(scene){super(scene,{campus:'strict'});this.layout.spawn=PRISON_SPAWN;}
  syncTrainingAccess(hunt={},instant=false){this.huntProgress=hunt;for(const g of this.trainingGates??[]){g.open=g.wing.key==='dungeon'?(this.state?.mined>=120||(hunt?.dungeonXP??0)>0):trainingAccess(this.state??{mined:0},hunt,g.wing);if(instant)g.lift=g.open?5.4:0;}this.refreshBlockers();}

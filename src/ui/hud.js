@@ -1,8 +1,8 @@
-import {swordDamage} from '../game/hunt-rules.js?v=86';
-import {SWORDS,BOWS} from '../game/weapons.js?v=86';
-import {toolIcon} from '../engine/pickaxe.js?v=86';
-import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=86';
-import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=86';
+import {swordDamage} from '../game/hunt-rules.js?v=87';
+import {SWORDS,BOWS} from '../game/weapons.js?v=87';
+import {toolIcon} from '../engine/pickaxe.js?v=87';
+import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=87';
+import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=87';
 
 const fmt=n=>n.toLocaleString();
 const swatch=b=>'<i class="ore-gem" style="--ore:#'+b.color.toString(16).padStart(6,'0')+'"></i>';
@@ -17,7 +17,7 @@ export class HUD{
   <aside class="next-order"><small>NEXT UNLOCK</small><b id="goal"></b><div class="meter"><span id="rank-meter"></span></div><span id="goal-detail"></span><kbd>E</kbd><em>Pay Office</em></aside>
   <div id="prison-route" class="prison-route"></div><div id="crosshair"><span></span><span></span><span></span><span></span></div>
   <div id="target" hidden><b id="block-name"></b><div class="meter"><span id="damage"></span></div></div>
-  <div id="pickup-slip" aria-hidden="true"></div><aside id="tree-payoff" role="status" aria-live="polite"></aside>
+  <div id="pickup-slip" aria-hidden="true"></div><aside id="tree-payoff" role="status" aria-live="polite"></aside><span id="melee-hit" aria-hidden="true"></span><aside id="combat-payoff" role="status" aria-live="polite"></aside>
   <footer class="hud-bottom"><div class="tool-chip"><span class="tool-icon">⛏</span><div><small>AUTO TOOL</small><b id="pick-name"></b><span id="pick-power"></span></div></div>
    <div class="voxel-hotbar" aria-hidden="true"><div class="hotbar-slot selected" data-tool-slot="pick"><img id="slot-pick" alt=""><small>PICK</small></div><div class="hotbar-slot" data-tool-slot="axe"><img id="slot-axe" alt=""><small>AXE</small></div><div class="hotbar-slot" data-tool-slot="sword"><svg viewBox="0 0 16 16"><path fill="#c8d6cf" d="M7 1h2v8H7z"/><path fill="#e6eddf" d="M7 0h1v8H7z"/><path fill="#d7b875" d="M4 9h8v2H4z"/><path fill="#714b29" d="M7 11h2v4H7z"/></svg><small>SWORD</small></div><div class="hotbar-slot" data-tool-slot="bow"><svg viewBox="0 0 16 16"><path fill="none" stroke="#bb8d53" stroke-width="2" d="M5 1L9 4L11 8L9 12L5 15"/><path fill="none" stroke="#e4d7b5" d="M5 1v14"/></svg><small>BOW</small></div><div class="hotbar-slot bag-slot"><svg viewBox="0 0 16 16"><path fill="#392d1e" d="M1 4h14v10H1z"/><path fill="#a4773b" d="M2 5h12v8H2z"/><path fill="#d6ae63" d="M1 4h14v4H1z"/><path fill="#684c2b" d="M2 8h12v1H2z"/><path fill="#f0d697" d="M7 7h2v4H7z"/></svg><small id="bag-mini">0</small></div></div><div class="satchel-chip"><div><b>Your haul</b><span id="bag-count"></span></div><div class="meter"><span id="bag-fill"></span></div><small id="bag-value"></small></div>
    <div class="control-strip"><span><kbd>SPACE</kbd> Jump</span><span><kbd>SHIFT</kbd> Sprint</span><span><kbd>E</kbd> Exchange</span><span><kbd>R</kbd> Yard</span><span><kbd>ESC</kbd> Pause</span></div></footer>
@@ -82,6 +82,8 @@ export class HUD{
  }
  location(area,level){this.area=area;this.set('hud-rank','L'+level);this.set('hud-mine',area===7?'The Underblock':area===6?'Bow Range':area===8?'Dungeon Entrance':area===5?'Containment Detail':area===4?'The Timber Detail':area===12?'Intake / Records':area===13?'Cellblock A':area===9?'Service Passage':area===10?'Containment Passage':area===11?'Armoury Passage':area===0?'The Deepwell':'Work Yard');this.set('hud-wing','Block 07 / Level '+level);}
  tool(kind,s,skills=this.combatSkills??{sword:0,bow:0}){this.combatSkills=skills;const key=kind+':'+(kind==='bow'?skills.bow:kind==='sword'?skills.sword:kind==='axe'?s.axe:s.pick)+':'+(kind==='sword'?skills.xp:0);if(this.toolKey===key)return;this.toolKey=key;document.querySelectorAll('[data-tool-slot]').forEach(el=>el.classList.toggle('selected',el.dataset.toolSlot===kind));if(kind==='bow'){this.set('pick-name',BOWS[skills.bow].name);this.set('pick-power',BOWS[skills.bow].damage+' damage / '+BOWS[skills.bow].draw+'s draw');document.querySelector('[data-tool-slot=bow] svg path').setAttribute('stroke','#'+BOWS[skills.bow].trim.toString(16));return;}if(kind==='sword'){this.set('pick-name',SWORDS[skills.sword].name);this.set('pick-power',swordDamage(skills.xp,skills.sword)+' damage / hold to strike');document.querySelector('[data-tool-slot=sword] svg path').setAttribute('fill','#'+SWORDS[skills.sword].color.toString(16));return;}const t=kind==='axe'?AXES[s.axe]:PICKS[s.pick];this.set('pick-name',t.name);this.set('pick-power',t.power.toFixed(2)+'× '+(kind==='axe'?'cutting':'mining')+' power');}
+ meleeHit(damage,killed=false){const el=document.getElementById('melee-hit');clearTimeout(this.meleeTimer);el.textContent='−'+damage;el.classList.toggle('finisher',killed);el.classList.add('visible');this.meleeTimer=setTimeout(()=>el.classList.remove('visible'),killed?700:430);}
+ monsterDefeated(stats){const el=document.getElementById('combat-payoff');clearTimeout(this.combatTimer);el.replaceChildren();for(const [tag,text] of [['small','CONTAINMENT / THREAT ELIMINATED'],['strong',stats.name],['span','+'+stats.xp+' ATTACK XP · +'+stats.value+' CR'],['em','LOOT AT RISK / EXIT TO BANK']]){const child=document.createElement(tag);child.textContent=text;el.append(child);}el.classList.add('visible');this.combatTimer=setTimeout(()=>el.classList.remove('visible'),1800);}
  wayfinding(text){this.set('prison-route',text);}
  set(id,value){document.getElementById(id).textContent=value;}
  update(s){

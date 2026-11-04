@@ -184,3 +184,24 @@ body:has(#menu:not([hidden])) .intake-caption{display:none}
 #tree-payoff.visible{opacity:1;transform:translate(-50%,0)}#tree-payoff small{display:block;font-size:9px;letter-spacing:3px;color:#c4cc9e}#tree-payoff strong{display:block;font-size:24px;letter-spacing:1px;margin:7px 0}#tree-payoff span{font-size:10px;color:#d4bd80}.modal-open #tree-payoff{display:none}
 @media(prefers-reduced-motion:reduce){#tree-payoff{transition:none;transform:translate(-50%,0)}}
 .reduced-motion #tree-payoff{transition:none;transform:translate(-50%,0)}
+
+/* Contact feedback stays close to the aim; the monster and route remain clear. */
+#melee-hit{position:fixed;left:calc(50% + 24px);top:calc(50% - 30px);color:#fff0cc;font:700 18px var(--pixel-font,monospace);text-shadow:2px 2px #171b1d;opacity:0;pointer-events:none;transform:translateY(5px);transition:opacity .09s,transform .15s;z-index:12}
+#melee-hit.visible{opacity:1;transform:translateY(-5px)}#melee-hit.finisher{color:#f7c674;font-size:22px}
+#combat-payoff{position:fixed;left:50%;top:59%;transform:translate(-50%,8px);opacity:0;pointer-events:none;display:grid;gap:6px;text-align:center;color:#f4dfb8;text-shadow:0 2px 3px #101513;font-family:monospace;z-index:12;transition:opacity .14s,transform .18s;white-space:nowrap}
+#combat-payoff.visible{opacity:1;transform:translate(-50%,0)}#combat-payoff small{font-size:9px;letter-spacing:2px;color:#c3b59d}#combat-payoff strong{font-size:21px;text-transform:uppercase;letter-spacing:1px}#combat-payoff span{font-size:12px;color:#f3c16b}#combat-payoff em{font-size:9px;font-style:normal;letter-spacing:1px;color:#cfb896}
+.modal-open #combat-payoff,.modal-open #melee-hit{display:none}.reduced-motion #combat-payoff,.reduced-motion #melee-hit{transition:none}
+@media(prefers-reduced-motion:reduce){#combat-payoff,#melee-hit{transition:none}}
+
+.new-prison.combat-commissioned [data-tool-slot=sword],.new-prison.combat-commissioned [data-tool-slot=bow]{display:grid!important}
+.new-prison.combat-commissioned #weapon-forge{display:grid!important}
+.new-prison.combat-commissioned #weapon-forge .weapon-card:last-child{display:none}
+
+/* Keep live threats visible: no arrival banner or mining order across a fight. */
+.in-combat .next-order{display:none}
+.in-combat #region-arrival{top:13%;width:min(380px,55vw);padding:9px}
+.in-combat #region-arrival strong{font-size:18px;letter-spacing:1px}
+.in-combat #region-arrival small{font-size:8px;letter-spacing:2px;margin-bottom:5px}
+.in-combat #region-arrival span{display:none}
+.melee-equipped #target{top:auto;bottom:178px;transform:translateX(-50%);width:max-content;max-width:70vw;min-width:0;padding:4px 8px;background:#202126b8;border:0}
+.melee-equipped #target .meter{display:none}

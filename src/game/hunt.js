@@ -1,11 +1,13 @@
-import {ATTACK_OFFSET} from './training-layout.js?v=86';
-import {arrowImpact,impactRecoil,pushDistance} from './arrow-impact.js?v=86';
+import {MELEE} from './rules.js?v=87';
+import {meleeImpact,deathPose} from './melee-impact.js?v=87';
+import {ATTACK_OFFSET} from './training-layout.js?v=87';
+import {arrowImpact,impactRecoil,pushDistance} from './arrow-impact.js?v=87';
 import * as T from '../../vendor/three.module.js';
-import {MONSTERS,swordDamage,reward,hurt,inHunt,MAX_HP} from './hunt-rules.js?v=86';
-import {dressWarden,animateWarden} from './warden.js?v=86';
-import {clearArrows,updateArrows} from './embedded-arrows.js?v=86';
-import {dressMonster,animateMonster} from './monster-look.js?v=86';
-import {CombatLoot} from './combat-loot.js?v=86';
+import {MONSTERS,swordDamage,reward,hurt,inHunt,MAX_HP} from './hunt-rules.js?v=87';
+import {dressWarden,animateWarden} from './warden.js?v=87';
+import {clearArrows,updateArrows} from './embedded-arrows.js?v=87';
+import {dressMonster,animateMonster} from './monster-look.js?v=87';
+import {CombatLoot} from './combat-loot.js?v=87';
 export class Hunt{
  constructor(scene,state,options={}){this.loot=new CombatLoot(scene);this.options=options;this.bounds=options.bounds??[-1.5,13.5,34,46];this.state=state;this.enemies=[];this.targets=[];this.inside=false;this.damageFlash=0;
   for(const [i,x,z,type]of (options.spawns??[[0,2,39,0],[1,10,40,0],[2,6,44,1]])){
@@ -21,15 +23,15 @@ export class Hunt{
  dispose(){this.loot.dispose();const geometries=new Set(),materials=new Set();for(const e of this.enemies){clearArrows(e);e.root.removeFromParent();e.root.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material)materials.add(o.material);});}geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());this.targets=[];}
  reset(){this.loot.clear();for(const e of this.enemies){clearArrows(e);e.hp=e.stats.hp;e.body.material.color.setHex(e.stats.color);if(e.look){e.look.armor.emissiveIntensity=0;e.look.hitTime=0;}if(e.warden)e.warden.steel.emissiveIntensity=0;e.root.position.set(e.x,1,e.z);e.root.rotation.set(0,0,0);e.root.visible=true;e.dead=false;e.windup=0;e.cooldown=1.1;e.hit=0;e.impactDirection=null;e.impactStrength=0;e.stagger=0;e.lunge=0;e.death=0;e.push.set(0,0);e.tell.visible=false;if(e.look){e.look.bar.visible=false;e.look.head.rotation.set(0,0,0);}e.body.rotation.set(0,0,0);e.arms.forEach(a=>a.rotation.set(0,0,0));e.root.scale.setScalar(1);}}
  strike(e,source=null,damage=null,skill='attack',impact=null){if(!e||e.dead||this.state.hp<=0)return false;
-  const ranged=skill==='archery',contact=ranged?arrowImpact(impact?.charge??1,e.type===1,!!e.stats.boss):null;
+  const ranged=skill==='archery',contact=ranged?arrowImpact(impact?.charge??1,e.type===1,!!e.stats.boss):meleeImpact(this.state.sword??0,e.type===1,!!e.stats.boss);
   e.hp=Math.max(0,e.hp-(damage??swordDamage(this.state.xp,this.state.sword??0)));e.hitDuration=contact?.duration??.18;e.hit=e.hitDuration;e.impactStrength=contact?.strength??1;e.stagger=contact?.stagger??(e.stats.boss?0:e.type===1?.13:.22);
   if(!e.stats.boss){e.windup=0;e.lunge=0;e.cooldown=Math.max(e.cooldown,e.stagger+.22);e.tell.visible=false;}
   const direction=impact?.velocity?new T.Vector2(impact.velocity.x,impact.velocity.z):source?new T.Vector2(e.root.position.x-source.x,e.root.position.z-source.z):new T.Vector2(0,1);if(direction.lengthSq()<.001)direction.set(0,1);direction.normalize();e.push.copy(direction).multiplyScalar(contact?.push??(e.stats.boss?.5:e.type===1?3:5));
-  e.impactDirection=direction.clone();
-  if(e.hp===0){e.deathOrigin=e.root.position.clone();e.deathDirection=new T.Vector3(e.push.x,0,e.push.y).normalize();this.loot.burst(e.root.position.clone().add(new T.Vector3(0,.9,0)),e.stats.boss);if(e.look)e.look.bar.visible=false;e.tell.visible=false;e.dead=true;e.respawn=9;e.death=e.stats.boss?1.1:.45;reward(this.state,e.type,skill,e.stats);return true;}return false;}
+  e.impactDirection=direction.clone();const side=direction.x*Math.cos(e.root.rotation.y)-direction.y*Math.sin(e.root.rotation.y);e.impactSide=Math.abs(side)>.1?Math.sign(side):1;
+  if(e.hp===0){e.deathOrigin=e.root.position.clone();e.deathDirection=new T.Vector3(e.push.x,0,e.push.y).normalize();this.loot.burst(e.root.position.clone().add(new T.Vector3(0,.9,0)),e.stats.boss);if(e.look)e.look.bar.visible=false;e.tell.visible=false;e.dead=true;e.respawn=9;e.death=e.stats.boss?1.1:MELEE.deathDuration;reward(this.state,e.type,skill,e.stats);return true;}return false;}
  update(dt,position,reduced=false){this.damageFlash=Math.max(0,this.damageFlash-dt*3);const active=this.options.active?this.options.active(position):inHunt(position);let defeated=false;this.loot.update(dt,position,reduced);for(const e of this.enemies)updateArrows(e,dt,reduced);
   if(!active){this.state.hp=Math.min(MAX_HP,this.state.hp+dt*15);return {defeated};}
-  for(const e of this.enemies){const m=e.stats,b=this.options.boundsFor?this.options.boundsFor(e):this.bounds;if(e.dead){e.death=Math.max(0,e.death-dt);const fall=1-e.death/(m.boss?1.1:.45);const collapse=fall*fall*(3-2*fall);e.root.rotation.z=collapse*(e.type===0?1.6:1.2);e.root.rotation.x=collapse*.35;if(e.deathOrigin){e.root.position.copy(e.deathOrigin).addScaledVector(e.deathDirection,collapse*(m.boss?.2:.5));e.root.position.x=Math.max(b[0],Math.min(b[1],e.root.position.x));e.root.position.z=Math.max(b[2],Math.min(b[3],e.root.position.z));}e.root.position.y=1-collapse*.55;e.arms.forEach((a,i)=>a.rotation.z=(i===0?-1:1)*collapse*.5);e.root.scale.setScalar(Math.max(.02,1-Math.max(0,(fall-.6)/.4)*.95));if(e.death===0||reduced)e.root.visible=false;e.respawn-=dt;if(this.options.respawn!==false&&e.respawn<=0&&Math.hypot(position.x-e.x,position.z-e.z)>3){clearArrows(e);e.dead=false;e.hp=m.hp;e.root.position.set(e.x,1,e.z);e.root.rotation.set(0,0,0);e.root.scale.setScalar(1);e.root.visible=true;e.cooldown=1.2;e.hit=0;e.stagger=0;e.lunge=0;e.windup=0;e.push.set(0,0);}continue;}
+  for(const e of this.enemies){const m=e.stats,b=this.options.boundsFor?this.options.boundsFor(e):this.bounds;if(e.dead){e.death=Math.max(0,e.death-dt);const fall=1-e.death/(m.boss?1.1:MELEE.deathDuration),pose=deathPose(fall,!!m.boss),collapse=pose.collapse;e.root.rotation.z=collapse*(e.type===0?.75:.55)*(e.impactSide??1);e.root.rotation.x=-collapse*(m.boss?.55:.92);if(e.deathOrigin){e.root.position.copy(e.deathOrigin).addScaledVector(e.deathDirection,pose.slide);e.root.position.x=Math.max(b[0],Math.min(b[1],e.root.position.x));e.root.position.z=Math.max(b[2],Math.min(b[3],e.root.position.z));}e.root.position.y=1-pose.sink+pose.kick;e.arms.forEach((a,i)=>a.rotation.z=(i===0?-1:1)*collapse*.5);e.root.scale.setScalar(Math.max(.02,pose.scale));if(e.death===0||reduced)e.root.visible=false;e.respawn-=dt;if(this.options.respawn!==false&&e.respawn<=0&&Math.hypot(position.x-e.x,position.z-e.z)>3){clearArrows(e);e.dead=false;e.hp=m.hp;e.root.position.set(e.x,1,e.z);e.root.rotation.set(0,0,0);e.root.scale.setScalar(1);e.root.visible=true;e.cooldown=1.2;e.hit=0;e.stagger=0;e.lunge=0;e.windup=0;e.push.set(0,0);e.body.rotation.set(0,0,0);e.arms.forEach(a=>a.rotation.set(0,0,0));e.legs.forEach(l=>l.rotation.set(0,0,0));if(e.look){e.look.head.rotation.set(0,0,0);e.look.armor.emissiveIntensity=0;e.look.bar.visible=false;}}continue;}
    if(this.options.canAct&&!this.options.canAct(e,position))continue;
    e.root.position.x=Math.max(b[0],Math.min(b[1],e.root.position.x+e.push.x*pushDistance(dt)));e.root.position.z=Math.max(b[2],Math.min(b[3],e.root.position.z+e.push.y*pushDistance(dt)));e.push.multiplyScalar(Math.exp(-10*dt));e.stagger=Math.max(0,e.stagger-dt);e.lunge=Math.max(0,e.lunge-dt);
    const dx=position.x-e.root.position.x,dz=position.z-e.root.position.z,d=Math.hypot(dx,dz);e.hit=Math.max(0,e.hit-dt);if(e.stagger<=0)e.root.rotation.y=Math.atan2(dx,dz);e.body.rotation.z=impactRecoil(e.hit,e.hitDuration)*.12*(e.impactStrength??1);e.cooldown-=dt;

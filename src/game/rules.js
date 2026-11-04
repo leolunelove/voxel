@@ -1,3 +1,5 @@
+// Melee contact is one event per swing. Pauses belong to presentation only.
+export const MELEE={reach:3.05,cadence:.50,tierSpeed:.012,hitPause:.042,killPause:.060,deathDuration:.48};
 export const BLOCKS=[
 {id:'slate',name:'Slate',color:0x718382,toughness:.62,value:2},
 {id:'copper',name:'Copper',color:0xc88758,toughness:.88,value:5},

@@ -1,9 +1,9 @@
-import {terraceFloor} from './foundry-layout.js?v=86';
+import {terraceFloor} from './foundry-layout.js?v=87';
 // Human-scale architecture shared with reception; keep every prop off the walking lanes.
 export function buildWorkCourt(w,{a,box:B,wall:W,roof:R,lamp:L,guard:G,sign:S}){
  const steel=0x435751,wood=0x8c6745,amber=0xb99a60;
  // Four legible frontages around one compact court, with no ambiguous side exits.
- for(const [x,z,width,depth]of [[-8,8,.3,8],[-8,23,.3,14],[-.15,30,15.7,.3],[14.6,30,7,.3],[18,6,.3,4],[18,14.5,.3,5],[18,28.5,.3,3]])W(x,z,width,depth,4.5);
+ for(const [x,z,width,depth]of [[-8,8,.3,8],[-8,23,.3,14],[-.15,30,15.7,.3],[11.8,30,1.4,.3],[17.3,30,1.4,.3],[18,6,.3,4],[18,14.5,.3,5],[18,28.5,.3,3]])W(x,z,width,depth,4.5);
  // North facade makes Deepwell the first obvious landmark on entering the yard.
  W(-1.4,4,13.2,.5,4.8);W(13.4,4,9.2,.5,4.8);
  B(7,4.43,4,3.6,1.26,.5,steel,true);R(5,-2,28,12.8,6.05);W(-8.8,-2,.4,12.8,4.8);W(18.8,-2,.4,12.8,4.8);W(13.9,-8.2,9.8,.4,4.8);

@@ -1,4 +1,4 @@
-import {impactRecoil} from './arrow-impact.js?v=86';
+import {impactRecoil} from './arrow-impact.js?v=87';
 import * as T from '../../vendor/three.module.js';
 export function dressMonster(root,body,head,arms,type){
  const armor=new T.MeshStandardMaterial({color:type===1?0x515c66:0x3c533a,roughness:.8,metalness:type===1?.4:.05}),bone=new T.MeshLambertMaterial({color:0xc9be95}),dark=new T.MeshLambertMaterial({color:0x242d2a});
@@ -13,7 +13,7 @@ export function animateMonster(e,dt,reduced,distance){const v=e.look;if(!v)retur
  v.armor.emissive.setHex(e.hit>0?0xc38348:0);v.armor.emissiveIntensity=hit*1.1;
  if(reduced){v.head.rotation.set(0,0,0);e.body.rotation.set(0,0,0);e.root.position.y=1;e.legs.forEach(l=>l.rotation.x=0);return;}
  const crawl=e.type===0;e.root.position.y=1+(moving?Math.abs(Math.sin(e.timer))*(crawl?.055:.025):Math.sin(v.time*2)*.012);
- v.head.rotation.x=-recoil*.34+(e.windup>0?-charge*.22:e.lunge>0?.2:0);e.body.rotation.z=recoil*(crawl?.22:.13);e.body.rotation.x=(crawl?.1:0)-recoil*.12;
+ v.head.rotation.z=-recoil*.13*(e.impactSide??1);v.head.rotation.x=-recoil*.40+(e.windup>0?-charge*.22:e.lunge>0?.2:0);e.body.rotation.z=recoil*(crawl?.25:.17)*(e.impactSide??1);e.body.rotation.x=(crawl?.1:0)-recoil*.12;
  if(e.stagger>0){e.arms.forEach((a,i)=>{a.rotation.x=.65*recoil;a.rotation.z=(i===0?-1:1)*recoil*.3;});}
  else if(e.windup>0){e.arms.forEach((a,i)=>{a.rotation.x=-charge*(crawl?1.4:2.1);a.rotation.z=(i===0?-1:1)*charge*(crawl?.65:.16);});}
  else{e.arms.forEach((a,i)=>{a.rotation.z=0;if(moving)a.rotation.x=Math.sin(e.timer+i*Math.PI)*(crawl?.45:.24);});}

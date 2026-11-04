@@ -1,0 +1,6 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Voxel / local checkpoint contact study</title><link rel="stylesheet" href="../style.css?v=87"><link rel="stylesheet" href="../voxel-ui.css?v=87"><link rel="stylesheet" href="../menu.css?v=87"><canvas id="game" aria-label="First person voxel mine"></canvas><div id="interface"></div><script type="module">
+if(location.hostname!=='127.0.0.1'||location.port!=='4334')throw Error('Local QA only');
+// Same game and saved test character, with only the local home point moved to
+// a combat inspection point. No encounter, damage, movement or reward rules change.
+import {PRISON_SPAWN} from '../src/game/foundry-layout.js?v=87';PRISON_SPAWN.splice(0,3,24,2.65,46.5);await import('../src/main.js?v=87');
+</script></html>

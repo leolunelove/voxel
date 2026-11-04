@@ -1,6 +1,6 @@
-import {bowRig,applyBowRig} from './bow-motion.js?v=86';
-import {BOW_ROTATION,BOW_VIEW_SCALE,bowPosition} from './bow-space.js?v=86';
-import {SWORDS,BOWS} from '../game/weapons.js?v=86';
+import {bowRig,applyBowRig} from './bow-motion.js?v=87';
+import {BOW_ROTATION,BOW_VIEW_SCALE,bowPosition} from './bow-space.js?v=87';
+import {SWORDS,BOWS} from '../game/weapons.js?v=87';
 import * as T from '../../vendor/three.module.js';
 // Solid stepped tools with a square shaft, socket and tapered working edges.
 const PALETTES=[[0x566161,0xb9c3bc,0xe2e6da],[0x4c5657,0xc9d4cc,0xf1f3e8],[0x20594c,0x54c7a7,0xa0f1cf],[0x364e5f,0x92b8cc,0xd9edf2],[0x765a24,0xd4ac45,0xffdf83],[0x713e31,0xe18a59,0xffc388]];
@@ -82,7 +82,7 @@ export const CONTACT_TIP=new T.Vector3(0,.22,-.51);
 export const AXE_TIP=new T.Vector3(0,.245,-.44);
 export const SWORD_TIP=new T.Vector3(0,.715,0);
 export function swordSwingPose(phase){
- const keys=[[0,0,0,0,0,0,0],[.18,.035,.10,.05,.11,-.08,.20],[.30,-.08,-.06,-.23,-.44,.12,-.24],[.34,-.08,-.06,-.23,-.44,.12,-.24],[.50,.015,.055,.04,.08,-.025,.08],[.82,0,0,0,0,0,0],[1,0,0,0,0,0,0]];
+ const keys=[[0,0,0,0,0,0,0],[.18,.035,.10,.05,.11,-.08,.24],[.30,-.08,-.06,-.23,-.44,.12,-.30],[.34,-.08,-.06,-.23,-.44,.12,-.30],[.46,-.10,-.10,-.16,-.36,.08,-.34],[.60,.015,.055,.04,.08,-.025,.08],[.84,0,0,0,0,0,0],[1,0,0,0,0,0,0]];
  for(let i=1;i<keys.length;i++){const a=keys[i-1],b=keys[i];if(phase<=b[0]){let t=Math.max(0,(phase-a[0])/(b[0]-a[0]));t=i===2?t*t:t*t*(3-2*t);return a.slice(1).map((v,j)=>v+(b[j+1]-v)*t);}}return [0,0,0,0,0,0];
 }
 export function heldPose(phase,aspect,motion=1,kind='pick',draw=0,recoil=0){
@@ -103,7 +103,11 @@ export function heldPose(phase,aspect,motion=1,kind='pick',draw=0,recoil=0){
   let point=rest;
   for(let i=1;i<keys.length;i++){const a=keys[i-1],b=keys[i];if(phase<=b[0]){let u=Math.max(0,(phase-a[0])/(b[0]-a[0]));u=i===2?u*u:u*u*(3-2*u);point=a.slice(1).map((v,j)=>v+(b[j+1]-v)*u);break;}}
   for(let i=0;i<3;i++)position[i]=rest[i]+(point[i]-rest[i])*motion-tip.getComponent(i);
- }else{position[0]+=(-tip.x-position[0])*contact*motion;position[1]+=(-tip.y-position[1])*contact*motion;}
+ }else{
+  const rest=[Math.min(.36,halfWidth*.36),-.08,-2.12],keys=[[0,...rest],[.18,rest[0]+.045,.27,-2.03],[.30,0,0,-2.45],[.34,0,0,-2.45],[.46,-.065,-.12,-2.38],[.60,rest[0]*.5,.035,-2.12],[.84,...rest],[1,...rest]];
+  let point=rest;for(let i=1;i<keys.length;i++){const a=keys[i-1],b=keys[i];if(phase<=b[0]){let u=Math.max(0,(phase-a[0])/(b[0]-a[0]));u=i===2?u*u:u*u*(3-2*u);point=a.slice(1).map((v,j)=>v+(b[j+1]-v)*u);break;}}
+  for(let i=0;i<3;i++)position[i]=rest[i]+(point[i]-rest[i])*motion-tip.getComponent(i);
+ }
  return {position,rotation};
 }
 // Solve the viewmodel tip onto the aimed surface's screen position, independent
