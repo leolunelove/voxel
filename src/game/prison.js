@@ -1,9 +1,9 @@
 import * as T from '../../vendor/three.module.js';
-import {dressPrison,updatePrisonDetail} from './prison-detail.js?v=84';
-import {World,keyOf} from './world.js?v=84';
-import {LAYOUTS} from './layouts.js?v=84';
-import {MINES} from './rules.js?v=84';
-import {PRISON_SPAWN,WINGS,PATHS,GATES,onPath,wingAt,areaAt,gateOpen,prisonLevel} from './prison-layout.js?v=84';
+import {dressPrison,updatePrisonDetail} from './prison-detail.js?v=85';
+import {World,keyOf} from './world.js?v=85';
+import {LAYOUTS} from './layouts.js?v=85';
+import {MINES} from './rules.js?v=85';
+import {PRISON_SPAWN,WINGS,PATHS,GATES,onPath,wingAt,areaAt,gateOpen,prisonLevel} from './prison-layout.js?v=85';
 
 export class PrisonWorld{
  constructor(scene){

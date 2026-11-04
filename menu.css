@@ -1,0 +1,32 @@
+/* Block 07's front door: a prison booking record, iron bars and stamped paper. */
+#menu{background:linear-gradient(90deg,#151714ed,#171a16bd 43%,#17191455),linear-gradient(0deg,#15160fc9,transparent 60%)!important}
+#menu:after{content:'';position:absolute;inset:20px;border:1px solid #e3bd6a25;pointer-events:none;clip-path:polygon(0 0,8% 0,8% 1px,92% 1px,92% 0,100% 0,100% 100%,92% 100%,92% calc(100% - 1px),8% calc(100% - 1px),8% 100%,0 100%)}
+#menu .start-shell{left:8vw!important;top:15vh!important;height:70vh!important;width:min(390px,42vw)!important;bottom:auto!important;gap:32px!important}
+#menu h1{font-size:clamp(48px,6.2vw,82px)!important;color:#efd9a7!important;text-shadow:0 3px #6a4f2b!important;letter-spacing:-2px!important}
+#menu .wordmark-sub{border-top:1px solid #c9a76b55!important;padding-top:12px!important;margin-top:12px!important}#menu .wordmark-sub b{letter-spacing:13px!important;color:#b9ad92!important;font-size:11px!important}
+#menu .prison-seal{display:flex;gap:6px;width:45px;height:29px;margin-bottom:19px;border-top:3px solid #c5a162;border-bottom:3px solid #c5a162;transform:skewY(-8deg)}
+.prison-seal i{width:5px;height:100%;background:#c5a162}
+#menu #start-title{font-size:23px!important;font-weight:600!important;color:#f4ead8!important;max-width:340px}
+#menu #start-summary{color:#bdb5a1!important;font:12px/1.7 ui-monospace,monospace!important;margin-bottom:25px!important}
+#menu .menu-play{background:#cfa75f!important;color:#1e231d!important;border-color:#ebc887!important;box-shadow:inset 0 1px #ffe3a366,0 5px 0 #5c4727,0 9px 25px #0003!important;border-radius:0!important;text-transform:uppercase;letter-spacing:1px;font-size:12px!important;min-height:58px!important;margin-bottom:22px!important}
+#menu .menu-play:before{content:'01';font:12px ui-monospace,monospace;opacity:.55;margin-right:16px}#menu .menu-play:hover{background:#e3bd77!important}
+#menu .menu-link{justify-content:flex-start!important;gap:18px!important;min-height:39px!important;border-color:#b5a47f25!important}#menu #open-settings:before{content:'02';font:10px ui-monospace,monospace;color:#a48b5c}#menu #open-controls:before{content:'03';font:10px ui-monospace,monospace;color:#a48b5c}
+#menu .menu-link>span:last-child{margin-left:auto!important;color:#9b8a6a!important}#menu #reset-character{left:8vw!important}
+#menu .title-topline{color:#d4bd8f!important;opacity:.85!important;font:10px ui-monospace,monospace!important}
+.admission-docket{position:absolute;left:64%;top:50%;transform:translate(-30%,-50%) rotate(3deg);width:300px;box-sizing:border-box;padding:23px 25px 20px;color:#373a30;background:repeating-linear-gradient(0deg,#e0d3b2 0,#e0d3b2 3px,#dbceac 4px);box-shadow:9px 15px 0 #0002,0 25px 70px #0005;pointer-events:none;font:11px/1.5 ui-monospace,monospace;border:1px solid #f3e5bf;clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,0 100%);animation:docket-idle 16s ease-in-out infinite}
+.docket-heading{display:flex;justify-content:space-between;gap:15px;border-bottom:2px solid #4f5543;padding-bottom:13px;align-items:center}.docket-heading span{font-weight:800;font-size:15px}.docket-heading b{font-size:8px;letter-spacing:1px;text-align:right;max-width:76px}
+.docket-number{padding:22px 0 10px}.docket-number small{font-size:9px;letter-spacing:4px}.docket-number strong{display:block;font:400 67px/1.2 VoxelPixel,monospace;letter-spacing:-4px;color:#354033}
+.docket-barcode{height:19px;width:100%;background:repeating-linear-gradient(90deg,#414837 0 2px,transparent 2px 5px,#414837 5px 6px,transparent 6px 9px,#414837 9px 13px,transparent 13px 16px);opacity:.65;margin-bottom:22px}
+.admission-docket dl{margin:0}.admission-docket dl>div{border-top:1px solid #8f907457;padding:9px 0}.admission-docket dt{font-size:8px;letter-spacing:1px;color:#797b60}.admission-docket dd{margin:3px 0 0;font-size:10px;font-weight:700}
+.docket-stamp{color:#805132;border:3px double #805132a6;padding:8px 6px;margin:19px -3px 15px;text-align:center;transform:rotate(-7deg);font-size:14px;font-weight:900;letter-spacing:1.5px}
+.admission-docket footer{font-size:7px;letter-spacing:.7px;color:#6a7257}
+#menu:has(#menu-settings:not([hidden])) .admission-docket,#menu:has(#menu-controls:not([hidden])) .admission-docket{opacity:.3}
+#menu:has(#menu-settings:not([hidden])) .prison-seal,#menu:has(#menu-controls:not([hidden])) .prison-seal{display:none}
+@keyframes docket-idle{0%,100%{transform:translate(-30%,-50%) rotate(3deg)}50%{transform:translate(-30%,-51%) rotate(2deg)}}
+@media(max-width:850px){.admission-docket{left:auto;right:6vw;transform:translateY(-50%) rotate(3deg);width:245px;padding:18px;animation:none}.docket-number strong{font-size:54px}.docket-heading{gap:8px}#menu .start-shell{left:6vw!important;width:40vw!important}#menu h1{font-size:48px!important}}
+@media(max-width:620px){.admission-docket{display:none}#menu .start-shell{left:8vw!important;width:84vw!important;top:13vh!important;height:73vh!important}#menu .prison-seal{margin-bottom:13px}#menu h1{font-size:58px!important}}
+@media(prefers-reduced-motion:reduce){.admission-docket{animation:none}}
+#menu .menu-play{justify-content:flex-start!important;gap:14px!important;text-align:left!important}#menu .menu-play:before{margin-right:0!important}#menu .menu-play>span{position:static!important;margin-left:auto!important}
+.reduced-motion .admission-docket{animation:none}
+@media(prefers-reduced-motion:reduce){#crosshair{transition:none}.mining-contact #crosshair{transform:translate(-50%,-50%)}}
+#menu #replay-arrival{min-height:32px!important;padding:6px 0!important}#menu #replay-arrival small{display:none!important}#menu .menu-link>span:first-child{text-align:left!important}

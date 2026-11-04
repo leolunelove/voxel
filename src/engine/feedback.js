@@ -1,9 +1,9 @@
-import {BlockFracture} from './block-fracture.js?v=84';
+import {BlockFracture} from './block-fracture.js?v=85';
 import * as T from '../../vendor/three.module.js';
-import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=84';
-import {PICKS} from '../game/rules.js?v=84';
-import {bowRig,applyBowRig} from './bow-motion.js?v=84';
-import {createShield} from './shield.js?v=84';
+import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=85';
+import {PICKS,miningCadence} from '../game/rules.js?v=85';
+import {bowRig,applyBowRig} from './bow-motion.js?v=85';
+import {createShield} from './shield.js?v=85';
 export class Feedback{
  constructor(scene){
  this.scene=scene;this.particles=[];this.geometry=new T.BoxGeometry(1,1,1);this.materials=new Map();this.reduced=false;this.phase=0;this.swinging=false;this.time=0;this.kick=0;this.equip=0;this.tier=-1;
@@ -26,18 +26,18 @@ export class Feedback{
  blockImpact(mesh,point,normal,color,progress,broken=false){
  if(!broken)this.fracture.hit(mesh,point,normal,progress,{tier:this.tier,exposure:mesh.userData.exposure??0});
  const n=normal.clone().normalize(),tangent=new T.Vector3().crossVectors(n,Math.abs(n.y)<.9?new T.Vector3(0,1,0):new T.Vector3(1,0,0)).normalize(),bitangent=new T.Vector3().crossVectors(n,tangent);
- const count=this.reduced?(broken?6:2):(broken?22:5),wood=mesh.userData.type===8;
+ const count=this.reduced?(broken?6:2):(broken?28:7),wood=mesh.userData.type===8;
  for(let i=0;i<count&&this.particles.length<160;i++){
-  const tint=i%3===0?color:wood?0x947047:i%2?0x566465:0x89918b;
+  const tint=wood?(i%2?color:0x947047):new T.Color(color).multiplyScalar([.64,.90,1.2][i%3]).getHex();
   let material=this.materials.get(tint);if(!material){material=new T.MeshStandardMaterial({color:tint,roughness:1});this.materials.set(tint,material);}
-  const m=new T.Mesh(this.geometry,material),size=(broken?.065:.025)+Math.random()*(broken?.065:.035),spread=broken?.20:.055;
+  const m=new T.Mesh(this.geometry,material),size=(broken?.075:.035)+Math.random()*(broken?.065:.035),spread=broken?.20:.055;
   m.scale.set(size,size*(wood?.35:.55),size*(.5+Math.random()*.5));m.rotation.set(Math.random()*3,Math.random()*3,Math.random()*3);
   m.position.copy(point).addScaledVector(n,.025).addScaledVector(tangent,(Math.random()-.5)*spread).addScaledVector(bitangent,(Math.random()-.5)*spread);
   const v=n.clone().multiplyScalar((broken?1.8:1.2)+Math.random()*1.8).addScaledVector(tangent,(Math.random()-.5)*(broken?3.2:1.5)).addScaledVector(bitangent,(Math.random()-.5)*1.6);v.y+=.55;
-  const life=this.reduced?.18:(broken?.42:.24)+Math.random()*.16;this.scene.add(m);this.particles.push({m,v,life,maxLife:life,initial:m.scale.clone(),spin:new T.Vector3((Math.random()-.5)*15,(Math.random()-.5)*15,(Math.random()-.5)*15)});
+  const life=this.reduced?.18:(broken?.55:.26)+Math.random()*.16;this.scene.add(m);this.particles.push({m,v,life,maxLife:life,initial:m.scale.clone(),spin:new T.Vector3((Math.random()-.5)*15,(Math.random()-.5)*15,(Math.random()-.5)*15)});
  }
  // Recoil belongs to the held tool; movement and the world camera stay free.
- this.kick=this.reduced?0:broken?.65:.32;
+ this.contactStop=this.reduced?0:broken?.042:.026;this.kick=this.reduced?0:broken?.95:.55;this.impactFlash=broken?.14:.075;
  }
 
  burst(position,color,small=false){
@@ -67,14 +67,14 @@ export class Feedback{
  releaseBow(charge=1){this.bowRecoil=charge;this.bowReleaseAge=0;this.releasedCharge=charge;this.nockDelay=.24;}
  confirmHit(){this.contactStop=this.reduced?0:.035;this.kick=this.reduced?0:.65;}
  update(dt,active,tier,moving=false,aim=null,kind='pick',power=PICKS[tier]?.power??1){
- this.setTier(tier,kind);this.bowReleaseAge=(this.bowReleaseAge??Infinity)+dt;this.bowRecoil=Math.max(0,(this.bowRecoil??0)-dt*8);this.nockDelay=Math.max(0,(this.nockDelay??0)-dt);this.time+=dt;this.equip=Math.max(0,this.equip-dt*2.8);this.kick=Math.max(0,this.kick-dt*9);let impact=false;
+ this.setTier(tier,kind);this.bowReleaseAge=(this.bowReleaseAge??Infinity)+dt;this.bowRecoil=Math.max(0,(this.bowRecoil??0)-dt*8);this.nockDelay=Math.max(0,(this.nockDelay??0)-dt);this.time+=dt;this.impactFlash=Math.max(0,(this.impactFlash??0)-dt);this.equip=Math.max(0,this.equip-dt*2.8);this.kick=Math.max(0,this.kick-dt*9);let impact=false;
  if(active&&!this.swinging){this.swinging=true;this.phase=0;}
- if(this.swinging){const before=this.phase;const step=this.contactStop>0?0:dt;this.contactStop=Math.max(0,(this.contactStop??0)-dt);this.phase+=step/(kind==='sword'?.50:Math.max(.30,.42/Math.pow(power,.18)));impact=(before<.30&&this.phase>=.30)||this.phase>=1.30;if(this.phase>=1){this.phase=active?this.phase%1:0;this.swinging=active;}}
+ if(this.swinging){const before=this.phase;const step=this.contactStop>0?0:dt;this.contactStop=Math.max(0,(this.contactStop??0)-dt);this.phase+=step/(kind==='sword'?.50:kind==='pick'?miningCadence(power):Math.max(.30,.42/Math.pow(power,.18)));impact=(before<.30&&this.phase>=.30)||this.phase>=1.30;if(this.phase>=1){this.phase=active?this.phase%1:0;this.swinging=active;}}
  const rig=kind==='bow'?bowRig(this.bowDraw??0,this.bowReleaseAge,this.releasedCharge,this.reduced):null;
  const renderPhase=impact?.30:this.phase,motion=this.reduced?.13:1,pose=heldPose(renderPhase,this.camera.aspect,motion,kind,rig?.stance??this.bowDraw??0,this.reduced?0:this.bowRecoil),bob=moving&&!this.reduced?Math.sin(this.time*10)*.004:0;
- this.pivot.position.fromArray(pose.position);this.pivot.position.y+=(kind==='bow'?bob*(1-(this.bowDraw??0)):bob)-(kind==='bow'?0:this.equip*.22);this.pivot.position.z+=this.kick*.012;
+ this.pivot.position.fromArray(pose.position);this.pivot.position.y+=(kind==='bow'?bob*(1-(this.bowDraw??0)):bob)-(kind==='bow'?0:this.equip*.22);this.pivot.position.z+=this.kick*(kind==='pick'?.065:.012);if(kind==='pick'){this.pivot.position.y+=this.kick*.016;}
  if(kind==='bow'){applyBowRig(this.tool,rig);this.pivot.position.z+=rig.follow;if(!this.reduced&&this.bowDraw>=.999)this.pivot.position.y+=Math.sin(this.time*32)*.002;}
- this.pivot.rotation.fromArray([...pose.rotation,'XYZ']);if(kind!=='bow')this.pivot.rotation.z-=this.equip*.04;
+ this.pivot.rotation.fromArray([...pose.rotation,'XYZ']);if(kind==='pick')this.pivot.rotation.x-=this.kick*.08;if(kind!=='bow')this.pivot.rotation.z-=this.equip*.04;
  if(aim?.point&&this.swinging){
  const smooth=(a,b,x)=>{let t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t);};
  const contact=smooth(.16,.30,renderPhase)*(1-smooth(.34,.48,renderPhase));

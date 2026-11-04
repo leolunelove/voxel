@@ -1,8 +1,8 @@
-import {swordDamage} from '../game/hunt-rules.js?v=84';
-import {SWORDS,BOWS} from '../game/weapons.js?v=84';
-import {toolIcon} from '../engine/pickaxe.js?v=84';
-import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=84';
-import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=84';
+import {swordDamage} from '../game/hunt-rules.js?v=85';
+import {SWORDS,BOWS} from '../game/weapons.js?v=85';
+import {toolIcon} from '../engine/pickaxe.js?v=85';
+import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=85';
+import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=85';
 
 const fmt=n=>n.toLocaleString();
 const swatch=b=>'<i class="ore-gem" style="--ore:#'+b.color.toString(16).padStart(6,'0')+'"></i>';
@@ -27,7 +27,7 @@ export class HUD{
  <section id="menu" class="overlay title-screen" role="dialog" aria-modal="true" aria-label="Voxel main menu">
   <div class="title-topline"><span>BLOCK 07</span><span class="title-status">IRON & EMBER</span></div>
   <div class="start-shell">
-   <div class="start-identity"><h1 aria-label="Voxel">VOXEL</h1><div class="wordmark-sub"><b>PRISON</b></div></div>
+   <div class="start-identity"><div class="prison-seal" aria-hidden="true"><i></i><i></i><i></i><i></i></div><h1 aria-label="Voxel">VOXEL</h1><div class="wordmark-sub"><b>PRISON</b></div></div>
    <div class="start-actions">
     <div id="menu-main-actions">
      <h2 id="start-title">Your next shift.</h2><p id="start-summary">Report. Work. Earn your clearance.</p>
@@ -50,6 +50,7 @@ export class HUD{
     </div>
    </div>
   </div>
+  <aside class="admission-docket" aria-label="Prison admission record"><div class="docket-heading"><span>BLOCK 07</span><b>ADMISSION RECORD</b></div><div class="docket-number"><small>PRISONER</small><strong>0007</strong></div><div class="docket-barcode" aria-hidden="true"></div><dl><div><dt>QUARTERS</dt><dd>CELL 07 / WEST ROW</dd></div><div><dt>LABOUR DETAIL</dt><dd>DEEPWELL EXTRACTION</dd></div><div><dt>REGISTERED TOOL</dt><dd id="docket-tool">PENDING ISSUE</dd></div></dl><div id="docket-stamp" class="docket-stamp">AWAITING INTAKE</div><footer>ALL MATERIAL IS PRISON PROPERTY.</footer></aside>
   <div class="title-footer"><span>THE WALLS DON’T GET THE LAST WORD.</span><span>SINGLE PLAYER <i>·</i> LOCAL SAVE <i>·</i> ALPHA</span></div>
  </section>
  <section id="shop" class="overlay" role="dialog" aria-modal="true" aria-labelledby="exchange-title" hidden>

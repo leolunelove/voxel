@@ -1,4 +1,4 @@
-import {impactSound} from './impact-sound.js?v=84';
+import {impactSound} from './impact-sound.js?v=85';
 export class Audio{
  constructor(){this.context=null;this.muted=false;this.noise=null;this.variant=0;}
  unlock(){this.context??=new(window.AudioContext||window.webkitAudioContext)();this.context.resume();if(!this.master){this.master=this.context.createGain();this.master.gain.value=this.volume??.75;this.master.connect(this.context.destination);}if(!this.noise){const c=this.context;this.noise=c.createBuffer(1,c.sampleRate,c.sampleRate);const d=this.noise.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;}}
@@ -6,6 +6,7 @@ export class Audio{
  grit(t,duration,volume,frequency,filterType='bandpass',attack=.003){const c=this.context,n=c.createBufferSource(),filter=c.createBiquadFilter(),g=c.createGain();n.buffer=this.noise;filter.type=filterType;filter.frequency.value=frequency;filter.Q.value=.65;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(volume,t+attack);g.gain.exponentialRampToValueAtTime(.0001,t+duration);n.connect(filter);filter.connect(g);g.connect(this.master??c.destination);n.start(t,Math.random()*.6,duration);n.onended=()=>{n.disconnect();filter.disconnect();g.disconnect();};}
  play(kind,type=0,tier=0){
  if(!this.context||this.muted||!this.noise)return;const t=this.context.currentTime;
+ if(kind==='intake-stamp'){this.tone(t,105,.09,.045,'triangle',42,.001);this.grit(t,.035,.04,1250);this.tone(t+.07,610,.045,.018,'triangle',240,.001);return;}
  if(kind==='tree-break'){this.tone(t,110,.14,.065,'triangle',38,.001);this.grit(t,.16,.08,650);this.grit(t+.035,.22,.045,2800,'highpass');this.tone(t+.06,320,.10,.025,'triangle',105,.001);return;}
  if(kind==='wake'){[392,494,587].forEach((f,i)=>this.tone(t+i*.15,f,.55,.025,'sine',f));return;}
  if(kind==='rest'){[330,440,554,660].forEach((f,i)=>this.tone(t+i*.18,f,.8,.035,'sine',f));return;}
@@ -22,7 +23,7 @@ export class Audio{
  if(kind==='swoosh'){this.grit(t,.075,.035,1800);return;}
  if(kind==='strike'){this.tone(t,145,.09,.065,'triangle',65);this.grit(t,.055,.09,750);this.tone(t+.004,1260,.09,.018,'sine',820);return;}
  if(kind==='hurt'){this.tone(t,88,.14,.06,'triangle',42);this.grit(t,.1,.055,340);return;}
- if(kind==='pickup'){this.tone(t,740+type*130,.08,.018,'sine',980+type*130);return;}
+ if(kind==='pickup'){if(t-(this.lastPickup??-1)<.045)return;this.lastPickup=t;this.pickupNote=(this.pickupNote??0)+1;const f=[660,784,880,988][this.pickupNote%4]+type*35;this.tone(t,f,.10,.022,'sine',f*1.12,.002);return;}
  if(kind==='sell'||kind==='upgrade'){const notes=kind==='upgrade'?[440,554.37,659.25,880]:[523.25,659.25,783.99];notes.forEach((f,i)=>this.tone(t+i*.065,f,.25,.035,'sine',f));return;}
  if(kind==='hit'||kind==='break')for(const layer of impactSound(kind,type,tier,this.variant++)){
   if(layer.kind==='tone')this.tone(t+layer.delay,layer.frequency,layer.duration,layer.volume,layer.wave,layer.end,layer.attack);

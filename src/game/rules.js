@@ -47,8 +47,11 @@ export function validateSave(raw){
  if(raw.version===4){if(!int(raw.mineLevel,2)||!int(raw.forestLevel,2)||!int(raw.axe,3)||!int(raw.chopped,1e12)||(raw.mined<20&&(raw.forestLevel>0||raw.axe>0)))return freshState();for(const key of ['mineLevel','forestLevel','axe','chopped'])s[key]=raw[key];}else{s.mineLevel=legacy?0:Math.min(2,raw.rank);}
  if(bagCount(s)>capacity(s))return freshState();return s;
 }
+// Pickaxe work is committed at contact, with a faster cadence on better tools.
+export const MINING_STRIKE=.42;
+export const miningCadence=power=>Math.max(.23,.36/Math.pow(Math.max(1,power),.18));
 export class Mining{
  constructor(){this.reset();}
  reset(){this.target=null;this.damage=0;}
- tick(dt,key,type,power,held,contact=true,toughness=BLOCKS[type]?.toughness??1){if(!held||key===null){this.reset();return {progress:0,broken:false};}if(this.target!==key){this.target=key;this.damage=0;}this.damage+=Math.max(0,Math.min(dt,.05))*power;const progress=this.damage/toughness;if(progress>=1&&contact){this.reset();return {progress:1,broken:true};}return {progress:Math.min(.98,progress),broken:false};}
+ tick(dt,key,type,power,held,contact=true,toughness=BLOCKS[type]?.toughness??1,strike=0){if(!held||key===null){this.reset();return {progress:0,broken:false};}if(this.target!==key){this.target=key;this.damage=0;}this.damage+=strike>0?(contact?strike*power:0):Math.max(0,Math.min(dt,.05))*power;const progress=this.damage/toughness;if(progress>=1&&contact){this.reset();return {progress:1,broken:true};}return {progress:Math.min(.98,progress),broken:false};}
 }

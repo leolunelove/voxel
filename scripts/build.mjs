@@ -1,7 +1,7 @@
 import {cpSync,mkdirSync,readFileSync,readdirSync,rmSync,writeFileSync} from 'node:fs';import {spawnSync} from 'node:child_process';
 import {dirname,join,resolve,relative} from 'node:path';import {createHash} from 'node:crypto';
 const root=resolve('.'),out=join(root,'dist');function syntax(dir){for(const e of readdirSync(dir,{withFileTypes:true})){const file=join(dir,e.name);if(e.isDirectory())syntax(file);else if(e.name.endsWith('.js')){const r=spawnSync(process.execPath,['--check',file],{stdio:'inherit'});if(r.status!==0)process.exit(r.status??1);}}}syntax(join(root,'src'));rmSync(out,{recursive:true,force:true});mkdirSync(out);
-for(const name of ['index.html','style.css','voxel-ui.css','assets'])cpSync(join(root,name),join(out,name),{recursive:true});
+for(const name of ['index.html','style.css','voxel-ui.css','menu.css','assets'])cpSync(join(root,name),join(out,name),{recursive:true});
 const visited=new Set();function copyModule(file){if(visited.has(file))return;visited.add(file);const target=join(out,relative(root,file));mkdirSync(dirname(target),{recursive:true});cpSync(file,target);const text=readFileSync(file,'utf8');for(const m of text.matchAll(/(?:from\s*|import\s*)['"](\.[^'"]+)['"]/g)){const next=resolve(dirname(file),m[1].split('?')[0]);if(!next.startsWith(root+'/'))throw new Error('Module outside project: '+next);copyModule(next);}}
 copyModule(join(root,'src/main.js'));mkdirSync(join(out,'vendor'),{recursive:true});cpSync(join(root,'vendor/LICENSE-three.txt'),join(out,'vendor/LICENSE-three.txt'));
 writeFileSync(join(out,'.nojekyll'),'');writeFileSync(join(out,'CNAME'),'voxel.leolune.fun\n');

@@ -1,0 +1,5 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {Mining,MINING_STRIKE,miningCadence,BLOCKS} from '../src/game/rules.js';
+const hit=(m,power=1,key='a',contact=true)=>m.tick(1/60,key,0,power,true,contact,BLOCKS[0].toughness,MINING_STRIKE);
+test('holding between contacts does no invisible mining work',()=>{const m=new Mining();for(let i=0;i<180;i++)assert.equal(hit(m,1,'a',false).progress,0);assert.ok(hit(m).progress>.6);for(let i=0;i<120;i++)assert.equal(hit(m,1,'a',false).broken,false);assert.equal(hit(m).broken,true);});
+test('first steel upgrade breaks starter slate in one committed strike; worn iron needs two',()=>{const iron=new Mining(),steel=new Mining();assert.equal(hit(iron).broken,false);assert.equal(hit(iron).broken,true);assert.equal(hit(steel,1.65).broken,true);assert.ok(miningCadence(1.65)<miningCadence(1));});
+test('retargeting and releasing discard contact work',()=>{const m=new Mining();hit(m);assert.equal(hit(m,1,'b',false).progress,0);hit(m,1,'b');m.tick(.01,'b',0,1,false);assert.equal(hit(m,1,'b',false).progress,0);});

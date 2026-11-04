@@ -1,4 +1,4 @@
-import {ATTACK_OFFSET,ARCHERY_OFFSET} from './training-layout.js?v=84';
+import {ATTACK_OFFSET,ARCHERY_OFFSET} from './training-layout.js?v=85';
 import * as T from '../../vendor/three.module.js';
 
 // Architecture stays outside the pursuit bounds and all three firing lanes.

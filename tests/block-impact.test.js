@@ -26,7 +26,7 @@ test('crack networks are repeatable per block, distinct between blocks, and beco
 test('impact chips leave the struck face, are bounded, expire, and never move the game camera',()=>{
  const f=new Feedback(new T.Scene()),m=new T.Mesh(new T.BoxGeometry(1,1,1));m.userData.type=3;const camera=new T.PerspectiveCamera(),before=camera.matrix.clone();
  for(const normal of [new T.Vector3(1,0,0),new T.Vector3(0,1,0),new T.Vector3(0,0,-1)]){
-  f.particles=[];f.blockImpact(m,new T.Vector3(),normal,0xcccccc,.5);assert.equal(f.particles.length,5);for(const p of f.particles){assert.ok(p.v.dot(normal)>.5);assert.ok(p.m.position.dot(normal)>.02);}
+  f.particles=[];f.blockImpact(m,new T.Vector3(),normal,0xcccccc,.5);assert.equal(f.particles.length,7);for(const p of f.particles){assert.ok(p.v.dot(normal)>.5);assert.ok(p.m.position.dot(normal)>.02);}
  }
  f.reduced=true;f.particles=[];f.blockImpact(m,new T.Vector3(),new T.Vector3(0,0,1),0xcccccc,1,true);assert.equal(f.particles.length,6);
  for(let i=0;i<80;i++)f.update(.02,false,0,false,{camera});assert.equal(f.particles.length,0);assert.ok(camera.matrix.equals(before));
