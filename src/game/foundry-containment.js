@@ -1,5 +1,5 @@
 import * as T from '../../vendor/three.module.js';
-import {CONTAINMENT as C} from './foundry-layout.js?v=87';
+import {CONTAINMENT as C} from './foundry-layout.js?v=88';
 // One compact holding hall behind the courtyard's south-east checkpoint.
 export function buildFoundryContainment(w,{a,box:B,wall:W,roof:R,lamp:L,sign:S}){
  const iron=0x435751,rust=0x88553d;

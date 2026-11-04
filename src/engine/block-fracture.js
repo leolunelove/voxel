@@ -1,4 +1,4 @@
-import {fractureGraph,revealFracture,fractureSeed} from './fracture-pattern.js?v=87';
+import {fractureGraph,revealFracture,fractureSeed} from './fracture-pattern.js?v=88';
 import * as T from '../../vendor/three.module.js';
 // BoxGeometry material order. Coordinates are block-local, never camera-local.
 export function faceUV(point,normal){

@@ -1,3 +1,4 @@
+export const ARCHERY_CONTACT={duration:.34,strength:.35,fullStrength:1.2,stagger:.10,fullStagger:.30,push:2,fullPush:7.8};
 // Melee contact is one event per swing. Pauses belong to presentation only.
 export const MELEE={reach:3.05,cadence:.50,tierSpeed:.012,hitPause:.042,killPause:.060,deathDuration:.48};
 export const BLOCKS=[

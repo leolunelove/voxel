@@ -1,4 +1,4 @@
-import {MELEE} from './rules.js?v=87';
+import {MELEE} from './rules.js?v=88';
 export const swordCadence=(tier=0)=>MELEE.cadence-Math.max(0,Math.min(3,tier))*MELEE.tierSpeed;
 export function meleeImpact(tier=0,heavy=false,boss=false){
  const weight=1+Math.max(0,Math.min(3,tier))*.06;

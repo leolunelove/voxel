@@ -1,5 +1,5 @@
 import * as T from '../../vendor/three.module.js';
-import {MELEE} from '../game/rules.js?v=87';
+import {MELEE} from '../game/rules.js?v=88';
 const samples=[[0,0],[-.14,0],[.14,0],[0,-.09],[0,.09]],aim=new T.Vector2(),hits=[];
 // A small blade-width sweep, not a bullet-sized pixel. Every candidate still
 // intersects an actual monster surface and must have an unobstructed approach.

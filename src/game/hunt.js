@@ -1,13 +1,13 @@
-import {MELEE} from './rules.js?v=87';
-import {meleeImpact,deathPose} from './melee-impact.js?v=87';
-import {ATTACK_OFFSET} from './training-layout.js?v=87';
-import {arrowImpact,impactRecoil,pushDistance} from './arrow-impact.js?v=87';
+import {MELEE} from './rules.js?v=88';
+import {meleeImpact,deathPose} from './melee-impact.js?v=88';
+import {ATTACK_OFFSET} from './training-layout.js?v=88';
+import {arrowImpact,impactRecoil,pushDistance} from './arrow-impact.js?v=88';
 import * as T from '../../vendor/three.module.js';
-import {MONSTERS,swordDamage,reward,hurt,inHunt,MAX_HP} from './hunt-rules.js?v=87';
-import {dressWarden,animateWarden} from './warden.js?v=87';
-import {clearArrows,updateArrows} from './embedded-arrows.js?v=87';
-import {dressMonster,animateMonster} from './monster-look.js?v=87';
-import {CombatLoot} from './combat-loot.js?v=87';
+import {MONSTERS,swordDamage,reward,hurt,inHunt,MAX_HP} from './hunt-rules.js?v=88';
+import {dressWarden,animateWarden} from './warden.js?v=88';
+import {clearArrows,updateArrows} from './embedded-arrows.js?v=88';
+import {dressMonster,animateMonster} from './monster-look.js?v=88';
+import {CombatLoot} from './combat-loot.js?v=88';
 export class Hunt{
  constructor(scene,state,options={}){this.loot=new CombatLoot(scene);this.options=options;this.bounds=options.bounds??[-1.5,13.5,34,46];this.state=state;this.enemies=[];this.targets=[];this.inside=false;this.damageFlash=0;
   for(const [i,x,z,type]of (options.spawns??[[0,2,39,0],[1,10,40,0],[2,6,44,1]])){

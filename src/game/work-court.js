@@ -1,4 +1,4 @@
-import {terraceFloor} from './foundry-layout.js?v=87';
+import {terraceFloor} from './foundry-layout.js?v=88';
 // Human-scale architecture shared with reception; keep every prop off the walking lanes.
 export function buildWorkCourt(w,{a,box:B,wall:W,roof:R,lamp:L,guard:G,sign:S}){
  const steel=0x435751,wood=0x8c6745,amber=0xb99a60;

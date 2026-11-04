@@ -1,6 +1,7 @@
 import * as T from '../../vendor/three.module.js';
 export const BOW_ROTATION=[.03,-.75,-.28];
 export const BOW_VIEW_SCALE=.8424;
+export const BOW_DRAW_LENGTH=1.08;
 export const BOW_REST=new T.Vector3(.28,.14,-.015);
 const rotation=new T.Quaternion().setFromEuler(new T.Euler(...BOW_ROTATION)),inverse=rotation.clone().invert();
 export const easeDraw=x=>{const t=Math.max(0,Math.min(1,x));return t*t*(3-2*t);};
@@ -8,7 +9,7 @@ export function bowAnchor(draw){const p=easeDraw(draw);return new T.Vector3(.25-
 export function bowFlight(draw){return new T.Vector3(0,0,-8).sub(bowAnchor(draw)).normalize();}
 export function localBowFlight(draw){return bowFlight(draw).applyQuaternion(inverse);}
 export function bowPosition(draw){return bowAnchor(draw).sub(BOW_REST.clone().multiplyScalar(BOW_VIEW_SCALE).applyQuaternion(rotation));}
-export function viewArrowTip(draw){return bowAnchor(draw).addScaledVector(bowFlight(draw),(1.39-.94*easeDraw(draw))*BOW_VIEW_SCALE);}
+export function viewArrowTip(draw){return bowAnchor(draw).addScaledVector(bowFlight(draw),(1.39-BOW_DRAW_LENGTH*easeDraw(draw))*BOW_VIEW_SCALE);}
 // Keep exactly the same screen position across the separate 48° item camera
 // and the world camera. The arrow starts just ahead of the player, not at eye 0.
 export function bowMuzzle(camera,draw){const tip=viewArrowTip(draw),depth=.55,ratio=Math.tan(camera.fov*Math.PI/360)/Math.tan(24*Math.PI/180),k=depth/-tip.z;return new T.Vector3(tip.x*k*ratio,tip.y*k*ratio,-depth).applyQuaternion(camera.quaternion).add(camera.position);}

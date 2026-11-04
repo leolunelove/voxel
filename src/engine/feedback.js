@@ -1,10 +1,10 @@
-import {swordCadence} from '../game/melee-impact.js?v=87';
-import {BlockFracture} from './block-fracture.js?v=87';
+import {swordCadence} from '../game/melee-impact.js?v=88';
+import {BlockFracture} from './block-fracture.js?v=88';
 import * as T from '../../vendor/three.module.js';
-import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=87';
-import {MELEE,PICKS,miningCadence,choppingCadence} from '../game/rules.js?v=87';
-import {bowRig,applyBowRig} from './bow-motion.js?v=87';
-import {createShield} from './shield.js?v=87';
+import {createPickaxe,createAxe,createSword,createBow,SWORD_TIP,BOW_SCALE,heldPose,TOOL_SCALE,AXE_TIP,CONTACT_TIP,contactPivot} from './pickaxe.js?v=88';
+import {MELEE,PICKS,miningCadence,choppingCadence} from '../game/rules.js?v=88';
+import {bowRig,applyBowRig} from './bow-motion.js?v=88';
+import {createShield} from './shield.js?v=88';
 export class Feedback{
  constructor(scene){
  this.scene=scene;this.particles=[];this.geometry=new T.BoxGeometry(1,1,1);this.materials=new Map();this.reduced=false;this.phase=0;this.swinging=false;this.time=0;this.kick=0;this.equip=0;this.tier=-1;
@@ -76,10 +76,10 @@ export class Feedback{
   const life=this.reduced?.2:.5+Math.random()*.25;this.particles.push({m,v:new T.Vector3((Math.random()-.5)*3,.3+Math.random(),(Math.random()-.5)*3),life,maxLife:life,initial:m.scale.clone(),spin:new T.Vector3(4,6,3)});
  }
  }
- releaseBow(charge=1){this.bowRecoil=charge;this.bowReleaseAge=0;this.releasedCharge=charge;this.nockDelay=.24;}
+ releaseBow(charge=1){this.bowRecoil=charge;this.bowReleaseAge=0;this.bowJustReleased=true;this.releasedCharge=charge;this.nockDelay=.24;}
  confirmHit(killed=false){this.contactStop=this.reduced?0:killed?MELEE.killPause:MELEE.hitPause;this.kick=this.reduced?0:killed?.95:.70;this.impactFlash=killed?.18:.10;}
  update(dt,active,tier,moving=false,aim=null,kind='pick',power=PICKS[tier]?.power??1){
- this.setTier(tier,kind);this.bowReleaseAge=(this.bowReleaseAge??Infinity)+dt;this.bowRecoil=Math.max(0,(this.bowRecoil??0)-dt*8);this.nockDelay=Math.max(0,(this.nockDelay??0)-dt);this.time+=dt;this.impactFlash=Math.max(0,(this.impactFlash??0)-dt);this.equip=Math.max(0,this.equip-dt*2.8);this.kick=Math.max(0,this.kick-dt*9);let impact=false;const contactHeld=(this.contactStop??0)>0;
+ this.setTier(tier,kind);this.bowReleaseAge=this.bowJustReleased?Math.min(dt,.018):(this.bowReleaseAge??Infinity)+dt;this.bowJustReleased=false;this.bowRecoil=Math.max(0,(this.bowRecoil??0)-dt*8);this.nockDelay=Math.max(0,(this.nockDelay??0)-dt);this.time+=dt;this.impactFlash=Math.max(0,(this.impactFlash??0)-dt);this.equip=Math.max(0,this.equip-dt*2.8);this.kick=Math.max(0,this.kick-dt*9);let impact=false;const contactHeld=(this.contactStop??0)>0;
  if(active&&!this.swinging){this.swinging=true;this.phase=0;}
  if(this.swinging){const before=this.phase;const step=this.contactStop>0?0:dt;this.contactStop=Math.max(0,(this.contactStop??0)-dt);this.phase+=step/(kind==='sword'?swordCadence(tier):kind==='pick'?miningCadence(power):kind==='axe'?choppingCadence(power):.42);impact=(before<.30&&this.phase>=.30)||this.phase>=1.30;if(this.phase>=1){this.phase=active?this.phase%1:0;this.swinging=active;}}
  const rig=kind==='bow'?bowRig(this.bowDraw??0,this.bowReleaseAge,this.releasedCharge,this.reduced):null;

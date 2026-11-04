@@ -1,8 +1,8 @@
-import {swordDamage} from '../game/hunt-rules.js?v=87';
-import {SWORDS,BOWS} from '../game/weapons.js?v=87';
-import {toolIcon} from '../engine/pickaxe.js?v=87';
-import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=87';
-import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=87';
+import {swordDamage} from '../game/hunt-rules.js?v=88';
+import {SWORDS,BOWS} from '../game/weapons.js?v=88';
+import {toolIcon} from '../engine/pickaxe.js?v=88';
+import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=88';
+import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=88';
 
 const fmt=n=>n.toLocaleString();
 const swatch=b=>'<i class="ore-gem" style="--ore:#'+b.color.toString(16).padStart(6,'0')+'"></i>';
@@ -82,8 +82,8 @@ export class HUD{
  }
  location(area,level){this.area=area;this.set('hud-rank','L'+level);this.set('hud-mine',area===7?'The Underblock':area===6?'Bow Range':area===8?'Dungeon Entrance':area===5?'Containment Detail':area===4?'The Timber Detail':area===12?'Intake / Records':area===13?'Cellblock A':area===9?'Service Passage':area===10?'Containment Passage':area===11?'Armoury Passage':area===0?'The Deepwell':'Work Yard');this.set('hud-wing','Block 07 / Level '+level);}
  tool(kind,s,skills=this.combatSkills??{sword:0,bow:0}){this.combatSkills=skills;const key=kind+':'+(kind==='bow'?skills.bow:kind==='sword'?skills.sword:kind==='axe'?s.axe:s.pick)+':'+(kind==='sword'?skills.xp:0);if(this.toolKey===key)return;this.toolKey=key;document.querySelectorAll('[data-tool-slot]').forEach(el=>el.classList.toggle('selected',el.dataset.toolSlot===kind));if(kind==='bow'){this.set('pick-name',BOWS[skills.bow].name);this.set('pick-power',BOWS[skills.bow].damage+' damage / '+BOWS[skills.bow].draw+'s draw');document.querySelector('[data-tool-slot=bow] svg path').setAttribute('stroke','#'+BOWS[skills.bow].trim.toString(16));return;}if(kind==='sword'){this.set('pick-name',SWORDS[skills.sword].name);this.set('pick-power',swordDamage(skills.xp,skills.sword)+' damage / hold to strike');document.querySelector('[data-tool-slot=sword] svg path').setAttribute('fill','#'+SWORDS[skills.sword].color.toString(16));return;}const t=kind==='axe'?AXES[s.axe]:PICKS[s.pick];this.set('pick-name',t.name);this.set('pick-power',t.power.toFixed(2)+'× '+(kind==='axe'?'cutting':'mining')+' power');}
- meleeHit(damage,killed=false){const el=document.getElementById('melee-hit');clearTimeout(this.meleeTimer);el.textContent='−'+damage;el.classList.toggle('finisher',killed);el.classList.add('visible');this.meleeTimer=setTimeout(()=>el.classList.remove('visible'),killed?700:430);}
- monsterDefeated(stats){const el=document.getElementById('combat-payoff');clearTimeout(this.combatTimer);el.replaceChildren();for(const [tag,text] of [['small','CONTAINMENT / THREAT ELIMINATED'],['strong',stats.name],['span','+'+stats.xp+' ATTACK XP · +'+stats.value+' CR'],['em','LOOT AT RISK / EXIT TO BANK']]){const child=document.createElement(tag);child.textContent=text;el.append(child);}el.classList.add('visible');this.combatTimer=setTimeout(()=>el.classList.remove('visible'),1800);}
+ combatHit(damage,killed=false){const el=document.getElementById('melee-hit');clearTimeout(this.meleeTimer);el.textContent='−'+damage;el.classList.toggle('finisher',killed);el.classList.add('visible');this.meleeTimer=setTimeout(()=>el.classList.remove('visible'),killed?700:430);}
+ monsterDefeated(stats,skill='ATTACK'){clearTimeout(this.timeout);document.getElementById('toast').classList.remove('visible');const el=document.getElementById('combat-payoff');clearTimeout(this.combatTimer);el.replaceChildren();for(const [tag,text] of [['small','CONTAINMENT / THREAT ELIMINATED'],['strong',stats.name],['span','+'+stats.xp+' '+skill+' XP · +'+stats.value+' CR'],['em','LOOT AT RISK / EXIT TO BANK']]){const child=document.createElement(tag);child.textContent=text;el.append(child);}el.classList.add('visible');this.combatTimer=setTimeout(()=>el.classList.remove('visible'),1800);}
  wayfinding(text){this.set('prison-route',text);}
  set(id,value){document.getElementById(id).textContent=value;}
  update(s){
@@ -110,7 +110,7 @@ export class HUD{
  this.set('bag-detail',s.bagLevel<10?cap+' → '+(cap+48)+' fragments. Level '+s.bagLevel+' / 10.':'Maximum capacity: '+cap+' fragments.');this.set('buy-bag',s.bagLevel<10?'Expand · '+fmt(bagCost(s))+' CR':'Fully expanded');document.getElementById('buy-bag').disabled=s.bagLevel>=10||s.money<bagCost(s);
  }
  select(tab){this.tab=tab;document.querySelector('.exchange-content').scrollTop=0;document.querySelectorAll('[data-tab]').forEach(b=>{b.classList.toggle('selected',b.dataset.tab===tab);b.setAttribute('aria-pressed',String(b.dataset.tab===tab));});for(const name of ['mines','forge','cargo'])document.getElementById('pane-'+name).hidden=name!==tab;}
- target(name,progress,showMeter=true){document.getElementById('damage').parentElement.hidden=!showMeter;this.set('block-name',name);document.getElementById('target').hidden=!name;document.getElementById('damage').style.width=progress*100+'%';}
+ target(name,progress,showMeter=true){document.getElementById('damage').parentElement.hidden=!showMeter;this.set('block-name',name);document.getElementById('target').hidden=!name||document.getElementById('combat-payoff').classList.contains('visible');document.getElementById('damage').style.width=progress*100+'%';}
  treeCleared(timber){const note=document.getElementById('toast');if(note.textContent.includes('logs cut')){clearTimeout(this.timeout);note.classList.remove('visible');}const el=document.getElementById('tree-payoff');el.innerHTML='<small>TREE CLEARED</small><strong>'+timber+' TIMBER</strong><span>+12 WOODCUTTING XP</span>';el.classList.add('visible');clearTimeout(this.treeTimer);this.treeTimer=setTimeout(()=>el.classList.remove('visible'),1500);}
  pickup(name){const now=performance.now();this.pickupCount=this.lastPickup===name&&now-(this.pickupAt??0)<450?(this.pickupCount??0)+1:1;this.lastPickup=name;this.pickupAt=now;const el=document.getElementById('pickup-slip');el.textContent='+'+this.pickupCount+' '+name+' / RECOVERED';el.classList.add('visible');clearTimeout(this.pickupTimer);this.pickupTimer=setTimeout(()=>el.classList.remove('visible'),900);}
 

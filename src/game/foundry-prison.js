@@ -1,10 +1,10 @@
-import {buildFoundryContainment} from './foundry-containment.js?v=87';
-import {buildArrivalCampus,buildCompactCells,arrivalLocal} from './arrival-campus.js?v=87';
-import {buildFoundryTimber} from './foundry-timber.js?v=87';
-import {buildWorkCourt,buildDeepwell} from './work-court.js?v=87';
+import {buildFoundryContainment} from './foundry-containment.js?v=88';
+import {buildArrivalCampus,buildCompactCells,arrivalLocal} from './arrival-campus.js?v=88';
+import {buildFoundryTimber} from './foundry-timber.js?v=88';
+import {buildWorkCourt,buildDeepwell} from './work-court.js?v=88';
 import * as T from '../../vendor/three.module.js';
-import {batchScenery} from '../engine/static-batch.js?v=87';
-import {CAMPUS_FLOORS,PIT,inBox,terraceFloor,ARRIVAL_SCALE,ARRIVAL_Y} from './foundry-layout.js?v=87';
+import {batchScenery} from '../engine/static-batch.js?v=88';
+import {CAMPUS_FLOORS,PIT,inBox,terraceFloor,ARRIVAL_SCALE,ARRIVAL_Y} from './foundry-layout.js?v=88';
 export function buildFoundryPrison(w){
  const root=new T.Group();root.name='Block 07 / compact working court';w.scene.add(root);w.foundry=root;
  w.skyLight=new T.HemisphereLight(0xdde3e4,0x706553,1.45);w.sun=new T.DirectionalLight(0xffdfae,3.1);w.sun.position.set(-22,32,18);w.sun.castShadow=true;w.sun.shadow.autoUpdate=false;w.sun.shadow.needsUpdate=true;w.sun.shadow.mapSize.set(2048,2048);Object.assign(w.sun.shadow.camera,{left:-75,right:75,top:100,bottom:-80,near:1,far:220});w.sun.shadow.bias=-.0003;w.sun.shadow.normalBias=.025;w.yardFill=new T.HemisphereLight(0xe8d3af,0x534b44,.35);w.scene.add(w.skyLight,w.sun,w.yardFill);

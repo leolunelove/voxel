@@ -47,3 +47,5 @@ test('ballistic launch keeps equipment speed and intersects the intended point a
   const origin=new T.Vector3(-.1,-.05,-.55),v=ballisticVelocity(origin,target,speed),horizontal=Math.hypot(target.x-origin.x,target.z-origin.z),time=horizontal/Math.hypot(v.x,v.z),hit=origin.clone().addScaledVector(v,time).add(new T.Vector3(0,-.8*time*time,0));assert.ok(Math.abs(v.length()-speed)<1e-8);assert.ok(hit.distanceTo(target)<1e-7);
  }
 });
+
+test('the nocked arrow is visible at rest and full draw preserves a longer shaft pull',()=>{assert.equal(bowRig(0).arrowVisible,true);const start=poseBow(0).bow.getObjectByName('loaded-arrow').getWorldPosition(new T.Vector3()),end=poseBow(1).bow.getObjectByName('loaded-arrow').getWorldPosition(new T.Vector3());assert.ok(end.z-start.z>1);});

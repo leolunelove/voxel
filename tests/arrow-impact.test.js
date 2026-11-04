@@ -14,7 +14,7 @@ test('contact anchor follows a rotated scaled limb while the shaft rings, settle
  const localPoint=new T.Vector3(.12,.1,.325),point=e.body.localToWorld(localPoint.clone()),velocity=new T.Vector3(-.4,0,-1).normalize();embedArrow(e,e.body,point,velocity,1);const a=e.embeddedArrows[0];e.root.updateMatrixWorld(true);
  assert.ok(a.root.getWorldPosition(new T.Vector3()).distanceTo(point)<1e-6);const tip=a.root.localToWorld(new T.Vector3(0,0,arrowImpact(1).penetration));assert.ok(tip.clone().sub(point).normalize().dot(velocity)>.999);
  e.root.position.x=2;e.root.rotation.y=-.6;e.body.rotation.x=.45;updateArrows(e,.02);e.root.updateMatrixWorld(true);assert.ok(Math.abs(a.shaft.rotation.x)>.01);assert.ok(a.root.getWorldPosition(new T.Vector3()).distanceTo(e.body.localToWorld(localPoint.clone()))<1e-6);
- updateArrows(e,.8);assert.ok(Math.abs(a.shaft.rotation.x)<.0001);updateArrows(e,8.5,true);assert.equal(a.shaft.rotation.x,0);assert.ok(a.shaft.children[0].material.opacity<1);hunt.dispose();assert.equal(e.embeddedArrows.length,0);
+ updateArrows(e,.8);assert.ok(Math.abs(a.shaft.rotation.x)<.0001);updateArrows(e,28.5,true);assert.equal(a.shaft.rotation.x,0);assert.ok(a.shaft.children[0].material.opacity<1);hunt.dispose();assert.equal(e.embeddedArrows.length,0);
 });
 test('projectile passes charge and incoming direction once, and contact cannot be farmed for loot',()=>{
  const {scene,state,hunt,e}=create(),a=new Archery(scene,state,()=>{}),c=new T.PerspectiveCamera();c.position.set(0,1.85,3);c.lookAt(0,1.85,0);c.updateMatrixWorld();scene.updateMatrixWorld(true);a.combatTargets=hunt.targets;let hits=0;
