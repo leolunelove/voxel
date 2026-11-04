@@ -47,6 +47,6 @@ test('wood notches cut across the grain and widen as the log weakens',()=>{
 test('final tree break scatters canopy fragments without removing or rewarding game objects',()=>{
  const scene=new T.Scene(),f=new Feedback(scene),visual=new T.Group();visual.position.set(7,1,-10);scene.add(visual);
  for(const y of [3.3,4.3,5.1]){const m=new T.Mesh(new T.BoxGeometry(1,1,1),new T.MeshStandardMaterial({color:0x648b48}));m.position.y=y;m.userData.canopy=true;visual.add(m);}
- f.treeBreak({visual});assert.equal(f.particles.length,15);assert.equal(visual.children.length,3);for(const p of f.particles)assert.ok(p.m.position.y>3.8);
+ f.treeBreak({visual});assert.equal(f.particles.length,26);assert.equal(visual.children.length,3);for(const p of f.particles)assert.ok(p.m.position.y>3.8);
  f.particles=[];f.reduced=true;f.treeBreak({visual});assert.equal(f.particles.length,3);
 });

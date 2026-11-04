@@ -1,4 +1,4 @@
-import {impactSound} from './impact-sound.js?v=85';
+import {impactSound} from './impact-sound.js?v=86';
 export class Audio{
  constructor(){this.context=null;this.muted=false;this.noise=null;this.variant=0;}
  unlock(){this.context??=new(window.AudioContext||window.webkitAudioContext)();this.context.resume();if(!this.master){this.master=this.context.createGain();this.master.gain.value=this.volume??.75;this.master.connect(this.context.destination);}if(!this.noise){const c=this.context;this.noise=c.createBuffer(1,c.sampleRate,c.sampleRate);const d=this.noise.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;}}
@@ -7,7 +7,7 @@ export class Audio{
  play(kind,type=0,tier=0){
  if(!this.context||this.muted||!this.noise)return;const t=this.context.currentTime;
  if(kind==='intake-stamp'){this.tone(t,105,.09,.045,'triangle',42,.001);this.grit(t,.035,.04,1250);this.tone(t+.07,610,.045,.018,'triangle',240,.001);return;}
- if(kind==='tree-break'){this.tone(t,110,.14,.065,'triangle',38,.001);this.grit(t,.16,.08,650);this.grit(t+.035,.22,.045,2800,'highpass');this.tone(t+.06,320,.10,.025,'triangle',105,.001);return;}
+ if(kind==='tree-break'){this.tone(t,96,.18,.07,'triangle',34,.001);this.grit(t,.055,.09,680,'bandpass',.001);this.grit(t+.055,.16,.055,1100);this.grit(t+.11,.30,.035,3200,'highpass');this.tone(t+.025,230,.10,.025,'triangle',70,.001);return;}
  if(kind==='wake'){[392,494,587].forEach((f,i)=>this.tone(t+i*.15,f,.55,.025,'sine',f));return;}
  if(kind==='rest'){[330,440,554,660].forEach((f,i)=>this.tone(t+i*.18,f,.8,.035,'sine',f));return;}
  if(kind==='shield-block'||kind==='perfect-block'||kind==='guard-break'){this.tone(t,kind==='guard-break'?95:420,.17,.075,'triangle',kind==='guard-break'?38:210);this.grit(t,.085,.08,1700);if(kind==='perfect-block')this.tone(t+.02,1100,.23,.035,'sine',1500);return;}

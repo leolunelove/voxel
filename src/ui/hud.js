@@ -1,8 +1,8 @@
-import {swordDamage} from '../game/hunt-rules.js?v=85';
-import {SWORDS,BOWS} from '../game/weapons.js?v=85';
-import {toolIcon} from '../engine/pickaxe.js?v=85';
-import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=85';
-import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=85';
+import {swordDamage} from '../game/hunt-rules.js?v=86';
+import {SWORDS,BOWS} from '../game/weapons.js?v=86';
+import {toolIcon} from '../engine/pickaxe.js?v=86';
+import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=86';
+import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=86';
 
 const fmt=n=>n.toLocaleString();
 const swatch=b=>'<i class="ore-gem" style="--ore:#'+b.color.toString(16).padStart(6,'0')+'"></i>';
@@ -17,7 +17,7 @@ export class HUD{
   <aside class="next-order"><small>NEXT UNLOCK</small><b id="goal"></b><div class="meter"><span id="rank-meter"></span></div><span id="goal-detail"></span><kbd>E</kbd><em>Pay Office</em></aside>
   <div id="prison-route" class="prison-route"></div><div id="crosshair"><span></span><span></span><span></span><span></span></div>
   <div id="target" hidden><b id="block-name"></b><div class="meter"><span id="damage"></span></div></div>
-  <div id="pickup-slip" aria-hidden="true"></div>
+  <div id="pickup-slip" aria-hidden="true"></div><aside id="tree-payoff" role="status" aria-live="polite"></aside>
   <footer class="hud-bottom"><div class="tool-chip"><span class="tool-icon">⛏</span><div><small>AUTO TOOL</small><b id="pick-name"></b><span id="pick-power"></span></div></div>
    <div class="voxel-hotbar" aria-hidden="true"><div class="hotbar-slot selected" data-tool-slot="pick"><img id="slot-pick" alt=""><small>PICK</small></div><div class="hotbar-slot" data-tool-slot="axe"><img id="slot-axe" alt=""><small>AXE</small></div><div class="hotbar-slot" data-tool-slot="sword"><svg viewBox="0 0 16 16"><path fill="#c8d6cf" d="M7 1h2v8H7z"/><path fill="#e6eddf" d="M7 0h1v8H7z"/><path fill="#d7b875" d="M4 9h8v2H4z"/><path fill="#714b29" d="M7 11h2v4H7z"/></svg><small>SWORD</small></div><div class="hotbar-slot" data-tool-slot="bow"><svg viewBox="0 0 16 16"><path fill="none" stroke="#bb8d53" stroke-width="2" d="M5 1L9 4L11 8L9 12L5 15"/><path fill="none" stroke="#e4d7b5" d="M5 1v14"/></svg><small>BOW</small></div><div class="hotbar-slot bag-slot"><svg viewBox="0 0 16 16"><path fill="#392d1e" d="M1 4h14v10H1z"/><path fill="#a4773b" d="M2 5h12v8H2z"/><path fill="#d6ae63" d="M1 4h14v4H1z"/><path fill="#684c2b" d="M2 8h12v1H2z"/><path fill="#f0d697" d="M7 7h2v4H7z"/></svg><small id="bag-mini">0</small></div></div><div class="satchel-chip"><div><b>Your haul</b><span id="bag-count"></span></div><div class="meter"><span id="bag-fill"></span></div><small id="bag-value"></small></div>
    <div class="control-strip"><span><kbd>SPACE</kbd> Jump</span><span><kbd>SHIFT</kbd> Sprint</span><span><kbd>E</kbd> Exchange</span><span><kbd>R</kbd> Yard</span><span><kbd>ESC</kbd> Pause</span></div></footer>
@@ -109,6 +109,7 @@ export class HUD{
  }
  select(tab){this.tab=tab;document.querySelector('.exchange-content').scrollTop=0;document.querySelectorAll('[data-tab]').forEach(b=>{b.classList.toggle('selected',b.dataset.tab===tab);b.setAttribute('aria-pressed',String(b.dataset.tab===tab));});for(const name of ['mines','forge','cargo'])document.getElementById('pane-'+name).hidden=name!==tab;}
  target(name,progress,showMeter=true){document.getElementById('damage').parentElement.hidden=!showMeter;this.set('block-name',name);document.getElementById('target').hidden=!name;document.getElementById('damage').style.width=progress*100+'%';}
+ treeCleared(timber){const note=document.getElementById('toast');if(note.textContent.includes('logs cut')){clearTimeout(this.timeout);note.classList.remove('visible');}const el=document.getElementById('tree-payoff');el.innerHTML='<small>TREE CLEARED</small><strong>'+timber+' TIMBER</strong><span>+12 WOODCUTTING XP</span>';el.classList.add('visible');clearTimeout(this.treeTimer);this.treeTimer=setTimeout(()=>el.classList.remove('visible'),1500);}
  pickup(name){const now=performance.now();this.pickupCount=this.lastPickup===name&&now-(this.pickupAt??0)<450?(this.pickupCount??0)+1:1;this.lastPickup=name;this.pickupAt=now;const el=document.getElementById('pickup-slip');el.textContent='+'+this.pickupCount+' '+name+' / RECOVERED';el.classList.add('visible');clearTimeout(this.pickupTimer);this.pickupTimer=setTimeout(()=>el.classList.remove('visible'),900);}
 
  menuPanel(name){for(const panel of ['main-actions','settings','controls'])document.getElementById('menu-'+panel).hidden=panel!==name;const area=document.getElementById('menu-'+name);area.querySelector('button,input')?.focus();}

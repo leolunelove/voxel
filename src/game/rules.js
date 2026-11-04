@@ -48,7 +48,8 @@ export function validateSave(raw){
  if(bagCount(s)>capacity(s))return freshState();return s;
 }
 // Pickaxe work is committed at contact, with a faster cadence on better tools.
-export const MINING_STRIKE=.42;
+export const MINING_STRIKE=.42,WOOD_STRIKE=.44;
+export const choppingCadence=power=>Math.max(.26,.43/Math.pow(Math.max(1,power),.2));
 export const miningCadence=power=>Math.max(.23,.36/Math.pow(Math.max(1,power),.18));
 export class Mining{
  constructor(){this.reset();}

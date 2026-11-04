@@ -1,0 +1,6 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {Mining,WOOD_STRIKE,choppingCadence,BLOCKS} from '../src/game/rules.js';import {AXES} from '../src/game/camp-rules.js';
+
+const hit=(m,power=1,key='log:0',contact=true)=>m.tick(1/60,key,8,power,true,contact,BLOCKS[8].toughness,WOOD_STRIKE);
+test('wood takes work only on contact; starter hatchet takes three committed chops per log',()=>{const m=new Mining();for(let n=0;n<90;n++)assert.equal(hit(m,1,'log:0',false).progress,0);assert.equal(hit(m).broken,false);assert.equal(hit(m).broken,false);assert.equal(hit(m).broken,true);});
+test('axe upgrades have a stronger strike and a shorter recovery',()=>{const hits=power=>{const m=new Mining();for(let i=1;i<10;i++)if(hit(m,power).broken)return i;};assert.equal(hits(AXES[0].power),3);assert.equal(hits(AXES[1].power),2);assert.equal(hits(AXES[2].power),1);assert.ok(choppingCadence(AXES[1].power)<choppingCadence(AXES[0].power));});
+test('partial cuts do not carry to another log or survive release',()=>{const m=new Mining();hit(m);assert.equal(hit(m,1,'log:1',false).progress,0);hit(m,1,'log:1');m.tick(.01,'log:1',8,1,false);assert.equal(hit(m,1,'log:1',false).progress,0);});

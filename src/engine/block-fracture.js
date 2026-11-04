@@ -1,4 +1,4 @@
-import {fractureGraph,revealFracture,fractureSeed} from './fracture-pattern.js?v=85';
+import {fractureGraph,revealFracture,fractureSeed} from './fracture-pattern.js?v=86';
 import * as T from '../../vendor/three.module.js';
 // BoxGeometry material order. Coordinates are block-local, never camera-local.
 export function faceUV(point,normal){
@@ -29,7 +29,7 @@ export class BlockFracture{
   if(!previous&&this.impacts.length<4)this.impacts.push({...contact,born:this.impacts.length?Math.max(0,(stage-1)/9):0,energy:1+(context.tier??0)*.13,seed:this.seed+this.impacts.length*7919});
   this.stage=Math.max(this.stage,stage);
   this.faces.forEach((f,index)=>{
-   const primary=index===this.anchor.face,origin=primary?this.anchor:{u:.5,v:.5},contacts=this.impacts.filter(i=>i.face===index),fallback={...origin,born:.22,energy:1,seed:this.seed},lines=block.userData.type===8?woodCutLines(this.seed,primary?stage:Math.max(0,stage-2),origin):(contacts.length?contacts:[fallback]).flatMap(i=>revealFracture(fractureGraph({seed:i.seed,type:block.userData.type??0,face:index,anchor:i,energy:i.energy,exposure:context.exposure??0}),Math.max(0,(this.stage/9-i.born)/(1-i.born)))),ctx=f.ctx;ctx.clearRect(0,0,128,128);ctx.lineJoin='miter';ctx.lineCap='square';
+   const primary=index===this.anchor.face,origin=primary?this.anchor:{u:.5,v:.5},contacts=this.impacts.filter(i=>i.face===index),fallback={...origin,born:.22,energy:1,seed:this.seed},lines=block.userData.type===8?woodCutLines(this.seed,primary||contacts.length?stage:Math.max(0,stage-2),contacts[0]??origin):(contacts.length?contacts:[fallback]).flatMap(i=>revealFracture(fractureGraph({seed:i.seed,type:block.userData.type??0,face:index,anchor:i,energy:i.energy,exposure:context.exposure??0}),Math.max(0,(this.stage/9-i.born)/(1-i.born)))),ctx=f.ctx;ctx.clearRect(0,0,128,128);ctx.lineJoin='miter';ctx.lineCap='square';
    for(const [color,width,offset] of [['rgba(8,13,15,.90)',4,0],['rgba(220,211,182,.36)',1.5,1],['rgba(13,18,20,.98)',3,0]]){
     ctx.strokeStyle=color;ctx.lineWidth=width;
     for(const line of lines){ctx.beginPath();line.forEach(([x,y],i)=>i?ctx.lineTo(x+offset,y+offset):ctx.moveTo(x+offset,y+offset));ctx.stroke();}

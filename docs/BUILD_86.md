@@ -1,0 +1,7 @@
+# Build 86 — Timber Detail contact and payoff
+
+Axe work now commits on contact, with three starter-hatchet chops, two steel chops or one jade chop per log at full stamina. Better axes recover faster. The axe's own forward pitch and supported grip retain the reticle-aligned working edge, with tool-only impact stops and recoil; camera and locomotion remain independent.
+
+Hits throw thin grain-shaped splinters and deepen anchored wood notches, including a newly struck side of the same log. Each tree still requires all three individual trunk blocks. The final log releases a bounded leaf burst, a short layered canopy collapse, a heavier wood-split/rustle sound and a timber/XP payoff panel. That panel reports the existing yield and XP; it does not award additional resources. Stale partial-cut toasts are cleared. Regrowth timing, satchel reservation and saved values are retained.
+
+Validation: the full rule/geometry/regrowth/save suite passes. New tests cover contact-only cutting, three/two/one-hit axe progression, release and retarget reset. Browser-played an isolated level-two character through the checkpoint, cut all three logs with the starter hatchet, observed the canopy/leaf payoff, collected nine timber worth 36 credits, jumped/moved, forged a steel axe for 85 credits and reloaded with 915 credits. Live user saves were untouched. Steel contact timing is covered by rule/pose tests; a second browser pass was interrupted by an automation timeout. Sound synthesis was exercised; subjective audio and feel remain for player review.

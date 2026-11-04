@@ -1,6 +1,6 @@
-import {bowRig,applyBowRig} from './bow-motion.js?v=85';
-import {BOW_ROTATION,BOW_VIEW_SCALE,bowPosition} from './bow-space.js?v=85';
-import {SWORDS,BOWS} from '../game/weapons.js?v=85';
+import {bowRig,applyBowRig} from './bow-motion.js?v=86';
+import {BOW_ROTATION,BOW_VIEW_SCALE,bowPosition} from './bow-space.js?v=86';
+import {SWORDS,BOWS} from '../game/weapons.js?v=86';
 import * as T from '../../vendor/three.module.js';
 // Solid stepped tools with a square shaft, socket and tapered working edges.
 const PALETTES=[[0x566161,0xb9c3bc,0xe2e6da],[0x4c5657,0xc9d4cc,0xf1f3e8],[0x20594c,0x54c7a7,0xa0f1cf],[0x364e5f,0x92b8cc,0xd9edf2],[0x765a24,0xd4ac45,0xffdf83],[0x713e31,0xe18a59,0xffc388]];
@@ -90,7 +90,7 @@ export function heldPose(phase,aspect,motion=1,kind='pick',draw=0,recoil=0){
  const p=kind==='sword'?swordSwingPose(phase):swingPose(phase),halfWidth=Math.tan(24*Math.PI/180)*TOOL_DEPTH*aspect,x=Math.min(.56,Math.max(.08,halfWidth-.82)),distance=phase<.30?.30-phase:Math.max(0,phase-.34),t=Math.max(0,1-distance/.14),contact=t*t*(3-2*t);
  // Hold the silhouette diagonally at the right shoulder. Pitch does the work;
  // yaw stays quiet so the head drives forward instead of sweeping sideways.
- const rotation=[-.12+p[3]*motion*1.25,.38+p[4]*motion*.25,.20-p[5]*motion*.65];
+ const rotation=[-.12+p[3]*motion*1.25,.38+p[4]*motion*.25,.20-p[5]*motion*.65];if(kind==='axe'){rotation[0]=-.08+p[3]*motion*1.4;rotation[1]=.34+p[4]*motion*.2;rotation[2]=.22-p[5]*motion*.5;}
  if(kind==='sword'){rotation[0]=-.35+p[3]*motion*1.4;rotation[1]=-.25+p[4]*motion;rotation[2]=-.25+p[5]*motion;}
  const position=[x+p[0]*motion,(kind==='sword'?-.43:-.22)+p[1]*motion,-TOOL_DEPTH+p[2]*motion];
  position[0]=Math.min(position[0],halfWidth*.62);if(kind==='sword')position[2]-=.16*contact*motion;

@@ -1,5 +1,5 @@
-import {ATTACK_OFFSET,ARCHERY_OFFSET} from './training-layout.js?v=85';
-import {FOREST_OFFSET} from './conservatory-layout.js?v=85';
+import {ATTACK_OFFSET,ARCHERY_OFFSET} from './training-layout.js?v=86';
+import {FOREST_OFFSET} from './conservatory-layout.js?v=86';
 import * as T from '../../vendor/three.module.js';
 
 // Only edge fixtures collide. Firing lanes, monster navigation and tree work

@@ -1,49 +1,49 @@
-import {MINING_STRIKE} from './game/rules.js?v=85';
-import {workRoute,routeHint} from './game/work-route.js?v=85';
-import {CameraHandoff} from './engine/camera-handoff.js?v=85';
-import {createIntakeExperience} from './ui/intake-experience.js?v=85';
-import {toolIcon} from './engine/pickaxe.js?v=85';
-import {consumeCharacterReset} from './game/character-reset.js?v=85';
-import {mountCharacterReset} from './ui/character-reset.js?v=85';
+import {MINING_STRIKE,WOOD_STRIKE} from './game/rules.js?v=86';
+import {workRoute,routeHint} from './game/work-route.js?v=86';
+import {CameraHandoff} from './engine/camera-handoff.js?v=86';
+import {createIntakeExperience} from './ui/intake-experience.js?v=86';
+import {toolIcon} from './engine/pickaxe.js?v=86';
+import {consumeCharacterReset} from './game/character-reset.js?v=86';
+import {mountCharacterReset} from './ui/character-reset.js?v=86';
 try{consumeCharacterReset(localStorage);}catch{}
-import {SEARCH,CELL_CHECK} from './game/foundry-arrival.js?v=85';
-import {CELL_WAKE,atBed,atPayOffice,inIntake,HUNT_OPTIONS,RANGE_OFFSET,inHunt,inRange,atDungeonGate,prisonDepth as entryDepth,trainingGateNear,LABOUR_WINGS as TRAINING_WINGS} from './game/foundry-layout.js?v=85';
-import {loadIntake,advanceIntake,intakeNear,intakeInstruction,INTAKE_SPAWNS,CHECKIN,TOOL_ISSUE} from './game/foundry-arrival.js?v=85';
-import {trainingAccess} from './game/training-layout.js?v=85';
-import {timberGateNear as atConservatoryGate} from './game/foundry-timber-layout.js?v=85';
-import {LightBudget,RenderQuality} from './engine/render-quality.js?v=85';
+import {SEARCH,CELL_CHECK} from './game/foundry-arrival.js?v=86';
+import {CELL_WAKE,atBed,atPayOffice,inIntake,HUNT_OPTIONS,RANGE_OFFSET,inHunt,inRange,atDungeonGate,prisonDepth as entryDepth,trainingGateNear,LABOUR_WINGS as TRAINING_WINGS} from './game/foundry-layout.js?v=86';
+import {loadIntake,advanceIntake,intakeNear,intakeInstruction,INTAKE_SPAWNS,CHECKIN,TOOL_ISSUE} from './game/foundry-arrival.js?v=86';
+import {trainingAccess} from './game/training-layout.js?v=86';
+import {timberGateNear as atConservatoryGate} from './game/foundry-timber-layout.js?v=86';
+import {LightBudget,RenderQuality} from './engine/render-quality.js?v=86';
 import * as T from '../vendor/three.module.js';
 
 const entryFogColor=new T.Color(0x263e38);
-import {Input} from './engine/input.js?v=85';
-import {Audio} from './engine/audio.js?v=85';
-import {Feedback} from './engine/feedback.js?v=85';
-import {FoundryWorld as CampWorld} from './game/foundry-world.js?v=85';
-import {campLevel,LEVEL_TWO,AXES,treeYield,treeLogYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=85';
-import {Player} from './game/player.js?v=85';
-import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=85';
-import {Pickups} from './game/pickups.js?v=85';
-import {HUD} from './ui/hud.js?v=85';
+import {Input} from './engine/input.js?v=86';
+import {Audio} from './engine/audio.js?v=86';
+import {Feedback} from './engine/feedback.js?v=86';
+import {FoundryWorld as CampWorld} from './game/foundry-world.js?v=86';
+import {campLevel,LEVEL_TWO,AXES,treeYield,treeLogYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=86';
+import {Player} from './game/player.js?v=86';
+import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=86';
+import {Pickups} from './game/pickups.js?v=86';
+import {HUD} from './ui/hud.js?v=86';
 
-import {Hunt} from './game/hunt.js?v=85';
-import {freshHunt,loadHunt,bank,retreat,attackLevel,swordDamage,MONSTERS,MAX_HP,hurt} from './game/hunt-rules.js?v=85';
+import {Hunt} from './game/hunt.js?v=86';
+import {freshHunt,loadHunt,bank,retreat,attackLevel,swordDamage,MONSTERS,MAX_HP,hurt} from './game/hunt-rules.js?v=86';
 
-import {Archery} from './game/archery.js?v=85';
-import {Dungeon} from './game/dungeon.js?v=85';
-import {skillLevel,finishDungeon,DIFFICULTIES} from './game/dungeon-rules.js?v=85';
+import {Archery} from './game/archery.js?v=86';
+import {Dungeon} from './game/dungeon.js?v=86';
+import {skillLevel,finishDungeon,DIFFICULTIES} from './game/dungeon-rules.js?v=86';
 
-import {SkillBook} from './ui/skills.js?v=85';
+import {SkillBook} from './ui/skills.js?v=86';
 
-import {SWORDS,BOWS,forgeWeapon,weaponReason} from './game/weapons.js?v=85';
+import {SWORDS,BOWS,forgeWeapon,weaponReason} from './game/weapons.js?v=86';
 
-import {SHIELDS,freshGuard,tickGuard,defend,forgeShield,shieldReason} from './game/shield-rules.js?v=85';
-import {skillLedger} from './game/skills.js?v=85';
-import {freshShift,loadShift,tickShift,fatigue,shiftClock,closeShift,loadSummary} from './game/shift-rules.js?v=85';
+import {SHIELDS,freshGuard,tickGuard,defend,forgeShield,shieldReason} from './game/shield-rules.js?v=86';
+import {skillLedger} from './game/skills.js?v=86';
+import {freshShift,loadShift,tickShift,fatigue,shiftClock,closeShift,loadSummary} from './game/shift-rules.js?v=86';
 
-import {ShiftUI} from './ui/shift.js?v=85';
-import {RestFlow} from './game/rest-flow.js?v=85';
-import {Daylight} from './engine/daylight.js?v=85';
-import {updateHTML} from './ui/dom.js?v=85';
+import {ShiftUI} from './ui/shift.js?v=86';
+import {RestFlow} from './game/rest-flow.js?v=86';
+import {Daylight} from './engine/daylight.js?v=86';
+import {updateHTML} from './ui/dom.js?v=86';
 document.body.classList.add('new-prison','timber-commissioned');
 const qaPosition=new URLSearchParams(location.search).has('qa')?document.body.appendChild(document.createElement('output')):null;if(qaPosition){qaPosition.style.cssText='position:fixed;top:0;left:40%;z-index:200;background:#222;color:#fff;padding:6px';}
 const canvas=document.getElementById('game');
@@ -136,13 +136,13 @@ function frame(now){if(qaPosition)qaPosition.textContent=player.position.toArray
   const tree=target?.userData.type===8;const needed=target?(tree?treeLogYield(state):dropCount(target.userData.type)):1;heldKind=tree||area===4?'axe':'pick';const baseTool=heldKind==='axe'?AXES[state.axe]:PICKS[state.pick],tool={...baseTool,power:baseTool.power*fatigue(shift)},tier=heldKind==='axe'?state.axe:state.pick;hud.tool(heldKind,state,huntState);const full=bagCount(state)+pickups.count+needed>capacity(state);active=input.held&&!!target&&!full;
   impactTarget=target;impactPoint=aimed?.point;
   impact=feedback.update(dt,active,tier,player.horizontal.lengthSq()>.1,{camera,point:impactPoint},heldKind,tool.power);
-  const result=mining.tick(dt,target?.userData.key??null,target?.userData.type??0,tool.power,active,impact,BLOCKS[target?.userData.type??0].toughness,heldKind==='pick'?MINING_STRIKE:0);progress=result.progress;
+  const result=mining.tick(dt,target?.userData.key??null,target?.userData.type??0,tool.power,active,impact,BLOCKS[target?.userData.type??0].toughness,heldKind==='pick'?MINING_STRIKE:heldKind==='axe'?WOOD_STRIKE:0);progress=result.progress;
   impactTarget=target;impactPoint=aimed?.point;
   if(result.broken&&target&&!full){
    const type=target.userData.type,count=tree?treeLogYield(state):dropCount(type),timberTree=tree?target.userData.tree:null;
    shift.resources[type]+=count;for(let n=0;n<count;n++)pickups.spawn(aimed.point.clone().addScaledVector(aimed.face.normal,.16),type);
    feedback.blockImpact(target,aimed.point,aimed.face.normal.clone().transformDirection(target.matrixWorld),BLOCKS[type].color,1,true);audio.play('break',type,tier);
-   const completed=world.remove(target);if(!tree)state.mined++;else if(completed){state.chopped++;feedback.treeBreak(timberTree);audio.play('tree-break',8,tier);hud.toast('TREE CLEARED / +12 Woodcutting XP · '+treeYield(state)+' timber across 3 logs');}else hud.toast(timberTree.cuts+' / 3 logs cut · +'+count+' timber');
+   const completed=world.remove(target);if(!tree)state.mined++;else if(completed){state.chopped++;feedback.treeBreak(timberTree);audio.play('tree-break',8,tier);hud.treeCleared(treeYield(state));}else hud.toast(timberTree.cuts+' / 3 logs cut · +'+count+' timber');
    target=null;progress=0;changed();
   }
   if(impact&&impactTarget&&target&&impactPoint){const type=impactTarget.userData.type;audio.play('hit',type,tier);if(type===8)impactTarget.userData.tree.hit=.18;feedback.blockImpact(impactTarget,impactPoint,aimed.face.normal.clone().transformDirection(impactTarget.matrixWorld),BLOCKS[type].color,progress);}
@@ -152,7 +152,7 @@ function frame(now){if(qaPosition)qaPosition.textContent=player.position.toArray
  input.guardMode=!!dungeon&&combatWeapon==='sword'&&mode==='playing';feedback.updateShield(dt,!!dungeon&&combatWeapon==='sword'&&mode==='playing',dungeonGuard,huntState.shield);
  if(mode==='playing'){tickShift(shift,dt,(heldKind==='pick'||heldKind==='axe')&&active,inCombat()&&(input.held||dungeonGuard?.held));shiftSaveClock+=dt;if(shiftSaveClock>1){saveShift();shiftSaveClock=0;}}
  if(mode==='playing'){let collected=false;pickups.update(dt,player.position,state,(type)=>{audio.play('pickup',type);hud.pickup(BLOCKS[type].name);collected=true;},feedback.reduced);if(collected)changed();}
- document.body.classList.toggle('mining-contact',mode==='playing'&&heldKind==='pick'&&(feedback.impactFlash??0)>0);feedback.target(target,progress);uiClock+=dt;if(uiClock>.05){hud.target((inRange(player.position)||(inCombat()&&combatWeapon==='bow'))?(now<rangedHitUntil?rangedHitLabel:archery.charge>=.99?'FULL DRAW / RELEASE TO FIRE':archery.charge>0?'DRAWING / '+Math.round(archery.charge*100)+'%':'HOLD TO DRAW / RELEASE TO FIRE'):inCombat()?(huntTarget?huntTarget.stats.name+' / '+huntTarget.hp+' HP'+(huntTarget.windup>0?' / BACKSTEP!':''):'HOLD LEFT / STRIKE · Q / SWORD OR BOW'):target?target.userData.type===8?'TRUNK / '+(target.userData.tree.cuts??0)+' OF 3 CUT / '+treeLogYield(state)+' TIMBER PER LOG':BLOCKS[target.userData.type].name+' / '+dropCount(target.userData.type)+' drops / '+BLOCKS[target.userData.type].value+' CR each':'',(inRange(player.position)||(inCombat()&&combatWeapon==='bow'))?archery.charge:inCombat()?(huntTarget?huntTarget.hp/huntTarget.maxHp:0):progress,target?.userData.type!==8);uiClock=0;}
+ document.body.classList.toggle('mining-contact',mode==='playing'&&(heldKind==='pick'||heldKind==='axe')&&(feedback.impactFlash??0)>0);feedback.target(target,progress);uiClock+=dt;if(uiClock>.05){hud.target((inRange(player.position)||(inCombat()&&combatWeapon==='bow'))?(now<rangedHitUntil?rangedHitLabel:archery.charge>=.99?'FULL DRAW / RELEASE TO FIRE':archery.charge>0?'DRAWING / '+Math.round(archery.charge*100)+'%':'HOLD TO DRAW / RELEASE TO FIRE'):inCombat()?(huntTarget?huntTarget.stats.name+' / '+huntTarget.hp+' HP'+(huntTarget.windup>0?' / BACKSTEP!':''):'HOLD LEFT / STRIKE · Q / SWORD OR BOW'):target?target.userData.type===8?'TRUNK / '+(target.userData.tree.cuts??0)+' OF 3 CUT / '+treeLogYield(state)+' TIMBER PER LOG':BLOCKS[target.userData.type].name+' / '+dropCount(target.userData.type)+' drops / '+BLOCKS[target.userData.type].value+' CR each':'',(inRange(player.position)||(inCombat()&&combatWeapon==='bow'))?archery.charge:inCombat()?(huntTarget?huntTarget.hp/huntTarget.maxHp:0):progress,target?.userData.type!==8);uiClock=0;}
  document.body.classList.toggle('bow-equipped',heldKind==='bow');document.body.classList.toggle('bow-ready',heldKind==='bow'&&archery.charge>=.99);document.body.classList.toggle('bow-aim',heldKind==='bow'&&archery.charge>0);document.body.style.setProperty('--draw',String(archery.charge));const targetFov=heldKind==='bow'&&mode==='playing'&&!feedback.reduced?72-5*archery.charge:72;const nextFov=camera.fov+(targetFov-camera.fov)*(1-Math.exp(-dt*12));if(Math.abs(nextFov-camera.fov)>.001){camera.fov=nextFov;camera.updateProjectionMatrix();}document.body.classList.toggle('combat-contact',mode==='playing'&&!feedback.reduced&&now<hitMarkerUntil);huntUIClock+=dt;huntPanel.hidden=mode!=='playing'||!(inCombat()||inRange(player.position)||atDungeonGate(player.position));huntPanel.classList.toggle('danger',currentCombat().damageFlash>0);if(huntUIClock>.1){huntUIClock=0;updateHTML(huntPanel,inRange(player.position)&&!dungeon?'<b>ARCHERY / LEVEL '+skillLevel(huntState.archeryXP)+'</b><div>BOW RANGE</div><div>'+BOWS[huntState.bow].name+'</div><div>'+huntState.archeryXP+' Archery XP</div><strong>HOLD TO DRAW · RELEASE TO FIRE</strong><small>Centre / 6 XP · Inner ring / 4 XP · Outer ring / 2 XP<br>'+(input.locked?'Right or left click / draw.':'Left click / draw · RMB / look.')+' Aim higher at distance. Arrows supplied.</small><div>TAB / VIEW ALL SKILLS</div>':'<b>ATTACK / LEVEL '+attackLevel(huntState.xp)+'</b><div>HP '+Math.ceil(huntState.hp)+' / 100</div><div class=hunt-health role=meter aria-label=Health aria-valuemin=0 aria-valuemax=100 aria-valuenow='+Math.ceil(huntState.hp)+'><i style=width:'+huntState.hp+'%></i></div><div>'+huntState.xp+' Attack XP · '+swordDamage(huntState.xp,huntState.sword)+' sword damage</div><em>'+(inCombat()&&currentCombat().enemies.some(e=>!e.dead&&e.windup>0)?'ATTACK INCOMING / BACKSTEP OR JUMP':'')+'</em><div>TAB / VIEW ALL SKILLS</div><strong>'+huntState.loot+' CR / MONSTER LOOT AT RISK</strong><small>'+(dungeon?((dungeon.roomAt(player.position)<0?'PASSAGE':'ROOM '+(dungeon.roomAt(player.position)+1))+' / '+dungeon.rooms.length+' · '+(dungeon.rooms[dungeon.roomAt(player.position)]?.style??'Passage')+' · '+dungeon.rules.name+' · '+currentCombat().enemies.filter(e=>!e.dead).length+' enemies left. '+(dungeon.cleared?'Reach the gold exit seal and press E.':'Clear the rooms. R abandons.')):inRange(player.position)?'Hold to draw; release to fire. Aim above distant targets. Arrows are supplied here.':atDungeonGate(player.position)?DIFFICULTIES[dungeonDifficulty].name+' / F changes difficulty · E enters. Enemy HP ×'+DIFFICULTIES[dungeonDifficulty].health+' · loot ×'+DIFFICULTIES[dungeonDifficulty].reward+' · completion +'+DIFFICULTIES[dungeonDifficulty].bonus+' CR. Defeat loses unbanked loot.':inHunt(player.position)?'Walk out to bank. R retreats and loses loot. Defeat or reload loses all unbanked loot.':'Hunting gate behind the yard. Heal here; your banked credits are safe.')+'</small>'+(dungeon&&dungeon.roomAt(player.position)===dungeon.rooms.length-1?'<div class=warden-status>THE UNDERWARDEN / '+dungeon.combat.enemies.at(-1).hp+' / '+dungeon.combat.enemies.at(-1).maxHp+' HP<br>Gold ring: backstep or jump.<br>SEAL REWARD / +'+dungeon.bonus+' CR · +'+dungeon.xp+' XP</div>':'')+(dungeon?'<div class=dungeon-route>ROUTE / '+dungeon.rooms.map((r,i)=>i===0?'1':((r.x>dungeon.rooms[i-1].x?' EAST ':r.x<dungeon.rooms[i-1].x?' WEST ':r.z>dungeon.rooms[i-1].z?' SOUTH ':' NORTH ')+(i+1))).join(' → ')+'</div>':''));}
  document.body.classList.toggle('unissued',intake.stage<3);document.body.classList.toggle('quiet-intake',intake.stage<4);document.body.classList.toggle('quiet-room',intake.stage>=4&&(world.area(player.position)===12||world.area(player.position)===13));document.body.classList.toggle('arrival-menu',intake.stage<3&&mode==='menu');if(intake.stage<3&&mode==='menu'){document.getElementById('start-title').textContent=intake.stage===0?'Your sentence starts here.':'Complete your intake.';document.getElementById('start-summary').textContent=intake.stage===0?'Report. Break stone. Earn your clearance.':intakeInstruction(intake);document.getElementById('play').firstChild.textContent=intake.stage===0?(arrivalWelcomed?'Continue intake ':'Begin sentence '):'Continue ';}if(mode==='menu'){updateHTML(document.getElementById('docket-stamp'),intake.stage<3?'AWAITING INTAKE':'LABOUR CLEARED');updateHTML(document.getElementById('docket-tool'),intake.stage<3?'PENDING ISSUE':PICKS[state.pick].name.toUpperCase());}if(mode==='menu'&&intake.stage>=3){updateHTML(document.getElementById('start-title'),intake.stage===3?'Report to Cell 07.':'Back on the clock.');updateHTML(document.getElementById('start-summary'),'Shift '+shift.day+' · '+state.money.toLocaleString()+' credits · '+(saveAvailable?'Progress saved locally':'Saving unavailable for this session'));}feedback.pivot.visible=intake.stage>=3;intakePanel.hidden=mode!=='playing'||intake.stage>=5;
  const stations=[SEARCH,CHECKIN,TOOL_ISSUE,CELL_CHECK],nearStation=intake.stage<4&&intakeNear(player.position,stations[intake.stage]);

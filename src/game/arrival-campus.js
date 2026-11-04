@@ -1,9 +1,9 @@
 import * as T from '../../vendor/three.module.js';
-import {ArrivalWorld} from './prison-arrival.js?v=85';
-import {groundHeight,inPreview} from './arrival-layout.js?v=85';
-import {ARRIVAL_SCALE as S,ARRIVAL_Y as Y,ARRIVAL_Z as Z} from './foundry-layout.js?v=85';
-import {batchScenery} from '../engine/static-batch.js?v=85';
-import {createPickaxe} from '../engine/pickaxe.js?v=85';
+import {ArrivalWorld} from './prison-arrival.js?v=86';
+import {groundHeight,inPreview} from './arrival-layout.js?v=86';
+import {ARRIVAL_SCALE as S,ARRIVAL_Y as Y,ARRIVAL_Z as Z} from './foundry-layout.js?v=86';
+import {batchScenery} from '../engine/static-batch.js?v=86';
+import {createPickaxe} from '../engine/pickaxe.js?v=86';
 export const arrivalLocal=(x,z)=>({x:x/S,z:(z-Z)/S});
 export const insideArrival=(x,z)=>{const p=arrivalLocal(x,z);return inPreview(p.x,p.z);};
 export const arrivalFloor=(x,z)=>{const p=arrivalLocal(x,z);return 1+Y*groundHeight(p.x,p.z);};
