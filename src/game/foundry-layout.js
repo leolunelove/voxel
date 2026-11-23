@@ -1,3 +1,4 @@
+import {RANGE_WING,rangeHall,RANGE_TARGETS,rangeFiringPosition} from './foundry-range-layout.js?v=89.1';
 export const PRISON_SPAWN=[7,2.65,16],CELL_WAKE=[-29.3,2.65,19.4];
 export const inBox=(x,z,b)=>x>=b[0]&&x<b[1]&&z>=b[2]&&z<b[3];
 export const atBed=p=>Math.hypot(p.x+29.3,p.z-19.4)<1.7;
@@ -7,8 +8,8 @@ export const CONTAINMENT={key:'attack',name:'CONTAINMENT DETAIL',level:3,blocks:
 export const containmentInside=p=>inBox(p.x,p.z,CONTAINMENT.bounds)||CONTAINMENT.passages.some(b=>inBox(p.x,p.z,b));
 export const containmentAccess=(state,hunt={})=>state.mined>=60||(hunt.xp??0)>0;
 export const containmentRoute=[[7,26],[7,28],[14.5,28],[14.5,34],[25,34],[25,41]];
-export const inHunt=p=>inBox(p.x,p.z,CONTAINMENT.bounds),inRange=()=>false,atDungeonGate=()=>false,prisonDepth=()=>0,trainingGateNear=p=>Math.abs(p.x-14.5)<2.5&&Math.abs(p.z-30)<2.5?CONTAINMENT:null,LABOUR_WINGS=[CONTAINMENT];
-export const HUNT_OPTIONS={spawns:[[0,24,44,0],[1,32,44,0],[2,28,50,1]],bounds:[20.8,35.2,39.8,52.2],canAct:(e,p)=>e.hp<e.maxHp||Math.hypot(e.root.position.x-p.x,e.root.position.z-p.z)<5.2,active:inHunt},RANGE_OFFSET={x:200,z:200};
+export const inHunt=p=>inBox(p.x,p.z,CONTAINMENT.bounds),inRange=rangeHall,atDungeonGate=()=>false,prisonDepth=()=>0,trainingGateNear=p=>[CONTAINMENT,RANGE_WING].sort((a,b)=>Math.hypot(p.x-a.gate[0],p.z-a.gate[1])-Math.hypot(p.x-b.gate[0],p.z-b.gate[1])).find(w=>Math.abs(p.x-w.gate[0])<2.5&&Math.abs(p.z-w.gate[1])<2.5),LABOUR_WINGS=[CONTAINMENT,RANGE_WING];
+export const HUNT_OPTIONS={spawns:[[0,24,44,0],[1,32,44,0],[2,28,50,1]],bounds:[20.8,35.2,39.8,52.2],canAct:(e,p)=>e.hp<e.maxHp||Math.hypot(e.root.position.x-p.x,e.root.position.z-p.z)<5.2,active:inHunt},RANGE_OFFSET={targets:RANGE_TARGETS,canScore:rangeFiringPosition};
 export const CAMPUS_FLOORS=[[-20,-7,12,16],[7.8,11,29,51.2],[-8,18,4,30],[12,22,17,27],[-32.5,-19.5,5,24],[4,10,-12,4],[-24,10,-36,-8]];
 // Ore retains canonical coordinates for generation, exposure and excavation identity.
 export const MINE_OFFSET=22,PIT=[-20,4,-32,-10];

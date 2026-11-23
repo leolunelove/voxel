@@ -205,3 +205,10 @@ body:has(#menu:not([hidden])) .intake-caption{display:none}
 .in-combat #region-arrival span{display:none}
 .melee-equipped #target{top:auto;bottom:178px;transform:translateX(-50%);width:max-content;max-width:70vw;min-width:0;padding:4px 8px;background:#202126b8;border:0}
 .melee-equipped #target .meter{display:none}
+
+/* Focus the qualification view on aim, score and lane guidance. */
+.bow-equipped .next-order{display:none}
+.bow-equipped #region-arrival{top:13%;width:min(440px,65vw);padding:10px}
+.bow-equipped #region-arrival strong{font-size:20px;letter-spacing:1px}
+.bow-equipped #region-arrival small{font-size:9px;letter-spacing:2px}
+.bow-equipped #region-arrival span{display:none}
