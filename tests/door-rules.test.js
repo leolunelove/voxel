@@ -1,0 +1,5 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {tickDoor} from '../src/game/door-rules.js';
+test('door hysteresis holds the threshold open instead of flickering around approach range',()=>{const d={open:false,amount:0};assert.ok(tickDoor(d,.1,3));assert.ok(d.amount>0&&d.amount<1);for(const distance of [3.5,3.2,4.3,3.9,4.6]){assert.equal(tickDoor(d,.1,distance),false);assert.ok(d.open);}assert.ok(tickDoor(d,.1,5));assert.equal(d.open,false);assert.equal(tickDoor(d,.1,4),false);assert.equal(d.open,false);});
+test('clearance and reduced motion preserve the same physical open state',()=>{const d={open:false,amount:0};tickDoor(d,1,0,false,true);assert.equal(d.amount,0);tickDoor(d,0,1,true,true);assert.equal(d.amount,1);tickDoor(d,0,1,false,true);assert.equal(d.amount,0);});
+test('door motion is independent of frame rate and freezes with simulation time',()=>{const run=hz=>{const d={open:false,amount:0};for(let n=0;n<hz;n++)tickDoor(d,1/hz,1);return d.amount;};assert.ok(Math.abs(run(30)-run(144))<.001);const d={open:true,amount:.6};tickDoor(d,0,1);assert.equal(d.amount,.6);});

@@ -1,3 +1,4 @@
+export const PRISON_DOORS={openDistance:3.4,closeDistance:4.8,speed:7};
 export const INTAKE_REACH={counter:[-.35,6.45,54.02,57.5],issue:[8.88,10.68,44.25,49.35],eye:[1.9,4.25]};
 export const MINE_REFILL={seconds:150,remaining:.25,warning:5};
 export const ARCHERY_CONTACT={duration:.34,strength:.35,fullStrength:1.2,stagger:.10,fullStagger:.30,push:2,fullPush:7.8};

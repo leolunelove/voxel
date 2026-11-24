@@ -1,6 +1,6 @@
 import * as T from '../../vendor/three.module.js';
-import {BOW_ROTATION,BOW_REST,BOW_DRAW_LENGTH,easeDraw,localBowFlight} from './bow-space.js?v=91';
-export {BOW_ROTATION} from './bow-space.js?v=91';
+import {BOW_ROTATION,BOW_REST,BOW_DRAW_LENGTH,easeDraw,localBowFlight} from './bow-space.js?v=92';
+export {BOW_ROTATION} from './bow-space.js?v=92';
 export const ARROW_DIRECTION=new T.Vector3(0,0,-1);
 export function bowRig(draw,releaseAge=Infinity,releasedCharge=1,reduced=false){
  const d=Math.max(0,Math.min(1,draw)),age=Math.max(0,releaseAge),releasing=age<.24&&d===0;

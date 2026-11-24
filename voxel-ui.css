@@ -222,3 +222,11 @@ body:has(#menu:not([hidden])) .intake-caption{display:none}
 #intake-objective.interaction-ready span{font-size:14px;color:#fff0cc;margin-top:10px}
 #intake-objective.interaction-ready kbd{display:inline-block;min-width:24px;padding:6px 8px;background:#edcd8d;color:#262c27;font-size:14px;box-shadow:0 2px 0 #8d703e}
 @media(max-width:650px){#intake-objective.interaction-ready{max-width:calc(100vw - 110px);padding:10px 12px}#intake-objective.interaction-ready span{font-size:12px}}
+
+/* A physical duty route, with a compact direction plate above the tool belt. */
+#walking-guide{position:fixed;bottom:175px;left:50%;transform:translateX(-50%);z-index:8;display:flex;align-items:center;gap:12px;max-width:min(460px,85vw);padding:10px 14px;background:#22322de8;border:1px solid #8c805f;color:#ead8af;box-shadow:0 3px 0 #121e1b80;pointer-events:none;font-family:Arial,sans-serif}
+#walking-guide[hidden]{display:none}#walking-guide .walk-person{width:24px;height:28px;flex:none;fill:currentColor;color:#d9b77f}#walking-guide div{min-width:0}#walking-guide small{display:block;font-size:8px;letter-spacing:2px;color:#b8b69f;margin-bottom:4px}#walking-guide strong{display:block;font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#walking-guide span{white-space:nowrap;font-size:11px;color:#d5c5a3}#walking-guide i{display:block;font-style:normal;font-size:24px;color:#edc084;line-height:1}.quiet-intake #walking-guide{bottom:175px}body:has(#walking-guide:not([hidden])) .prison-route{display:none}
+@media(max-width:650px){#walking-guide{bottom:202px;gap:8px;padding:8px 10px}.quiet-intake #walking-guide{bottom:175px}#walking-guide strong{font-size:11px}#walking-guide small{font-size:7px;letter-spacing:1px}}
+.quiet-intake .control-strip{bottom:30px;max-width:none}
+.quiet-intake:has(.intake-caption:not([hidden])) #walking-guide{bottom:200px}
+@media(max-width:650px){.quiet-intake .control-strip{max-width:90vw;justify-content:center;gap:12px}.quiet-intake:has(.intake-caption:not([hidden])) #walking-guide{bottom:190px}}

@@ -1,9 +1,10 @@
+import {buildPrisonDoor} from '../engine/prison-doors.js?v=92';
 import * as T from '../../vendor/three.module.js';
-import {ArrivalWorld} from './prison-arrival.js?v=91';
-import {groundHeight,inPreview} from './arrival-layout.js?v=91';
-import {ARRIVAL_SCALE as S,ARRIVAL_Y as Y,ARRIVAL_Z as Z} from './foundry-layout.js?v=91';
-import {batchScenery} from '../engine/static-batch.js?v=91';
-import {createPickaxe} from '../engine/pickaxe.js?v=91';
+import {ArrivalWorld} from './prison-arrival.js?v=92';
+import {groundHeight,inPreview} from './arrival-layout.js?v=92';
+import {ARRIVAL_SCALE as S,ARRIVAL_Y as Y,ARRIVAL_Z as Z} from './foundry-layout.js?v=92';
+import {batchScenery} from '../engine/static-batch.js?v=92';
+import {createPickaxe} from '../engine/pickaxe.js?v=92';
 export const arrivalLocal=(x,z)=>({x:x/S,z:(z-Z)/S});
 export const insideArrival=(x,z)=>{const p=arrivalLocal(x,z);return inPreview(p.x,p.z);};
 export const arrivalFloor=(x,z)=>{const p=arrivalLocal(x,z);return 1+Y*groundHeight(p.x,p.z);};
@@ -17,6 +18,7 @@ export function buildArrivalCampus(w){
  art.scene=w.scene;w.arrival=art;const originalBlockers=art.blockers.length;
  w.scene.traverse(o=>{if(o.isPointLight&&o.parent===w.scene){o.userData.alwaysOn=true;o.intensity*=.68;o.distance*=.85;}});
  const B=(...a)=>art.box(...a),F=(...a)=>art.surface(...a);
+ buildPrisonDoor(w,art,{id:"Reception",x:2.88,z:63.016,width:2.62,height:3.6,double:true});
  // A real doorway connects Reception to a compact, staffed tool-control room.
  const top=4.05;
  F(9.36,.932,46.4,3.2,.16,9.2,0xc9c1ab,'ground');
@@ -50,7 +52,7 @@ export function buildArrivalCampus(w){
  art.sign(['CELLBLOCK A  ←','DEEPWELL / FIRST SHIFT'],9.36,3.35,30,2.3,.45);
  // New surfaces use the same cached materials as the approved scene.
  w.blockers.push(...art.blockers.slice(originalBlockers));
- w.arrivalStats=batchScenery(w.scene,art.geometry,[art.dynamic,issueDoor,exitDoor,pick]);
+ w.arrivalStats=batchScenery(w.scene,art.geometry,[art.dynamic,w.doorRoot,issueDoor,exitDoor,pick]);
 }
 export function buildCompactCells(w){
  const a=w.arrival,start=a.blockers.length,B=(...x)=>a.box(...x),F=(...x)=>a.surface(...x),stone=0xc6c5b7,steel=0x435751;
@@ -70,7 +72,7 @@ export function buildCompactCells(w){
    for(const dz of [-1.65,1.65]){B(front,2.1,z+dz,.12,2.2,1.7,0x825b44,'metal',true);for(const d of [-.5,0,.5])B(front+(side<0?.075:-.075),2.7,z+dz+d,.06,.52,.06,steel,'metal');}
    B(front,3.36,z,.15,.2,5.1,steel,'metal',true);
    if(!assigned){B(front,2.1,z,.13,2.2,1.25,0x825b44,'metal',true);for(const d of [-.38,0,.38])B(front,2.68,z+d,.15,.55,.055,steel,'metal');}
-   else B(front-.78,2.1,z+.7,1.5,2.2,.12,0x825b44,'metal',true);
+   else buildPrisonDoor(w,a,{id:"Cell 07",x:front,z,width:1.25,height:2.2,axis:"z",stage:3});
    const n=assigned?'07':String(side<0?i+1:i+4).padStart(2,'0');
    a.sign(['CELL '+n],front+(side<0?.09:-.09),3.03,z,.9,.22,side<0?Math.PI/2:-Math.PI/2,true);
    B(outer,1.24,z,.94,.46,2.05,steel,'metal',true);B(outer,1.52,z,.91,.12,2,0xbbb49e);B(outer,1.61,z+.7,.78,.13,.45,0xd4ccb5);
@@ -92,5 +94,5 @@ export function buildCompactCells(w){
  a.sign(['CELL 07 / WEST ROW'], -27.8,2.85,14,2.4,.3,Math.PI/2,true);
  a.sign(['CELL 07','YOUR ASSIGNED QUARTERS'],-29.6,2.7,23.82,2.5,.36,Math.PI,true);
  w.blockers.push(...a.blockers.slice(start));
- w.cellStats=batchScenery(w.scene,a.geometry,[a.dynamic,...w.intakeGates.map(g=>g.bars),w.issuedPick]);
+ w.cellStats=batchScenery(w.scene,a.geometry,[a.dynamic,w.doorRoot,...w.intakeGates.map(g=>g.bars),w.issuedPick]);
 }

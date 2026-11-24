@@ -1,4 +1,4 @@
-import {impactSound} from './impact-sound.js?v=91';
+import {impactSound} from './impact-sound.js?v=92';
 export class Audio{
  constructor(){this.context=null;this.muted=false;this.noise=null;this.variant=0;}
  unlock(){this.context??=new(window.AudioContext||window.webkitAudioContext)();this.context.resume();if(!this.master){this.master=this.context.createGain();this.master.gain.value=this.volume??.75;this.master.connect(this.context.destination);}if(!this.noise){const c=this.context;this.noise=c.createBuffer(1,c.sampleRate,c.sampleRate);const d=this.noise.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;}}
@@ -6,6 +6,7 @@ export class Audio{
  grit(t,duration,volume,frequency,filterType='bandpass',attack=.003){const c=this.context,n=c.createBufferSource(),filter=c.createBiquadFilter(),g=c.createGain();n.buffer=this.noise;filter.type=filterType;filter.frequency.value=frequency;filter.Q.value=.65;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(volume,t+attack);g.gain.exponentialRampToValueAtTime(.0001,t+duration);n.connect(filter);filter.connect(g);g.connect(this.master??c.destination);n.start(t,Math.random()*.6,duration);n.onended=()=>{n.disconnect();filter.disconnect();g.disconnect();};}
  play(kind,type=0,tier=0){
  if(!this.context||this.muted||!this.noise)return;const t=this.context.currentTime;
+ if(kind==='door-open'||kind==='door-close'){const opening=kind==='door-open';this.grit(t,.14,.022,opening?630:440);this.tone(t,opening?155:115,.16,.014,'triangle',opening?95:55);if(!opening)this.grit(t+.12,.035,.035,1300);return;}
  if(kind==='intake-stamp'){this.tone(t,105,.09,.045,'triangle',42,.001);this.grit(t,.035,.04,1250);this.tone(t+.07,610,.045,.018,'triangle',240,.001);return;}
  if(kind==='tree-break'){this.tone(t,96,.18,.07,'triangle',34,.001);this.grit(t,.055,.09,680,'bandpass',.001);this.grit(t+.055,.16,.055,1100);this.grit(t+.11,.30,.035,3200,'highpass');this.tone(t+.025,230,.10,.025,'triangle',70,.001);return;}
  if(kind==='wake'){[392,494,587].forEach((f,i)=>this.tone(t+i*.15,f,.55,.025,'sine',f));return;}

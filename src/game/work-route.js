@@ -1,6 +1,8 @@
-import {containmentInside} from './foundry-layout.js?v=91';
-import {rangeInside} from './foundry-range-layout.js?v=91';
-import {timberInside} from './foundry-timber-layout.js?v=91';
+import {intakeInteraction} from './foundry-arrival.js?v=92';
+import {arrivalRoute} from './foundry-layout.js?v=92';
+import {containmentInside} from './foundry-layout.js?v=92';
+import {rangeInside} from './foundry-range-layout.js?v=92';
+import {timberInside} from './foundry-timber-layout.js?v=92';
 // Ordered, physical portals. Project onto the nearest segment so passing a doorway
 // advances the route even when the player is off-centre or overshoots a turn.
 export function followRoute(p,points){
@@ -41,7 +43,12 @@ function exitToYard(p){
  return null;
 }
 export function workRoute(p,stage,haul=false,destination=null){
- if(stage<3)return null;
+ if(stage<3){
+  if(intakeInteraction(stage,p)?.ready)return null;
+  if(stage===2)return followRoute(p,[[2.88,56,'Tool Control / right-hand doorway'],[9.36,54,'Tool Issue / authorised entry'],[9.36,49.1,'Collect your assigned pickaxe'],[9.36,46.4,'E / collect pickaxe']]);
+  if(p.z<60)return {x:2.88,z:56.3,name:stage===0?'Reception / belongings register':'Reception / duty officer'};
+  return followRoute(p,arrivalRoute.map((q,i)=>[...q,['Transport aisle','Front-right exit','Step down to the bay','Reception portico','Reception doors / walk forward','Reception counter'][i]]));
+ }
  const goal=stage===3?'cell':stage===4?(haul?'pay':'mine'):destination;
  if(!goal||!DUTY_ROUTES[goal])return null;
  if(p.z>37&&p.x>=7&&p.x<=11)return {x:9.36,z:27,name:'Release passage / enter yard'};

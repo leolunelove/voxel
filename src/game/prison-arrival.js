@@ -1,6 +1,6 @@
 import * as T from '../../vendor/three.module.js';
-import {batchScenery} from '../engine/static-batch.js?v=91';
-import {SPAWN,groundHeight,inPreview,inBus} from './arrival-layout.js?v=91';
+import {batchScenery} from '../engine/static-batch.js?v=92';
+import {SPAWN,groundHeight,inPreview,inBus} from './arrival-layout.js?v=92';
 function texture(kind){const c=document.createElement('canvas');c.width=c.height=256;const ctx=c.getContext('2d');let seed=317;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
  const bg={brick:'#77736d',stone:'#b0a89a',ground:'#a19a89',metal:'#5a6262',wood:'#8c6745'}[kind];ctx.fillStyle=bg;ctx.fillRect(0,0,256,256);
  if(kind==='brick'){ctx.fillStyle='#5f5c56';for(let row=0;row<8;row++){ctx.fillRect(0,row*32,256,2);for(let col=-1;col<5;col++)ctx.fillRect(col*64+(row%2)*32,row*32,2,32);}for(let i=0;i<72;i++){const x=Math.floor(random()*4)*64,y=Math.floor(random()*8)*32;ctx.fillStyle=random()>.5?'#8a8073':'#6c6b66';ctx.globalAlpha=.35;ctx.fillRect(x+3,y+3,58,26);}ctx.globalAlpha=1;}
@@ -39,7 +39,7 @@ export class ArrivalWorld{
  B(4,5.25,-8,12,.4,5.5,0x4a5b56,'metal',true);B(4,5.5,-8,12.4,.13,5.8,0x6f7d6b);for(const x of [-1.5,9.5]){S(x,2.5,-6,.48,5,.48,0x8b9684,'stone',true);B(x,.16,-6,.8,.32,.8,0x6c796d,'stone');}
  for(const x of [2.03,5.97]){B(x,2.15,-9.7,.18,4.3,.8,0x3d514e,'metal',true);B(x,.13,-9.55,.3,.26,1,0xa99874);}B(4,4.35,-9.65,4.1,.18,.8,0x344846,'metal');
  // Doors are parked open along the jambs, with a warm vestibule beyond.
- for(const x of [1.84,6.16]){B(x,2.05,-10.5,.16,4.1,1.8,0x8c563d,'metal',true);B(x,2.9,-10.49,.18,1.1,1.3,0x2f403e);}
+ if(!this.options.integrated)for(const x of [1.84,6.16]){B(x,2.05,-10.5,.16,4.1,1.8,0x8c563d,'metal',true);B(x,2.9,-10.49,.18,1.1,1.3,0x2f403e);}
  for(const x of [.8,7.2])this.lamp(x,3.3,-9,33,8);this.lamp(4,4.95,-6.5,38,10);
  B(-7,6.5,-9.45,13,.09,.1,0x5a6a60);for(const x of [-11,0,10,19])B(x,6.5,-9.42,.2,.25,.15,0x687569);
  // Small cameras, intake bench, drain and bollards keep the approach legible.

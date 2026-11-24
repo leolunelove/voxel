@@ -1,4 +1,4 @@
-import {MINE_REFILL} from './rules.js?v=91';
+import {MINE_REFILL} from './rules.js?v=92';
 // The countdown starts with excavation. Occupancy pauses the final reset,
 // including menus opened inside the mine. No relocation is ever required.
 export function updateMineRefill(mine,dt,occupied){

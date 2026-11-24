@@ -1,4 +1,4 @@
-import {RANGE_WING,rangeHall,RANGE_TARGETS,rangeFiringPosition} from './foundry-range-layout.js?v=91';
+import {RANGE_WING,rangeHall,RANGE_TARGETS,rangeFiringPosition} from './foundry-range-layout.js?v=92';
 export const PRISON_SPAWN=[7,2.65,16],CELL_WAKE=[-29.3,2.65,19.4];
 export const inBox=(x,z,b)=>x>=b[0]&&x<b[1]&&z>=b[2]&&z<b[3];
 export const atBed=p=>Math.hypot(p.x+29.3,p.z-19.4)<1.7;

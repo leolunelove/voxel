@@ -1,4 +1,4 @@
-import {INTAKE_REACH} from './rules.js?v=91';
+import {INTAKE_REACH} from './rules.js?v=92';
 export const SEARCH=[.288,54.448],CHECKIN=[2.88,54.448],TOOL_ISSUE=[9.36,46.4],CELL_CHECK=[-27,19.4];
 export const INTAKE_SPAWNS=[[0,3.415,78.496],[.288,2.65,55.6],[9.36,2.65,53],[9.36,2.65,40]];
 const inReach=(p,b)=>p.x>=b[0]&&p.x<=b[1]&&p.z>=b[2]&&p.z<=b[3]&&p.y>=INTAKE_REACH.eye[0]&&p.y<=INTAKE_REACH.eye[1];
