@@ -1,0 +1,11 @@
+<!doctype html><meta charset="utf-8"><title>Voxel navigation and refill check</title><link rel="stylesheet" href="../style.css?v=90.1"><link rel="stylesheet" href="../voxel-ui.css?v=90.1"><link rel="stylesheet" href="../menu.css?v=90.1"><canvas id=game></canvas><main id=interface></main><script type=module>
+if(location.hostname!=='127.0.0.1'||location.port!=='4336')throw Error('Local QA only');
+import {freshState} from '../src/game/rules.js?v=90.1';
+import {PRISON_SPAWN} from '../src/game/foundry-layout.js?v=90.1';
+import {FoundryWorld} from '../src/game/foundry-world.js?v=90.1';
+if(!localStorage.getItem('deepwell-save')){localStorage.setItem('deepwell-save',JSON.stringify({...freshState(),mined:120,money:150}));localStorage.setItem('voxel-intake',JSON.stringify({version:3,stage:5}));}
+PRISON_SPAWN.splice(0,3,7,2.65,-9);
+const original=FoundryWorld.prototype.update;const proof=document.createElement('output');proof.style.cssText='position:fixed;top:0;left:25%;z-index:200;background:#111;color:white;padding:6px';document.body.append(proof);
+FoundryWorld.prototype.update=function(dt,...args){if(this.excavated.size>0&&!this.testAged){this.elapsed=151;this.testAged=true;}original.call(this,dt,...args);proof.textContent='QA / '+this.blocks.size+' blocks · '+this.excavated.size+' excavated · refill '+this.refillIn.toFixed(1)+' · waiting '+!!this.refillWaiting;};
+await import('../src/main.js?v=90.1');
+</script>

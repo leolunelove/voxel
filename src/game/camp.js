@@ -1,27 +1,28 @@
-import {buildFoundryPrison} from './foundry-prison.js?v=89.1';
-import {buildStrictPrison} from './strict-prison.js?v=89.1';
-import {buildCampus,buildCampusTraining} from './campus.js?v=89.1';
-import {intakeFloor,campusYard} from './intake-rules.js?v=89.1';
-import {buildTrainingWings,updateTrainingGates} from './training-wings.js?v=89.1';
-import {ATTACK_OFFSET,ARCHERY_OFFSET,TRAINING_WINGS,trainingFootprint,trainingWingAt,trainingPassageAt,trainingAccess} from './training-layout.js?v=89.1';
-import {buildConservatory} from './conservatory.js?v=89.1';
-import {FOREST_OFFSET,inConservatory,inServicePassage,inServiceFootprint,conservatoryFloor} from './conservatory-layout.js?v=89.1';
-import {ArchitectureSurfaces} from '../engine/architecture-surfaces.js?v=89.1';
-import {surfaceTexture} from '../engine/surface-textures.js?v=89.1';
-import {batchScenery} from '../engine/static-batch.js?v=89.1';
-import {buildTrainingRooms} from './training-rooms.js?v=89.1';
-import {buildSkillRooms} from './skill-rooms.js?v=89.1';
+import {updateMineRefill} from './mine-refill.js?v=90.1';
+import {buildFoundryPrison} from './foundry-prison.js?v=90.1';
+import {buildStrictPrison} from './strict-prison.js?v=90.1';
+import {buildCampus,buildCampusTraining} from './campus.js?v=90.1';
+import {intakeFloor,campusYard} from './intake-rules.js?v=90.1';
+import {buildTrainingWings,updateTrainingGates} from './training-wings.js?v=90.1';
+import {ATTACK_OFFSET,ARCHERY_OFFSET,TRAINING_WINGS,trainingFootprint,trainingWingAt,trainingPassageAt,trainingAccess} from './training-layout.js?v=90.1';
+import {buildConservatory} from './conservatory.js?v=90.1';
+import {FOREST_OFFSET,inConservatory,inServicePassage,inServiceFootprint,conservatoryFloor} from './conservatory-layout.js?v=90.1';
+import {ArchitectureSurfaces} from '../engine/architecture-surfaces.js?v=90.1';
+import {surfaceTexture} from '../engine/surface-textures.js?v=90.1';
+import {batchScenery} from '../engine/static-batch.js?v=90.1';
+import {buildTrainingRooms} from './training-rooms.js?v=90.1';
+import {buildSkillRooms} from './skill-rooms.js?v=90.1';
 import * as T from '../../vendor/three.module.js';
-import {buildUnderblockEntry} from './underblock-entry.js?v=89.1';
-import {entryFloor} from './underblock-entry-rules.js?v=89.1';
-import {World,keyOf} from './world.js?v=89.1';
-import {BLOCKS} from './rules.js?v=89.1';
-import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,WORK_OFFSET,TREE_LOGS,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=89.1';
+import {buildUnderblockEntry} from './underblock-entry.js?v=90.1';
+import {entryFloor} from './underblock-entry-rules.js?v=90.1';
+import {World,keyOf} from './world.js?v=90.1';
+import {BLOCKS} from './rules.js?v=90.1';
+import {MINE_STAGES,FOREST_STAGES,CAMP_SPAWN,WORK_OFFSET,TREE_LOGS,campLevel,inside,stairTop,mineOre} from './camp-rules.js?v=90.1';
 export const TREE_SPOTS=[[7,-4],[10,-7],[7,-8],[13,-4],[13,-9],[5,-11],[16,-4],[16,-12],[10,-14],[4,-15]].map(([x,z])=>[x+FOREST_OFFSET.x,z+WORK_OFFSET+FOREST_OFFSET.z]);
-import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=89.1';
-import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=89.1';
-import {buildIronEmber} from './iron-ember.js?v=89.1';
-import {buildCell,insideCell} from './cell.js?v=89.1';
+import {buildWorkyardCharacter,dressForestPlot} from './workyard-character.js?v=90.1';
+import {buildYardCharacter,dressMineEntrance} from './yard-character.js?v=90.1';
+import {buildIronEmber} from './iron-ember.js?v=90.1';
+import {buildCell,insideCell} from './cell.js?v=90.1';
 export class CampWorld{
  constructor(scene,{campus=false}={}){this.campus=campus;
   this.architecture=new ArchitectureSurfaces();this.scene=scene;this.layout={spawn:CAMP_SPAWN};this.geometry=new T.BoxGeometry(1,1,1);this.materials=BLOCKS.map((b,i)=>new T.MeshStandardMaterial({map:World.prototype.texture.call(this,i),color:0xffffff,roughness:1}));this.paint=new Map();this.blocks=new Map();this.meshes=[];this.trees=[];this.excavated=new Set();this.blockers=[];this.mineLevel=-1;this.forestLevel=-1;this.level=1;this.time=0;this.refillIn=-1;this.elapsed=0;
@@ -82,7 +83,7 @@ export class CampWorld{
  }
  buildFloor(){this.floorRoot.traverse(o=>{if(o.isInstancedMesh)o.dispose();});this.floorRoot.clear();const s=MINE_STAGES[this.mineLevel],cells=[];for(let x=-20;x<20;x++)for(let z=-24;z<16;z++)if(!inside(x+.5,z+.5,s.bounds))cells.push([x,z]);const floor=new T.InstancedMesh(this.geometry,this.floorMat,cells.length),matrix=new T.Matrix4();cells.forEach(([x,z],i)=>{matrix.makeTranslation(x+.5,.5,z+.5);floor.setMatrixAt(i,matrix);floor.setColorAt(i,new T.Color(x>2&&z<0?0x929579:0xd4cdc7));});floor.receiveShadow=true;this.floorRoot.add(floor);}
  generateMine(preserve=false){
-  if(!preserve){this.excavated.clear();this.elapsed=0;this.refillIn=-1;}
+  if(!preserve){this.excavated.clear();this.elapsed=0;this.refillIn=-1;this.refillWaiting=false;}
   this.mineRoot.traverse(o=>{if(o.isInstancedMesh)o.dispose();});this.mineRoot.clear();this.blocks.clear();const s=MINE_STAGES[this.mineLevel],[x0,x1,z0,z1]=s.bounds;
   this.meshes=this.meshes.filter(m=>m.userData.tree);
   for(let x=x0;x<x1;x++)for(let z=z0;z<z1;z++)for(let y=s.bottom;y<=0;y++){
@@ -146,13 +147,12 @@ export class CampWorld{
  }
  refill(){this.generateMine(false);}
  update(dt,reduced=false,position=null){
-  updateTrainingGates(this,dt);this.time+=reduced?0:dt;this.elapsed+=dt;this.gateLift+=(((this.level>=2?4:0)-this.gateLift))*Math.min(1,dt*3);this.gate.position.y=this.gateLift;
+  updateTrainingGates(this,dt);this.time+=reduced?0:dt;this.gateLift+=(((this.level>=2?4:0)-this.gateLift))*Math.min(1,dt*3);this.gate.position.y=this.gateLift;
   for(const f of this.fences?.values()??[]){const blend=1-Math.exp(-dt*3);f.group.position.x+=(f.x-f.group.position.x)*blend;f.group.position.z+=(f.z-f.group.position.z)*blend;f.group.scale.x+=(f.w-f.group.scale.x)*blend;f.group.scale.z+=(f.d-f.group.scale.z)*blend;}
   for(const t of this.trees){if(t.status==='ready'){t.hit=Math.max(0,(t.hit??0)-dt);for(const leaf of t.visual.children)if(leaf.userData.canopy)leaf.rotation.z=reduced?0:Math.sin(t.hit*45)*t.hit*.08;continue;}if(t.status==='falling'){t.fall+=dt;const f=Math.min(1,t.fall/.42);if(!reduced){t.visual.position.y=1+Math.sin(f*Math.PI)*.12-f*f*.4;let i=0;for(const leaf of t.visual.children)if(leaf.userData.canopy){leaf.userData.fellBase??={y:leaf.position.y,scale:leaf.scale.clone()};const base=leaf.userData.fellBase;leaf.position.set(Math.sin(++i*2.4)*f*.55,base.y-f*f*(.5+i*.2),Math.cos(i*2.4)*f*.55);leaf.rotation.z=(i%2?1:-1)*f*.16;leaf.scale.copy(base.scale).multiplyScalar(1-f*f*.88);}}if(t.fall>.42){t.status='regrowing';t.visual.clear();t.visual.position.y=1;t.visual.rotation.z=0;t.visual.scale.setScalar(1);const stem=new T.Mesh(this.geometry,this.mat(0x795e40));stem.scale.set(.15,.8,.15);stem.position.y=.4;t.visual.add(stem);const sprout=new T.Mesh(this.geometry,this.mat(0x709454));sprout.scale.set(.9,.7,.9);sprout.position.y=.9;t.visual.add(sprout);}}
    else{t.timer-=dt;t.visual.scale.setScalar(.35+.65*(1-t.timer/FOREST_STAGES[this.forestLevel].regrow));if(t.timer<=0){if(position&&Math.hypot(position.x-t.x,position.z-t.z)<1.8)t.timer=1;else this.makeTree(t);}}
   }
-  if(this.refillIn<0&&this.excavated.size>0&&(this.blocks.size<this.totalBlocks*.25||this.elapsed>150))this.refillIn=5;
-  else if(this.refillIn>=0){this.refillIn-=dt;if(this.refillIn<=0){this.refill();this.refillEvent=true;}}
+  if(updateMineRefill(this,dt,position&&this.area(position)===0)){this.refill();this.refillWaiting=false;this.refillEvent=true;}
   for(let i=0;i<32;i++){this.matrix.makeTranslation(Math.sin(i*73)*18,2+(i*1.7)%5+Math.sin(this.time*.3+i)*.1,-15+(i*3.7)%29);this.motes.setMatrixAt(i,this.matrix);}this.motes.instanceMatrix.needsUpdate=true;
  }
 }

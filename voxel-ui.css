@@ -212,3 +212,7 @@ body:has(#menu:not([hidden])) .intake-caption{display:none}
 .bow-equipped #region-arrival strong{font-size:20px;letter-spacing:1px}
 .bow-equipped #region-arrival small{font-size:9px;letter-spacing:2px}
 .bow-equipped #region-arrival span{display:none}
+
+#prison-directions{margin:22px 0;padding-top:18px;border-top:1px solid #776444}#prison-directions h2{font:13px var(--pixel);color:#f0cc8b}#prison-directions>div{display:flex;flex-wrap:wrap;gap:8px}#prison-directions button{padding:11px 14px;background:#343137;border:1px solid #9b7a47;color:#f4dfb8;font:11px var(--pixel);cursor:pointer}#prison-directions button:disabled{opacity:.45;cursor:default}
+
+.brand-logomark{width:38px;height:38px;object-fit:contain;flex:none}.quiet-intake .brand-logomark{width:26px;height:26px}

@@ -1,9 +1,9 @@
 import * as T from '../../vendor/three.module.js';
-import {ArrivalWorld} from './prison-arrival.js?v=89.1';
-import {groundHeight,inPreview} from './arrival-layout.js?v=89.1';
-import {ARRIVAL_SCALE as S,ARRIVAL_Y as Y,ARRIVAL_Z as Z} from './foundry-layout.js?v=89.1';
-import {batchScenery} from '../engine/static-batch.js?v=89.1';
-import {createPickaxe} from '../engine/pickaxe.js?v=89.1';
+import {ArrivalWorld} from './prison-arrival.js?v=90.1';
+import {groundHeight,inPreview} from './arrival-layout.js?v=90.1';
+import {ARRIVAL_SCALE as S,ARRIVAL_Y as Y,ARRIVAL_Z as Z} from './foundry-layout.js?v=90.1';
+import {batchScenery} from '../engine/static-batch.js?v=90.1';
+import {createPickaxe} from '../engine/pickaxe.js?v=90.1';
 export const arrivalLocal=(x,z)=>({x:x/S,z:(z-Z)/S});
 export const insideArrival=(x,z)=>{const p=arrivalLocal(x,z);return inPreview(p.x,p.z);};
 export const arrivalFloor=(x,z)=>{const p=arrivalLocal(x,z);return 1+Y*groundHeight(p.x,p.z);};
@@ -88,6 +88,7 @@ export function buildCompactCells(w){
  F(-13.6,4.05,14,11.8,.2,4.5,0x8d9789,'stone',true);
  for(const x of [-11,-17]){const l=a.lamp(x,3.8,14,22,6);l.userData.alwaysOn=true;}
  a.sign(['CELLBLOCK A'], -7.83,3.15,14,2.5,.35,Math.PI/2);
+ a.sign(['07  ←  YOUR CELL'], -25.95,3.45,19.4,2.6,.4,Math.PI/2,true);
  a.sign(['CELL 07 / WEST ROW'], -27.8,2.85,14,2.4,.3,Math.PI/2,true);
  a.sign(['CELL 07','YOUR ASSIGNED QUARTERS'],-29.6,2.7,23.82,2.5,.36,Math.PI,true);
  w.blockers.push(...a.blockers.slice(start));

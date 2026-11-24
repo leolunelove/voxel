@@ -1,50 +1,50 @@
-import {swordContact} from './engine/melee-contact.js?v=89.1';
-import {MINING_STRIKE,WOOD_STRIKE} from './game/rules.js?v=89.1';
-import {workRoute,routeHint} from './game/work-route.js?v=89.1';
-import {CameraHandoff} from './engine/camera-handoff.js?v=89.1';
-import {createIntakeExperience} from './ui/intake-experience.js?v=89.1';
-import {toolIcon} from './engine/pickaxe.js?v=89.1';
-import {consumeCharacterReset} from './game/character-reset.js?v=89.1';
-import {mountCharacterReset} from './ui/character-reset.js?v=89.1';
+import {swordContact} from './engine/melee-contact.js?v=90.1';
+import {MINING_STRIKE,WOOD_STRIKE} from './game/rules.js?v=90.1';
+import {workRoute,routeHint} from './game/work-route.js?v=90.1';
+import {CameraHandoff} from './engine/camera-handoff.js?v=90.1';
+import {createIntakeExperience} from './ui/intake-experience.js?v=90.1';
+import {toolIcon} from './engine/pickaxe.js?v=90.1';
+import {consumeCharacterReset} from './game/character-reset.js?v=90.1';
+import {mountCharacterReset} from './ui/character-reset.js?v=90.1';
 try{consumeCharacterReset(localStorage);}catch{}
-import {SEARCH,CELL_CHECK} from './game/foundry-arrival.js?v=89.1';
-import {CELL_WAKE,atBed,atPayOffice,inIntake,HUNT_OPTIONS,RANGE_OFFSET,inHunt,inRange,atDungeonGate,prisonDepth as entryDepth,trainingGateNear,LABOUR_WINGS as TRAINING_WINGS} from './game/foundry-layout.js?v=89.1';
-import {loadIntake,advanceIntake,intakeNear,intakeInstruction,INTAKE_SPAWNS,CHECKIN,TOOL_ISSUE} from './game/foundry-arrival.js?v=89.1';
-import {trainingAccess} from './game/training-layout.js?v=89.1';
-import {timberGateNear as atConservatoryGate} from './game/foundry-timber-layout.js?v=89.1';
-import {LightBudget,RenderQuality} from './engine/render-quality.js?v=89.1';
+import {SEARCH,CELL_CHECK} from './game/foundry-arrival.js?v=90.1';
+import {CELL_WAKE,atBed,atPayOffice,inIntake,HUNT_OPTIONS,RANGE_OFFSET,inHunt,inRange,atDungeonGate,prisonDepth as entryDepth,trainingGateNear,LABOUR_WINGS as TRAINING_WINGS} from './game/foundry-layout.js?v=90.1';
+import {loadIntake,advanceIntake,intakeNear,intakeInstruction,INTAKE_SPAWNS,CHECKIN,TOOL_ISSUE} from './game/foundry-arrival.js?v=90.1';
+import {trainingAccess} from './game/training-layout.js?v=90.1';
+import {timberGateNear as atConservatoryGate} from './game/foundry-timber-layout.js?v=90.1';
+import {LightBudget,RenderQuality} from './engine/render-quality.js?v=90.1';
 import * as T from '../vendor/three.module.js';
 
 const entryFogColor=new T.Color(0x263e38);
-import {Input} from './engine/input.js?v=89.1';
-import {Audio} from './engine/audio.js?v=89.1';
-import {Feedback} from './engine/feedback.js?v=89.1';
-import {FoundryWorld as CampWorld} from './game/foundry-world.js?v=89.1';
-import {campLevel,LEVEL_TWO,AXES,treeYield,treeLogYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=89.1';
-import {Player} from './game/player.js?v=89.1';
-import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=89.1';
-import {Pickups} from './game/pickups.js?v=89.1';
-import {HUD} from './ui/hud.js?v=89.1';
+import {Input} from './engine/input.js?v=90.1';
+import {Audio} from './engine/audio.js?v=90.1';
+import {Feedback} from './engine/feedback.js?v=90.1';
+import {FoundryWorld as CampWorld} from './game/foundry-world.js?v=90.1';
+import {campLevel,LEVEL_TWO,AXES,treeYield,treeLogYield,expandPlot,forgePick,upgradeAxe,MINE_STAGES} from './game/camp-rules.js?v=90.1';
+import {Player} from './game/player.js?v=90.1';
+import {BLOCKS,PICKS,dropCount,Mining,freshState,validateSave,bagCount,capacity,sell,upgradeBag} from './game/rules.js?v=90.1';
+import {Pickups} from './game/pickups.js?v=90.1';
+import {HUD} from './ui/hud.js?v=90.1';
 
-import {Hunt} from './game/hunt.js?v=89.1';
-import {freshHunt,loadHunt,bank,retreat,attackLevel,swordDamage,MONSTERS,MAX_HP,hurt} from './game/hunt-rules.js?v=89.1';
+import {Hunt} from './game/hunt.js?v=90.1';
+import {freshHunt,loadHunt,bank,retreat,attackLevel,swordDamage,MONSTERS,MAX_HP,hurt} from './game/hunt-rules.js?v=90.1';
 
-import {Archery} from './game/archery.js?v=89.1';
-import {Dungeon} from './game/dungeon.js?v=89.1';
-import {skillLevel,finishDungeon,DIFFICULTIES} from './game/dungeon-rules.js?v=89.1';
+import {Archery} from './game/archery.js?v=90.1';
+import {Dungeon} from './game/dungeon.js?v=90.1';
+import {skillLevel,finishDungeon,DIFFICULTIES} from './game/dungeon-rules.js?v=90.1';
 
-import {SkillBook} from './ui/skills.js?v=89.1';
+import {SkillBook} from './ui/skills.js?v=90.1';
 
-import {SWORDS,BOWS,forgeWeapon,weaponReason} from './game/weapons.js?v=89.1';
+import {SWORDS,BOWS,forgeWeapon,weaponReason} from './game/weapons.js?v=90.1';
 
-import {SHIELDS,freshGuard,tickGuard,defend,forgeShield,shieldReason} from './game/shield-rules.js?v=89.1';
-import {skillLedger} from './game/skills.js?v=89.1';
-import {freshShift,loadShift,tickShift,fatigue,shiftClock,closeShift,loadSummary} from './game/shift-rules.js?v=89.1';
+import {SHIELDS,freshGuard,tickGuard,defend,forgeShield,shieldReason} from './game/shield-rules.js?v=90.1';
+import {skillLedger} from './game/skills.js?v=90.1';
+import {freshShift,loadShift,tickShift,fatigue,shiftClock,closeShift,loadSummary} from './game/shift-rules.js?v=90.1';
 
-import {ShiftUI} from './ui/shift.js?v=89.1';
-import {RestFlow} from './game/rest-flow.js?v=89.1';
-import {Daylight} from './engine/daylight.js?v=89.1';
-import {updateHTML} from './ui/dom.js?v=89.1';
+import {ShiftUI} from './ui/shift.js?v=90.1';
+import {RestFlow} from './game/rest-flow.js?v=90.1';
+import {Daylight} from './engine/daylight.js?v=90.1';
+import {updateHTML} from './ui/dom.js?v=90.1';
 document.body.classList.add('new-prison','timber-commissioned');
 const qaPosition=new URLSearchParams(location.search).has('qa')?document.body.appendChild(document.createElement('output')):null;if(qaPosition){qaPosition.style.cssText='position:fixed;top:0;left:40%;z-index:200;background:#222;color:#fff;padding:6px';}
 const canvas=document.getElementById('game');
@@ -98,7 +98,7 @@ async function play(){
 
 function flushPickups(){if(!pickups.count)return;pickups.flush(state);changed();}
 function openShop(tab='mines'){if(intake.stage<3){hud.toast(intakeInstruction(intake));return;}if(intake.stage===4&&!atPayOffice(player.position)){hud.toast('REPORT HAUL / Walk to the Pay Office on the east side of the yard. E at the counter.');return;}if(inCombat()){hud.toast('Leave through the hunting gate to bank loot and use the Exchange. R retreats and forfeits monster loot.');return;}flushPickups();player.stop();mode='shop';input.clear();mining.reset();document.exitPointerLock?.();hud.menu(false);hud.shop(true);hud.select(tab);hud.update(state);renderWeapons();document.getElementById('sell').focus();}
-function resetMine(){flushPickups();player.home();mining.reset();world.refill();hud.toast('Fresh seam ready. Your haul stays yours.');}
+function resetMine(){flushPickups();if(world.area(player.position)===0){world.refillIn=0;world.refillWaiting=true;hud.toast('REFILL QUEUED / Work faces refresh after you leave Deepwell.');return;}mining.reset();world.refill();hud.toast('Fresh seam ready. Your haul stays yours.');}
 function expand(kind){flushPickups();if(expandPlot(state,kind)){mining.reset();audio.play('upgrade');changed();hud.toast(kind==='mine'?'The Deepwell expanded. More space. Richer ore.':'Timber Detail allotment expanded. New trees are ready.');}}
 hud=new HUD({play,close:play,exchange:()=>openShop(),mine:()=>expand('mine'),forest:()=>expand('forest'),axe:()=>{if(upgradeAxe(state)){audio.play('upgrade');changed();hud.toast(AXES[state.axe].name+' forged. Try another tree.');}},sell:()=>{const value=sell(state);if(value){shift.earnings+=value;saveShift();audio.play('sell');changed();if(advanceIntake(intake,'sell')){saveIntake();audio.play('upgrade');hud.toast('FIRST ASSIGNMENT PAID / Labour credits registered. Cell 07 is in Cellblock A, west of roll call. Your labour record is saved.');}else hud.toast(`Haul sold · +${value} credits`);}},pick:()=>{if(forgePick(state)){audio.play('upgrade');changed();hud.toast(`${PICKS[state.pick].name} equipped — try the same stone.`);}},bag:()=>{if(upgradeBag(state)){changed();hud.toast('A little more room for a good haul.');}},reset:resetMine,mute:value=>{settings.muted=value;applySettings();},motion:value=>{settings.reduced=value;applySettings();},volume:value=>{settings.volume=value;applySettings();},sensitivity:value=>{settings.sensitivity=value;applySettings();}});hud.update(state);
 document.getElementById('interface').append(huntPanel);
@@ -116,7 +116,9 @@ const restCurtain=document.createElement('div');restCurtain.id='rest-curtain';re
 const shiftUI=new ShiftUI(()=>{if(!restFlow.wake())return;mode='waking';input.clear();shiftUI.panel.hidden=true;restCurtain.hidden=false;restCurtain.textContent='SHIFT '+shift.day+' / A NEW MORNING';audio.play('wake');});
 function sleepInCell(){if(mode!=='playing'||dungeon||inHunt(player.position)||!atBed(player.position)||!restFlow.begin())return;flushPickups();archery.reset();pendingRest=closeShift(shift,skillLedger(state,huntState));mode='sleep-transition';input.clear();input.guardMode=false;player.stop();document.exitPointerLock?.();hud.menu(false);hud.shop(false);document.body.classList.add('sleeping');restCurtain.hidden=false;restCurtain.textContent='CELL 07 / LIGHTS OUT';audio.play('rest');}
 window.addEventListener('beforeunload',saveShift);document.addEventListener('visibilitychange',()=>{if(document.hidden)saveShift();});
+let routeDestination=null;
 const skillBook=new SkillBook(()=>{skillBook.close();play();});
+skillBook.onRoute=key=>{routeDestination=key;skillBook.close();play();hud.toast('DIRECTIONS / Follow the route below. TAB to choose another destination.');};
 function openSkills(){mode='skills';input.clear();player.stop();mining.reset();archery.cancel();document.exitPointerLock?.();hud.menu(false);hud.shop(false);document.body.classList.add('modal-open');document.querySelector('.game-hud').setAttribute('aria-hidden','true');skillBook.open(state,huntState);}
 const skillShortcut=document.createElement('button');skillShortcut.id='skill-shortcut';skillShortcut.innerHTML='<kbd>TAB</kbd> Your skills';skillShortcut.onclick=openSkills;document.getElementById('interface').append(skillShortcut);applySettings(false);
 window.addEventListener('keydown',e=>{if(e.repeat)return;if(e.code==='KeyL'&&mode==='playing'&&atBed(player.position)&&lastShiftReport){mode='sleep';input.clear();player.stop();document.exitPointerLock?.();document.body.classList.add('sleeping');shiftUI.open(lastShiftReport,{review:true,onContinue:()=>{shiftUI.panel.hidden=true;document.body.classList.remove('sleeping');input.clear();input.fallback=true;mode='playing';}});return;}if(e.code==='KeyF'&&mode==='playing'&&!dungeon&&atDungeonGate(player.position)){dungeonDifficulty=(dungeonDifficulty+1)%3;const d=DIFFICULTIES[dungeonDifficulty];hud.toast(d.name.toUpperCase()+' / enemies ×'+d.health+' HP · loot ×'+d.reward+' · completion +'+d.bonus+' CR. E enters · F changes difficulty');return;}if(e.code==='KeyQ'&&mode==='playing'&&inCombat()){combatWeapon=combatWeapon==='sword'?'bow':'sword';input.held=false;input.bowHeld=false;input.blocking=false;archery.cancel();hud.toast(combatWeapon==='bow'?'BOW / hold to draw · release to fire':'SWORD / hold to strike');return;}if(e.code==='Tab'&&(mode==='playing'||mode==='skills')){e.preventDefault();if(mode==='playing')openSkills();else{skillBook.close();play();}return;}if(e.code==='Escape'&&mode==='skills'){skillBook.close();play();return;}if((e.code==='KeyM'||e.code==='KeyI')&&mode==='playing')openShop(e.code==='KeyI'?'cargo':'mines');if(e.code==='KeyE'){if(mode==='playing'){if(intake.stage===0&&intakeNear(player.position,SEARCH)){intakeExperience.show('search');return;}if(intake.stage===1&&intakeNear(player.position,CHECKIN)){intakeExperience.show('checkin');return;}if(intake.stage===2&&intakeNear(player.position,TOOL_ISSUE)){intakeExperience.show('issue');return;}if(intake.stage<3){hud.toast(intakeInstruction(intake));return;}if(intake.stage===3&&intakeNear(player.position,CELL_CHECK)){intakeExperience.show('cell');return;}if(intake.stage===3){hud.toast(intakeInstruction(intake));return;}if(dungeon){dungeon.update(player.position);if(dungeon.cleared&&dungeon.atExit)exitDungeon(true);else if(player.position.distanceTo(new T.Vector3(dungeon.rooms[0].x+.5,2.65,dungeon.rooms[0].z+.5))<2)exitDungeon(false);else hud.toast('Clear every enemy and reach the final exit seal. R abandons the run.');}else if(trainingGateNear(player.position)){const w=trainingGateNear(player.position);hud.toast(trainingAccess(state,huntState,w)?'CHECKPOINT OPEN / Follow the '+(w.key==='attack'?'rust-red':'brass')+' line to '+w.name+'.':'ACCESS LOCKED / PRISON LEVEL '+w.level+' · Mine '+Math.max(0,w.blocks-state.mined)+' more blocks.');}else if(atConservatoryGate(player.position))hud.toast(campLevel(state)<2?'ACCESS LOCKED / Mine '+Math.max(0,20-state.mined)+' more blocks to reach Prison Level 2.':'CHECKPOINT OPEN / Weighing house → Saw Works → outdoor felling yard.');else if(atBed(player.position))sleepInCell();else if(atDungeonGate(player.position))enterDungeon();else openShop();}else if(mode==='shop')play();}if(e.code==='Escape'&&(mode==='shop'||(mode==='playing'&&input.fallback))){mode='menu';input.clear();hud.shop(false);hud.menu(true);document.getElementById('play').focus();}if(e.code==='KeyR'&&mode==='playing'){if(intake.stage<3){player.position.fromArray(INTAKE_SPAWNS[intake.stage]);player.stop();player.sync();hud.toast(intakeInstruction(intake));return;}if(dungeon){exitDungeon(false);return;}const fleeing=inHunt(player.position);if(fleeing)leaveHunt(true);player.home();archery.cancel();input.bowHeld=false;input.held=false;mining.reset();if(!fleeing)hud.toast('Back in the central yard.');}});
@@ -125,7 +127,7 @@ function frame(now){if(qaPosition)qaPosition.textContent=player.position.toArray
  if(mode==='playing'&&input.active){
   const area=dungeon?7:inRange(player.position)?6:atDungeonGate(player.position)?8:inHunt(player.position)?5:world.area(player.position);if(area!==currentArea){currentArea=area;hud.location(area,campLevel(state));if(arrivals[area]&&!seenRegions.has(area)){seenRegions.add(area);const a=arrivals[area];regionArrival.innerHTML='<small>'+a[0]+'</small><strong>'+a[1]+'</strong><span>'+a[2]+'</span>';regionArrivalUntil=now+3500;}}
   if(campLevel(state)>lastLevel){lastLevel=campLevel(state);audio.play('upgrade');hud.toast(lastLevel===2?'PRISON LEVEL 2 / TIMBER DETAIL ACCESS GRANTED. Follow the green route.':'PRISON LEVEL '+lastLevel+' / '+(lastLevel===3?'CONTAINMENT DETAIL':'LONG ROOM')+' ACCESS GRANTED. Follow the '+(lastLevel===3?'rust-red':'brass')+' route.');hud.location(area,lastLevel);}
-  if(world.refillIn>=0){hud.wayfinding('FRESH SEAM IN '+Math.ceil(world.refillIn)+'s / The mine will refill safely.');}
+  if(world.refillIn>=0){hud.wayfinding(world.refillWaiting?'FRESH SEAM READY / Keep mining. Work faces refill after you leave Deepwell.':'FRESH SEAM IN '+Math.ceil(world.refillIn)+'s / Refills when Deepwell is empty.');}
   else if(area===7)hud.wayfinding('RIGHT CLICK / GUARD · Q / SWORD OR BOW · E / FINAL SEAL');else if(area===6)hud.wayfinding('BOW QUALIFICATION / HOLD TO DRAW · RELEASE TO FIRE · LEAD THE MOVING TARGETS');else if(area===8)hud.wayfinding('F / DIFFICULTY · E / ENTER A NEW RANDOM DUNGEON · COMPLETE FOR DUNGEONEERING XP');else if(area===5)hud.wayfinding('CONTAINMENT DETAIL / Q / SWORD OR BOW · DODGE WINDUPS · WALK OUT TO BANK');else if(trainingGateNear(player.position)){const w=trainingGateNear(player.position);hud.wayfinding(w.name+' CHECKPOINT / '+(trainingAccess(state,huntState,w)?'OPEN · Follow the '+(w.key==='attack'?'rust-red':'brass')+' line':'PRISON LEVEL '+w.level+' · '+Math.min(state.mined,w.blocks)+' / '+w.blocks+' blocks'));}else if(area===10)hud.wayfinding('CONTAINMENT PASSAGE / Holding hall ahead · Return this way to bank');else if(area===11)hud.wayfinding('ARMOURY PASSAGE / Follow the brass line · Long Room at the far turn');else if(atConservatoryGate(player.position))hud.wayfinding(campLevel(state)<2?'TIMBER DETAIL CHECKPOINT / PRISON LEVEL 2 · '+Math.min(20,state.mined)+' / 20 blocks mined':'TIMBER DETAIL / OPEN · Enter the weighing house, follow the route to Saw Works');else if(atBed(player.position))hud.wayfinding(state.mined===0?'FIRST SHIFT / East passage → yard · amber line → Deepwell':'YOUR CELL / E TO REST · L / LAST SHIFT REPORT');else hud.wayfinding(false?'':area===4?'TIMBER DETAIL / Chop all three logs · Expand your allocation at the Pay Office':area===9?'TIMBER WORKS / Follow the issue route through the shed to the outdoor yard':area===0?'THE DEEPWELL / '+MINE_STAGES[state.mineLevel].name+' · E / upgrades':(state.mined>=60?'DEEPWELL / NORTH · CELL 07 / WEST · PAY OFFICE / EAST · CONTAINMENT / SOUTH · BOW RANGE / EAST GATE':'DEEPWELL / ACROSS THE YARD · CELL 07 / WEST PASSAGE · PAY OFFICE / EAST'));
   if(intake.stage<4)hud.wayfinding('');
   input.bowMode=(inRange(player.position)&&!dungeon)||(inCombat()&&combatWeapon==='bow');player.drawingBow=input.bowMode&&(input.held||input.bowHeld);
@@ -158,7 +160,7 @@ function frame(now){if(qaPosition)qaPosition.textContent=player.position.toArray
  document.body.classList.toggle('in-combat',inCombat()&&mode==='playing');document.body.classList.toggle('melee-equipped',heldKind==='sword');document.body.classList.toggle('bow-equipped',heldKind==='bow');document.body.classList.toggle('bow-ready',heldKind==='bow'&&archery.charge>=.99);document.body.classList.toggle('bow-aim',heldKind==='bow'&&archery.charge>0);document.body.style.setProperty('--draw',String(archery.charge));const targetFov=heldKind==='bow'&&mode==='playing'&&!feedback.reduced?72-5*archery.charge:72;const nextFov=camera.fov+(targetFov-camera.fov)*(1-Math.exp(-dt*12));if(Math.abs(nextFov-camera.fov)>.001){camera.fov=nextFov;camera.updateProjectionMatrix();}document.body.classList.toggle('combat-contact',mode==='playing'&&!feedback.reduced&&now<hitMarkerUntil);huntUIClock+=dt;huntPanel.hidden=mode!=='playing'||!(inCombat()||inRange(player.position)||atDungeonGate(player.position));huntPanel.classList.toggle('danger',currentCombat().damageFlash>0);if(huntUIClock>.1){huntUIClock=0;updateHTML(huntPanel,inRange(player.position)&&!dungeon?'<b>ARCHERY / LEVEL '+skillLevel(huntState.archeryXP)+'</b><div>BOW RANGE</div><div>'+BOWS[huntState.bow].name+'</div><div>'+huntState.archeryXP+' Archery XP</div><strong>HOLD TO DRAW · RELEASE TO FIRE</strong><small>Centre 6 XP · Inner 4 · Outer 2<br>Moving target +2 XP · Stay behind gold line.<br>'+(input.locked?'Right or left click / draw.':'Left click / draw · RMB / look.')+' Aim higher at distance. Arrows supplied.</small><div>TAB / VIEW ALL SKILLS</div>':'<b>'+(combatWeapon==='bow'?'ARCHERY / LEVEL '+skillLevel(huntState.archeryXP):'ATTACK / LEVEL '+attackLevel(huntState.xp))+'</b><div>HP '+Math.ceil(huntState.hp)+' / 100</div><div class=hunt-health role=meter aria-label=Health aria-valuemin=0 aria-valuemax=100 aria-valuenow='+Math.ceil(huntState.hp)+'><i style=width:'+huntState.hp+'%></i></div><div>'+(combatWeapon==='bow'?huntState.archeryXP+' Archery XP · '+BOWS[huntState.bow].name:huntState.xp+' Attack XP · '+swordDamage(huntState.xp,huntState.sword)+' sword damage')+'</div><em>'+(inCombat()&&currentCombat().enemies.some(e=>!e.dead&&e.windup>0)?'ATTACK INCOMING / BACKSTEP OR JUMP':'')+'</em><div>TAB / VIEW ALL SKILLS</div><strong>'+huntState.loot+' CR / MONSTER LOOT AT RISK</strong><small>'+(dungeon?((dungeon.roomAt(player.position)<0?'PASSAGE':'ROOM '+(dungeon.roomAt(player.position)+1))+' / '+dungeon.rooms.length+' · '+(dungeon.rooms[dungeon.roomAt(player.position)]?.style??'Passage')+' · '+dungeon.rules.name+' · '+currentCombat().enemies.filter(e=>!e.dead).length+' enemies left. '+(dungeon.cleared?'Reach the gold exit seal and press E.':'Clear the rooms. R abandons.')):inRange(player.position)?'Hold to draw; release to fire. Aim above distant targets. Arrows are supplied here.':atDungeonGate(player.position)?DIFFICULTIES[dungeonDifficulty].name+' / F changes difficulty · E enters. Enemy HP ×'+DIFFICULTIES[dungeonDifficulty].health+' · loot ×'+DIFFICULTIES[dungeonDifficulty].reward+' · completion +'+DIFFICULTIES[dungeonDifficulty].bonus+' CR. Defeat loses unbanked loot.':inHunt(player.position)?'Walk out to bank. R retreats and loses loot. Defeat or reload loses all unbanked loot.':'Hunting gate in the south-east courtyard. Heal here; your banked credits are safe.')+'</small>'+(dungeon&&dungeon.roomAt(player.position)===dungeon.rooms.length-1?'<div class=warden-status>THE UNDERWARDEN / '+dungeon.combat.enemies.at(-1).hp+' / '+dungeon.combat.enemies.at(-1).maxHp+' HP<br>Gold ring: backstep or jump.<br>SEAL REWARD / +'+dungeon.bonus+' CR · +'+dungeon.xp+' XP</div>':'')+(dungeon?'<div class=dungeon-route>ROUTE / '+dungeon.rooms.map((r,i)=>i===0?'1':((r.x>dungeon.rooms[i-1].x?' EAST ':r.x<dungeon.rooms[i-1].x?' WEST ':r.z>dungeon.rooms[i-1].z?' SOUTH ':' NORTH ')+(i+1))).join(' → ')+'</div>':''));}
  document.body.classList.toggle('unissued',intake.stage<3);document.body.classList.toggle('quiet-intake',intake.stage<4);document.body.classList.toggle('quiet-room',intake.stage>=4&&(world.area(player.position)===12||world.area(player.position)===13));document.body.classList.toggle('arrival-menu',intake.stage<3&&mode==='menu');if(intake.stage<3&&mode==='menu'){document.getElementById('start-title').textContent=intake.stage===0?'Your sentence starts here.':'Complete your intake.';document.getElementById('start-summary').textContent=intake.stage===0?'Report. Break stone. Earn your clearance.':intakeInstruction(intake);document.getElementById('play').firstChild.textContent=intake.stage===0?(arrivalWelcomed?'Continue intake ':'Begin sentence '):'Continue ';}if(mode==='menu'){updateHTML(document.getElementById('docket-stamp'),intake.stage<3?'AWAITING INTAKE':'LABOUR CLEARED');updateHTML(document.getElementById('docket-tool'),intake.stage<3?'PENDING ISSUE':PICKS[state.pick].name.toUpperCase());}if(mode==='menu'&&intake.stage>=3){updateHTML(document.getElementById('start-title'),intake.stage===3?'Report to Cell 07.':'Back on the clock.');updateHTML(document.getElementById('start-summary'),'Shift '+shift.day+' · '+state.money.toLocaleString()+' credits · '+(saveAvailable?'Progress saved locally':'Saving unavailable for this session'));}feedback.pivot.visible=intake.stage>=3;intakePanel.hidden=mode!=='playing'||intake.stage>=5;
  const stations=[SEARCH,CHECKIN,TOOL_ISSUE,CELL_CHECK],nearStation=intake.stage<4&&intakeNear(player.position,stations[intake.stage]);
- document.body.classList.toggle('first-shift',intake.stage===4);const route=workRoute(player.position,intake.stage,bagCount(state)>0);
+ document.body.classList.toggle('first-shift',intake.stage===4);const route=workRoute(player.position,intake.stage,bagCount(state)>0,routeDestination);if(intake.stage>=5&&route&&!dungeon)hud.wayfinding(routeHint(player.position,input.yaw,route)+(world.refillWaiting?' · REFILL WAITS UNTIL YOU LEAVE':' · TAB / routes'));
  const objective=intake.stage===4&&bagCount(state)>0?'Sell your first haul · Pay Office':intake.stage===0?(player.position.z>72?'Leave the transport':player.position.z<60?'Log belongings · left side of counter':'Report to Reception'):intakeInstruction(intake);
  updateHTML(intakePanel,'<small>'+(intake.stage<4?'ARRIVAL / BLOCK 07':'FIRST SHIFT')+'</small><strong>'+objective+'</strong><span>'+(nearStation?'<kbd>E</kbd> '+['Log belongings','Register','Collect pickaxe','Read duty slip'][intake.stage]:intake.stage===0&&player.position.z>72?'Front-right door · step down into the bay':intake.stage>=4&&atBed(player.position)?'<kbd>E</kbd> Rest & end shift':routeHint(player.position,input.yaw,route))+'</span>');
 
@@ -169,7 +171,7 @@ function frame(now){if(qaPosition)qaPosition.textContent=player.position.toArray
  if(dungeon)dungeon.atmosphere(world,scene,player.position,dt);
  if(!dungeon&&currentArea===4){world.skyLight.intensity+=.22;scene.fog.density*=.8;}
  if(!dungeon){const depth=entryDepth(player.position);if(depth){scene.fog.color.lerp(entryFogColor,depth*.8);scene.fog.density+=depth*.045;scene.background.lerp(entryFogColor,depth*.5);world.skyLight.intensity*=1-depth*.7;world.sun.intensity*=1-depth*.95;}}
- audio.environment(currentArea===7?3:currentArea===6?1:currentArea===8?1:currentArea===5?3:currentArea===4?4:currentArea===9||currentArea===10||currentArea===11||currentArea===12||currentArea===13?1:currentArea>=0?currentArea:0,mode==='playing');world.update(mode==='playing'?dt:0,feedback.reduced,player.position);if(world.refillEvent){world.refillEvent=false;if(world.area(player.position)===0)player.home();mining.reset();hud.toast('A fresh seam is ready. Your haul stays yours.');}if(mode!=='playing'){
+ audio.environment(currentArea===7?3:currentArea===6?1:currentArea===8?1:currentArea===5?3:currentArea===4?4:currentArea===9||currentArea===10||currentArea===11||currentArea===12||currentArea===13?1:currentArea>=0?currentArea:0,mode==='playing');world.update(mode==='playing'?dt:0,feedback.reduced,player.position);if(world.refillEvent){world.refillEvent=false;mining.reset();hud.toast('DEEPWELL / Fresh work faces ready. Your haul is safe.');}if(mode!=='playing'){
  archery.cancel();
  if(mode==='entering'){
   if(cameraHandoff.update(dt,menuCamera)){hud.menu(false);document.body.classList.remove('entering-game');mode='playing';accumulator=0;if(intake.stage===0&&!arrivalWelcomed){arrivalWelcomed=true;intakeExperience.show('welcome');}}

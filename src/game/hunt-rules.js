@@ -1,6 +1,6 @@
-import {trainingWingAt} from './training-layout.js?v=89.1';
-import {SHIELDS,dungeonLevel} from './shield-rules.js?v=89.1';
-import {SWORDS} from './weapons.js?v=89.1';
+import {trainingWingAt} from './training-layout.js?v=90.1';
+import {SHIELDS,dungeonLevel} from './shield-rules.js?v=90.1';
+import {SWORDS} from './weapons.js?v=90.1';
 export const MAX_HP=100;
 export const attackLevel=xp=>Math.min(10,1+Math.floor(Math.sqrt(Math.max(0,xp)/30)));
 export const swordDamage=(xp,tier=0)=>Math.round((16+attackLevel(xp)*4)*SWORDS[tier].multiplier);

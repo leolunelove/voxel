@@ -30,3 +30,5 @@
 .reduced-motion .admission-docket{animation:none}
 @media(prefers-reduced-motion:reduce){#crosshair{transition:none}.mining-contact #crosshair{transform:translate(-50%,-50%)}}
 #menu #replay-arrival{min-height:32px!important;padding:6px 0!important}#menu #replay-arrival small{display:none!important}#menu .menu-link>span:first-child{text-align:left!important}
+
+#menu .brand-wordmark{display:block;width:100%;height:auto;max-height:165px;object-fit:contain;object-position:left center}#menu h1:has(.brand-wordmark){margin:0!important;line-height:1!important;letter-spacing:0!important;text-shadow:none!important}#menu .start-identity{width:100%}

@@ -1,9 +1,10 @@
-import {swordDamage} from '../game/hunt-rules.js?v=89.1';
-import {SWORDS,BOWS} from '../game/weapons.js?v=89.1';
-import {toolIcon} from '../engine/pickaxe.js?v=89.1';
-import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=89.1';
-import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=89.1';
+import {swordDamage} from '../game/hunt-rules.js?v=90.1';
+import {SWORDS,BOWS} from '../game/weapons.js?v=90.1';
+import {toolIcon} from '../engine/pickaxe.js?v=90.1';
+import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=90.1';
+import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=90.1';
 
+const brandRoot=new URL('../../assets/brand/',import.meta.url).href;
 const fmt=n=>n.toLocaleString();
 const swatch=b=>'<i class="ore-gem" style="--ore:#'+b.color.toString(16).padStart(6,'0')+'"></i>';
 export class HUD{
@@ -11,7 +12,7 @@ export class HUD{
  this.actions=actions;this.tab='mines';this.started=false;
  document.querySelector('#interface').innerHTML=`
  <div class="game-hud">
-  <header class="hud-top"><div class="voxel-mark"><span class="brand-cube">V</span><div><b>VOXEL</b><small>EVERY BLOCK IS A WAY FORWARD</small></div></div>
+  <header class="hud-top"><div class="voxel-mark"><img class="brand-logomark" src="${brandRoot}voxel-x.webp" alt=""><div><b>VOXEL</b><small>EVERY BLOCK IS A WAY FORWARD</small></div></div>
    <div class="mine-badge"><span id="hud-rank">A</span><div><b id="hud-mine"></b><small id="hud-wing"></small></div></div>
    <div class="credit-chip"><small>CREDITS</small><b id="money">0</b><span>CR</span></div></header>
   <aside class="next-order"><small>NEXT UNLOCK</small><b id="goal"></b><div class="meter"><span id="rank-meter"></span></div><span id="goal-detail"></span><kbd>E</kbd><em>Pay Office</em></aside>
@@ -27,7 +28,7 @@ export class HUD{
  <section id="menu" class="overlay title-screen" role="dialog" aria-modal="true" aria-label="Voxel main menu">
   <div class="title-topline"><span>BLOCK 07</span><span class="title-status">IRON & EMBER</span></div>
   <div class="start-shell">
-   <div class="start-identity"><div class="prison-seal" aria-hidden="true"><i></i><i></i><i></i><i></i></div><h1 aria-label="Voxel">VOXEL</h1><div class="wordmark-sub"><b>PRISON</b></div></div>
+   <div class="start-identity"><h1 aria-label="Voxel Prison"><img class="brand-wordmark" src="${brandRoot}voxel-wordmark.webp" alt="Voxel Prison"></h1></div>
    <div class="start-actions">
     <div id="menu-main-actions">
      <h2 id="start-title">Your next shift.</h2><p id="start-summary">Report. Work. Earn your clearance.</p>
