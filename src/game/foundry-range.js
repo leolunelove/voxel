@@ -1,5 +1,5 @@
 import * as T from '../../vendor/three.module.js';
-import {RANGE_WING as C,RANGE_TARGETS} from './foundry-range-layout.js?v=90.1';
+import {RANGE_WING as C,RANGE_TARGETS} from './foundry-range-layout.js?v=91';
 export function buildFoundryRange(w,{a,box:B,wall:W,roof:R,lamp:L,sign:S}){
  const iron=0x435751,brass=0xb99a60,wood=0x8c6745;
  for(const [x1,x2,z1,z2] of [...C.passages,C.bounds])a.surface((x1+x2)/2,.92,(z1+z2)/2,x2-x1,.16,z2-z1,0x96998a,'ground');

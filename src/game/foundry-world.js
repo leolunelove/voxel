@@ -1,12 +1,12 @@
-import {rangeInside,rangeHall,rangeAccess} from './foundry-range-layout.js?v=90.1';
-import {insideArrival,arrivalFloor,arrivalLocal} from './arrival-campus.js?v=90.1';
-import {TIMBER_FLOORS,TIMBER_PLOTS,TIMBER_SPOTS,timberInside,timberPlot,timberAllocated} from './foundry-timber-layout.js?v=90.1';
-import {FOREST_STAGES} from './camp-rules.js?v=90.1';
+import {rangeInside,rangeHall,rangeAccess} from './foundry-range-layout.js?v=91';
+import {insideArrival,arrivalFloor,arrivalLocal} from './arrival-campus.js?v=91';
+import {TIMBER_FLOORS,TIMBER_PLOTS,TIMBER_SPOTS,timberInside,timberPlot,timberAllocated} from './foundry-timber-layout.js?v=91';
+import {FOREST_STAGES} from './camp-rules.js?v=91';
 import * as T from '../../vendor/three.module.js';
-import {CampWorld} from './camp.js?v=90.1';
-import {keyOf} from './world.js?v=90.1';
-import {mineOre,campLevel} from './camp-rules.js?v=90.1';
-import {containmentInside,containmentAccess,PRISON_SPAWN,CAMPUS_FLOORS,PIT,MINE_OFFSET,inBox,terraceFloor} from './foundry-layout.js?v=90.1';
+import {CampWorld} from './camp.js?v=91';
+import {keyOf} from './world.js?v=91';
+import {mineOre,campLevel} from './camp-rules.js?v=91';
+import {containmentInside,containmentAccess,PRISON_SPAWN,CAMPUS_FLOORS,PIT,MINE_OFFSET,inBox,terraceFloor} from './foundry-layout.js?v=91';
 export class FoundryWorld extends CampWorld{
  constructor(scene){super(scene,{campus:'foundry'});this.layout.spawn=PRISON_SPAWN;}
  configure(state){const forestChanged=this.forestLevel!==state.forestLevel||this.level!==campLevel(state);this.state=state;this.level=campLevel(state);this.forestLevel=state.forestLevel; if(this.mineLevel!==state.mineLevel){this.mineLevel=state.mineLevel;this.generateMine(true);}if(forestChanged)this.growForest();this.forestRoot.visible=this.level>=2;this.syncTrainingAccess(this.huntProgress);this.refreshBlockers();}

@@ -1,8 +1,8 @@
-import {swordDamage} from '../game/hunt-rules.js?v=90.1';
-import {SWORDS,BOWS} from '../game/weapons.js?v=90.1';
-import {toolIcon} from '../engine/pickaxe.js?v=90.1';
-import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=90.1';
-import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=90.1';
+import {swordDamage} from '../game/hunt-rules.js?v=91';
+import {SWORDS,BOWS} from '../game/weapons.js?v=91';
+import {toolIcon} from '../engine/pickaxe.js?v=91';
+import {PICKS,BLOCKS,bagCount,bagValue,capacity,bagCost} from '../game/rules.js?v=91';
+import {MINE_STAGES,FOREST_STAGES,AXES,campLevel,LEVEL_TWO,pickRequirement} from '../game/camp-rules.js?v=91';
 
 const brandRoot=new URL('../../assets/brand/',import.meta.url).href;
 const fmt=n=>n.toLocaleString();

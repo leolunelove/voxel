@@ -1,0 +1,8 @@
+<!doctype html><meta charset=utf-8><title>Voxel / reception reach check</title><link rel=stylesheet href="../style.css?v=91"><link rel=stylesheet href="../voxel-ui.css?v=91"><link rel=stylesheet href="../menu.css?v=91"><canvas id=game aria-label="Voxel prison"></canvas><main id=interface></main><script type=module>
+if(location.hostname!=='127.0.0.1'||location.port!=='4337')throw Error('Local QA only');
+// Isolated origin, real game. Start at the far end of the counter frontage that
+// the old circular registration hotspot did not reach. Rules are unmodified.
+import {INTAKE_SPAWNS} from '../src/game/foundry-arrival.js?v=91';
+INTAKE_SPAWNS[0].splice(0,3,5.8,2.65,56.8);
+await import('../src/main.js?v=91');
+</script>

@@ -216,3 +216,9 @@ body:has(#menu:not([hidden])) .intake-caption{display:none}
 #prison-directions{margin:22px 0;padding-top:18px;border-top:1px solid #776444}#prison-directions h2{font:13px var(--pixel);color:#f0cc8b}#prison-directions>div{display:flex;flex-wrap:wrap;gap:8px}#prison-directions button{padding:11px 14px;background:#343137;border:1px solid #9b7a47;color:#f4dfb8;font:11px var(--pixel);cursor:pointer}#prison-directions button:disabled{opacity:.45;cursor:default}
 
 .brand-logomark{width:38px;height:38px;object-fit:contain;flex:none}.quiet-intake .brand-logomark{width:26px;height:26px}
+
+/* Ready at the counter: one clear invitation, stable while moving along its front. */
+#intake-objective.interaction-ready{background:#26372ef2;border-color:#d3ad6d;border-left:3px solid #e6bb72}
+#intake-objective.interaction-ready span{font-size:14px;color:#fff0cc;margin-top:10px}
+#intake-objective.interaction-ready kbd{display:inline-block;min-width:24px;padding:6px 8px;background:#edcd8d;color:#262c27;font-size:14px;box-shadow:0 2px 0 #8d703e}
+@media(max-width:650px){#intake-objective.interaction-ready{max-width:calc(100vw - 110px);padding:10px 12px}#intake-objective.interaction-ready span{font-size:12px}}

@@ -1,9 +1,9 @@
 import * as T from '../../vendor/three.module.js';
-import {ArrivalWorld} from './prison-arrival.js?v=90.1';
-import {groundHeight,inPreview} from './arrival-layout.js?v=90.1';
-import {ARRIVAL_SCALE as S,ARRIVAL_Y as Y,ARRIVAL_Z as Z} from './foundry-layout.js?v=90.1';
-import {batchScenery} from '../engine/static-batch.js?v=90.1';
-import {createPickaxe} from '../engine/pickaxe.js?v=90.1';
+import {ArrivalWorld} from './prison-arrival.js?v=91';
+import {groundHeight,inPreview} from './arrival-layout.js?v=91';
+import {ARRIVAL_SCALE as S,ARRIVAL_Y as Y,ARRIVAL_Z as Z} from './foundry-layout.js?v=91';
+import {batchScenery} from '../engine/static-batch.js?v=91';
+import {createPickaxe} from '../engine/pickaxe.js?v=91';
 export const arrivalLocal=(x,z)=>({x:x/S,z:(z-Z)/S});
 export const insideArrival=(x,z)=>{const p=arrivalLocal(x,z);return inPreview(p.x,p.z);};
 export const arrivalFloor=(x,z)=>{const p=arrivalLocal(x,z);return 1+Y*groundHeight(p.x,p.z);};
@@ -33,7 +33,7 @@ export function buildArrivalCampus(w){
  // The waist-height cage counter is to the left of a clear walk-through lane.
  F(8.2,1.5,46.4,.85,1,2.1,0x526159,'metal',true);F(8.2,2.07,46.4,1,.14,2.2,0xb2a385,'wood',true);
  art.sign(['TOOL CONTROL'],9.36,3.53,50.45,2,.28,Math.PI);
- art.sign(['REGISTERED ISSUE'],8.72,1.65,46.4,1.5,.25,Math.PI/2,true);
+ art.sign(['REGISTERED ISSUE / E'],8.72,1.65,46.4,1.5,.25,Math.PI/2,true);
  art.sign(['YARD / CELLBLOCK A'],9.36,3.46,42.14,2.2,.28);
  for(const z of [44,48.5]){const l=art.lamp(9.36,3.82,z,24,6);l.userData.alwaysOn=true;}
  const pick=createPickaxe(0);pick.position.set(8.28,2.66,46.4);pick.rotation.set(.08,-Math.PI/2,-.45);pick.scale.setScalar(.36);w.scene.add(pick);w.issuedPick=pick;
