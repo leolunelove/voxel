@@ -12,3 +12,7 @@ A shared intakeInteraction result supplies both the E handler and visible action
 - Walked through the unlocked Tool Issue door; at (9.35, 2.65, 49.35), the clear E / Collect assigned pickaxe prompt appeared. Pressing E advanced to the Cell 07 assignment, registered Worn Iron and opened the release gate. Pause remained functional.
 - Reload preserved the registered Worn Iron and Cell 07 assignment. Continued through the release passage, registered Cell 07 and mined a first haul of 10 resources worth 32 CR with the issued pickaxe. Walked back to Pay Office, sold the haul for 32 CR, paused and reloaded; the 32 credits, registered tool and labour clearance persisted.
 - The checkpoint changes only the isolated test spawn. It is excluded from deployment; production character progress was not reset.
+
+## Deployment
+
+The first publishing attempt uploaded the artifact before GitHub indexed it; rerunning the combined job created duplicate named artifacts. Build and deployment now run as separate dependent jobs, following the deploy-pages recommendation. A failed deploy can reuse the verified build without another upload.
